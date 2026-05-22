@@ -313,7 +313,538 @@
         box-shadow 0.2s ease,
         opacity 0.2s ease;
     }
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+<title>Chapter 4 Pricing Setup</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  min-height:100vh;
+
+  font-family:
+    Inter,
+    "Noto Sans TC",
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255,214,214,.45),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255,232,208,.55),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #f6f0eb,
+      #efe7df
+    );
+
+  color:#2f2118;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  padding:18px;
+}
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.ch4-pricing-shell{
+  width:min(100%,920px);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.82),
+      rgba(255,248,244,.78)
+    );
+
+  border:1px solid rgba(255,255,255,.55);
+
+  backdrop-filter:blur(18px);
+
+  border-radius:24px;
+
+  padding:20px;
+
+  box-shadow:
+    0 16px 42px rgba(42,22,15,.10),
+    inset 0 1px 0 rgba(255,255,255,.65);
+
+  display:flex;
+  flex-direction:column;
+
+  gap:16px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.ch4-pricing-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+
+.ch4-pricing-kicker{
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:700;
+  opacity:.58;
+  margin-bottom:6px;
+}
+
+.ch4-pricing-title{
+  font-size:1.75rem;
+  line-height:1.1;
+  margin-bottom:8px;
+}
+
+.ch4-pricing-description{
+  font-size:.92rem;
+  line-height:1.55;
+  opacity:.78;
+  max-width:620px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.ch4-pricing-confirm{
+  border:none;
+
+  background:#2f2118;
+
+  color:white;
+
+  padding:.92em 1.4em;
+
+  border-radius:14px;
+
+  font-size:.88rem;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:
+    transform .2s ease,
+    opacity .2s ease,
+    box-shadow .2s ease;
+
+  box-shadow:
+    0 8px 18px rgba(47,33,24,.14);
+}
+
+.ch4-pricing-confirm:hover{
+  transform:translateY(-2px);
+
+  opacity:.95;
+
+  box-shadow:
+    0 12px 24px rgba(47,33,24,.18);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.ch4-pricing-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.ch4-pricing-badge{
+  padding:.42em .75em;
+
+  border-radius:999px;
+
+  background:rgba(47,33,24,.07);
+
+  border:1px solid rgba(47,33,24,.06);
+
+  font-size:.76rem;
+  font-weight:600;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.ch4-pricing-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:12px;
+}
+
+.ch4-pricing-card{
+  background:rgba(255,255,255,.68);
+
+  border:1px solid rgba(47,33,24,.06);
+
+  border-radius:18px;
+
+  padding:14px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:8px;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.ch4-pricing-card:hover{
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 10px 24px rgba(47,33,24,.08);
+}
+
+.ch4-pricing-label{
+  font-size:.82rem;
+  font-weight:700;
+}
+
+.ch4-pricing-input{
+  height:46px;
+
+  border-radius:14px;
+
+  background:white;
+
+  border:1px solid rgba(47,33,24,.08);
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding:0 14px;
+}
+
+.ch4-pricing-input span{
+  font-size:.82rem;
+  opacity:.5;
+}
+
+.ch4-pricing-input input{
+  width:100%;
+
+  border:none;
+  background:none;
+  outline:none;
+
+  font-size:.94rem;
+  font-weight:600;
+
+  color:#2f2118;
+}
+
+/* =========================
+   OPTIONS
+========================= */
+
+.ch4-pricing-options{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:14px;
+}
+
+.ch4-option-card{
+  background:rgba(255,255,255,.68);
+
+  border:1px solid rgba(47,33,24,.06);
+
+  border-radius:18px;
+
+  padding:16px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.ch4-option-title{
+  font-size:.94rem;
+  font-weight:700;
+}
+
+.ch4-radio{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding:8px 10px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  transition:
+    background .2s ease,
+    transform .2s ease;
+}
+
+.ch4-radio:hover{
+  background:rgba(47,33,24,.05);
+}
+
+.ch4-radio input{
+  accent-color:#2f2118;
+}
+
+.ch4-radio span{
+  font-size:.82rem;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width:768px){
+
+  body{
+    padding:12px;
+  }
+
+  .ch4-pricing-shell{
+    width:95%;
+    padding:16px;
+    gap:14px;
+  }
+
+  .ch4-pricing-header{
+    flex-direction:column;
+  }
+
+  .ch4-pricing-grid{
+    grid-template-columns:1fr;
+  }
+
+  .ch4-pricing-options{
+    grid-template-columns:1fr;
+  }
+
+  .ch4-pricing-title{
+    font-size:1.45rem;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="ch4-pricing-shell">
+
+  <!-- HEADER -->
+
+  <div class="ch4-pricing-header">
+
+    <div>
+
+      <div class="ch4-pricing-kicker">
+        Summer Nail Studio
+      </div>
+
+      <h1 class="ch4-pricing-title">
+        第四章：制定價目表
+      </h1>
+
+      <p class="ch4-pricing-description">
+        這一章，你需要替 Summer Nail Studio 制定第一份價目表。
+        請輸入各項服務價格，並選擇不指定款與取消規則。
+      </p>
+
+    </div>
+
+    <button class="ch4-pricing-confirm">
+      確認發布
+    </button>
+
+  </div>
+
+  <!-- STATS -->
+
+  <div class="ch4-pricing-stats">
+
+    <div class="ch4-pricing-badge">
+      收益 $21,300
+    </div>
+
+    <div class="ch4-pricing-badge">
+      追蹤數 0
+    </div>
+
+    <div class="ch4-pricing-badge">
+      技術 50%
+    </div>
+
+  </div>
+
+  <!-- PRICE GRID -->
+
+  <div class="ch4-pricing-grid">
+
+    <div class="ch4-pricing-card">
+
+      <div class="ch4-pricing-label">
+        單色凝膠
+      </div>
+
+      <div class="ch4-pricing-input">
+        <span>NT$</span>
+        <input type="number" value="399">
+      </div>
+
+    </div>
+
+    <div class="ch4-pricing-card">
+
+      <div class="ch4-pricing-label">
+        練習款
+      </div>
+
+      <div class="ch4-pricing-input">
+        <span>NT$</span>
+        <input type="number" value="399">
+      </div>
+
+    </div>
+
+    <div class="ch4-pricing-card">
+
+      <div class="ch4-pricing-label">
+        指定款底價
+      </div>
+
+      <div class="ch4-pricing-input">
+        <span>NT$</span>
+        <input type="number" value="999">
+      </div>
+
+    </div>
+
+    <div class="ch4-pricing-card">
+
+      <div class="ch4-pricing-label">
+        本店卸甲（續作）
+      </div>
+
+      <div class="ch4-pricing-input">
+        <span>NT$</span>
+        <input type="number" value="200">
+      </div>
+
+    </div>
+
+    <div class="ch4-pricing-card">
+
+      <div class="ch4-pricing-label">
+        他店卸甲（續作）
+      </div>
+
+      <div class="ch4-pricing-input">
+        <span>NT$</span>
+        <input type="number" value="300">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- OPTIONS -->
+
+  <div class="ch4-pricing-options">
+
+    <!-- RANDOM -->
+
+    <div class="ch4-option-card">
+
+      <div class="ch4-option-title">
+        不指定款規則
+      </div>
+
+      <label class="ch4-radio">
+        <input type="radio" name="random" checked>
+        <span>完全隨機款式</span>
+      </label>
+
+      <label class="ch4-radio">
+        <input type="radio" name="random">
+        <span>可選色不可選款</span>
+      </label>
+
+      <label class="ch4-radio">
+        <input type="radio" name="random">
+        <span>提供款式參考</span>
+      </label>
+
+    </div>
+
+    <!-- CANCEL -->
+
+    <div class="ch4-option-card">
+
+      <div class="ch4-option-title">
+        取消規則
+      </div>
+
+      <label class="ch4-radio">
+        <input type="radio" name="cancel">
+        <span>可免費取消</span>
+      </label>
+
+      <label class="ch4-radio">
+        <input type="radio" name="cancel" checked>
+        <span>24 小時內取消收訂金</span>
+      </label>
+
+      <label class="ch4-radio">
+        <input type="radio" name="cancel">
+        <span>取消不退訂金</span>
+      </label>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
     @media (hover: hover) {
       .choice-button:hover {
         transform: translateY(-3px);
