@@ -1329,6 +1329,32 @@
       display: none !important;
     }
 
+    .video-play-fallback-button {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 42;
+      transform: translate(-50%, -50%);
+      min-height: clamp(42px, 5.8vh, 56px);
+      padding: 0.78em 1.9em;
+      border: 1px solid rgba(255, 255, 255, 0.64);
+      border-radius: 999px;
+      cursor: pointer;
+      color: #3c2a24;
+      background: linear-gradient(135deg, rgba(255, 249, 239, 0.96), rgba(218, 172, 155, 0.88));
+      box-shadow:
+        0 18px 46px rgba(28, 17, 12, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.68);
+      font-weight: 900;
+      font-size: clamp(0.92rem, 1.35vw, 1.08rem);
+      letter-spacing: 0.08em;
+      pointer-events: auto;
+    }
+
+    .video-play-fallback-button:hover {
+      transform: translate(-50%, calc(-50% - 2px));
+    }
+
     @keyframes floatIn {
       from {
         opacity: 0;
@@ -9536,7 +9562,7 @@
       </section>
 
       <section class="screen ch5-video-screen" id="ch5VideoScreen" aria-label="第五章第一位客人服務影片">
-        <video class="ch5-video" id="ch5ServiceVideo" playsinline muted preload="auto"></video>
+        <video class="ch5-video" id="ch5ServiceVideo" playsinline preload="auto"></video>
 
         <div class="ch5-video-hint" id="ch5VideoHint">滾動或滑動，完成第一單</div>
         <div class="ch5-progress-bar" aria-hidden="true">
@@ -9582,7 +9608,7 @@
           <div class="hud-stat" data-hud-technique>技術 0%</div>
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
-        <video class="ch6-intro-video" id="ch6IntroVideo" playsinline muted preload="auto"></video>
+        <video class="ch6-intro-video" id="ch6IntroVideo" playsinline preload="auto"></video>
         <button class="ch6-skip-video-button" id="ch6SkipVideoButton" type="button">跳過影片</button>
       </section>
 
@@ -9720,7 +9746,7 @@
           <div class="hud-stat" data-hud-technique>技術 0%</div>
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
-        <video class="ch7-intro-video" id="ch7IntroVideo" playsinline muted preload="auto"></video>
+        <video class="ch7-intro-video" id="ch7IntroVideo" playsinline preload="auto"></video>
         <button class="ch7-skip-video-button" id="ch7SkipVideoButton" type="button">跳過影片</button>
       </section>
 
@@ -9797,7 +9823,7 @@
 
 
       <section class="screen final-intro-screen" id="finalIntroScreen" aria-label="最後結果報告前導影片">
-        <video class="final-intro-video" id="finalIntroVideo" playsinline muted preload="auto"></video>
+        <video class="final-intro-video" id="finalIntroVideo" playsinline preload="auto"></video>
         <button class="final-skip-video-button" id="finalSkipVideoButton" type="button">跳過影片</button>
       </section>
 
@@ -10082,6 +10108,93 @@
       introPoster: "images/final-report-poster.png",
       introFinalFallback: "images/final-report-final.png"
     };
+
+
+    const GAME_VIDEO_VOLUME = 1;
+    let isAudioUnlocked = false;
+
+    function unlockGameAudio() {
+      isAudioUnlocked = true;
+      document.querySelectorAll("video").forEach((video) => prepareVideoAudio(video));
+    }
+
+    function prepareVideoAudio(video) {
+      if (!video) return;
+
+      video.muted = !isAudioUnlocked;
+      video.volume = isAudioUnlocked ? GAME_VIDEO_VOLUME : 0;
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.removeAttribute("muted");
+
+      if (!isAudioUnlocked) {
+        console.warn("音訊尚未解鎖，影片將以靜音 fallback 播放");
+      }
+    }
+
+    function removeVideoPlayFallbackButton() {
+      document.querySelectorAll(".video-play-fallback-button").forEach((button) => button.remove());
+    }
+
+    function shouldOfferManualVideoPlay(error) {
+      return !isAudioUnlocked || !error || error.name === "NotAllowedError";
+    }
+
+    function showVideoPlayFallback(video, retryPlay) {
+      const gameFrame = document.getElementById("gameFrame");
+      if (!gameFrame || !video) return;
+
+      removeVideoPlayFallbackButton();
+
+      const poster = video.getAttribute("poster");
+      if (poster && typeof ChapterOne !== "undefined" && ChapterOne?.setBackground) {
+        ChapterOne.setBackground(poster, "video-click-play-poster");
+      }
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "video-play-fallback-button";
+      button.textContent = "點擊播放";
+      button.addEventListener("click", () => {
+        unlockGameAudio();
+        prepareVideoAudio(video);
+        removeVideoPlayFallbackButton();
+        retryPlay?.();
+      });
+
+      gameFrame.appendChild(button);
+    }
+
+    function playPreparedVideo(video, onFail, options = {}) {
+      if (!video) return null;
+
+      prepareVideoAudio(video);
+      const playPromise = video.play();
+
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch((error) => {
+          if (shouldOfferManualVideoPlay(error)) {
+            options.onBlocked?.(error);
+            showVideoPlayFallback(video, () => {
+              prepareVideoAudio(video);
+              const retryPromise = video.play();
+
+              if (retryPromise && typeof retryPromise.catch === "function") {
+                retryPromise.catch((retryError) => {
+                  removeVideoPlayFallbackButton();
+                  onFail?.(retryError);
+                });
+              }
+            });
+            return;
+          }
+
+          onFail?.(error);
+        });
+      }
+
+      return playPromise;
+    }
 
 
     const CH6_ACTORS = {
@@ -12440,11 +12553,13 @@ async function fetchChoicePercentage(choiceId) {
 
       bindEvents() {
         this.dom.enterButton.addEventListener("click", () => {
+          unlockGameAudio();
           this.dom.enterButton.disabled = true;
           this.playEnterVideo();
         });
 
         this.dom.startButton.addEventListener("click", () => {
+          unlockGameAudio();
           this.goToChapterTwo();
         });
       },
@@ -12589,13 +12704,11 @@ async function fetchChoicePercentage(choiceId) {
         video.setAttribute("src", src);
         video.setAttribute("poster", poster);
         video.setAttribute("playsinline", "");
-        video.setAttribute("muted", "");
         video.setAttribute("preload", "auto");
         video.setAttribute("aria-label", label);
 
-        video.muted = true;
-        video.playsInline = true;
         video.preload = "auto";
+        prepareVideoAudio(video);
 
         const source = document.createElement("source");
         source.setAttribute("src", src);
@@ -12623,6 +12736,7 @@ async function fetchChoicePercentage(choiceId) {
           video.removeEventListener("ended", handleEnded);
           video.removeEventListener("error", handleFail);
           window.clearTimeout(startGuard);
+          removeVideoPlayFallbackButton();
         };
 
         const finishFail = () => {
@@ -12636,6 +12750,7 @@ async function fetchChoicePercentage(choiceId) {
           if (started) return;
           started = true;
           window.clearTimeout(startGuard);
+          removeVideoPlayFallbackButton();
           onStarted();
         };
 
@@ -12651,13 +12766,11 @@ async function fetchChoicePercentage(choiceId) {
         };
 
         const tryPlay = () => {
-          const playPromise = video.play();
-
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => {
-              finishFail();
-            });
-          }
+          playPreparedVideo(video, finishFail, {
+            onBlocked: () => {
+              window.clearTimeout(startGuard);
+            }
+          });
         };
 
         const startGuard = window.setTimeout(() => {
@@ -12848,6 +12961,7 @@ async function fetchChoicePercentage(choiceId) {
 
       bindEvents() {
         this.dom.ruleButton.addEventListener("click", () => {
+          unlockGameAudio();
           this.showDecisionGame();
         });
 
@@ -13263,7 +13377,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       bindEvents() {
-        this.dom.ruleButton.addEventListener("click", () => this.showToolScreen());
+        this.dom.ruleButton.addEventListener("click", () => {
+          unlockGameAudio();
+          this.showToolScreen();
+        });
         this.dom.cartButton.addEventListener("click", () => this.openCart());
         this.dom.detailClose.addEventListener("click", () => this.closeToolDetail());
         this.dom.detailModal.addEventListener("click", (event) => {
@@ -13763,7 +13880,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       bindEvents() {
-        this.dom.ruleButton.addEventListener("click", () => this.showPricingScreen());
+        this.dom.ruleButton.addEventListener("click", () => {
+          unlockGameAudio();
+          this.showPricingScreen();
+        });
         this.dom.noteButton.addEventListener("click", () => this.openNoteModal());
         this.dom.noteCloseButton.addEventListener("click", () => this.closeNoteModal());
         this.dom.noteModal.addEventListener("click", (event) => {
@@ -14169,7 +14289,10 @@ async function fetchChoicePercentage(choiceId) {
         this.boundHandleTouchMove = (event) => this.handleTouchMove(event);
         this.boundHandleTouchEnd = (event) => this.handleTouchEnd(event);
 
-        this.dom.openingButton.addEventListener("click", () => this.startServiceVideo());
+        this.dom.openingButton.addEventListener("click", () => {
+          unlockGameAudio();
+          this.startServiceVideo();
+        });
         this.dom.skipVideoButton.addEventListener("click", () => this.completeVideo());
         this.dom.resultButton.addEventListener("click", () => this.confirmResult());
       },
@@ -14235,9 +14358,8 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", this.activeAssets.video);
         video.setAttribute("poster", this.activeAssets.firstFrame);
-        video.muted = true;
-        video.playsInline = true;
         video.preload = "auto";
+        prepareVideoAudio(video);
         video.currentTime = 0;
 
         const source = document.createElement("source");
@@ -14322,6 +14444,9 @@ async function fetchChoicePercentage(choiceId) {
         const video = this.dom.video;
         if (this.videoCompleted) return;
 
+        unlockGameAudio();
+        prepareVideoAudio(video);
+
         if (!this.metadataReady || !Number.isFinite(video.duration) || video.duration <= 0) {
           return;
         }
@@ -14332,10 +14457,9 @@ async function fetchChoicePercentage(choiceId) {
         video.classList.add("is-visible");
         this.updateProgress(nextTime / video.duration);
 
-        const playPromise = video.play();
-        if (playPromise && typeof playPromise.catch === "function") {
-          playPromise.catch(() => {});
-        }
+        playPreparedVideo(video, () => {}, {
+          onBlocked: () => {}
+        });
 
         this.pauseVideoAfterInputStops(150);
 
@@ -14569,7 +14693,10 @@ async function fetchChoicePercentage(choiceId) {
 
       bindEvents() {
         this.dom.skipVideoButton?.addEventListener("click", () => this.completeIntroVideo());
-        this.dom.ruleButton?.addEventListener("click", () => this.showChatScreen());
+        this.dom.ruleButton?.addEventListener("click", () => {
+          unlockGameAudio();
+          this.showChatScreen();
+        });
         this.dom.systemButton?.addEventListener("click", () => this.resolveSystemCard());
         this.dom.summaryButton?.addEventListener("click", () => this.showGuide());
         this.dom.guideNextButton?.addEventListener("click", () => this.nextGuidePage());
@@ -14630,9 +14757,8 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", CH6_ASSETS.introVideo);
         video.setAttribute("poster", CH6_ASSETS.introPoster);
-        video.muted = true;
-        video.playsInline = true;
         video.preload = "auto";
+        prepareVideoAudio(video);
 
         const source = document.createElement("source");
         source.src = CH6_ASSETS.introVideo;
@@ -14644,10 +14770,7 @@ async function fetchChoicePercentage(choiceId) {
           metadataLoaded = true;
           window.clearTimeout(this.introFallbackTimer);
           video.classList.add("is-visible");
-          const playPromise = video.play();
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => this.handleIntroFallback());
-          }
+          playPreparedVideo(video, () => this.handleIntroFallback());
         };
         video.onended = () => this.completeIntroVideo();
         video.onerror = () => this.handleIntroFallback();
@@ -15291,7 +15414,10 @@ async function fetchChoicePercentage(choiceId) {
 
       bindEvents() {
         this.dom.skipVideoButton?.addEventListener("click", () => this.completeIntroVideo({ useFallback: true }));
-        this.dom.ruleCardButton?.addEventListener("click", () => this.showFormScreen());
+        this.dom.ruleCardButton?.addEventListener("click", () => {
+          unlockGameAudio();
+          this.showFormScreen();
+        });
         this.dom.confirmButton?.addEventListener("click", () => this.confirmRules());
         this.dom.publishButton?.addEventListener("click", () => this.publishRules());
         this.getInputs().forEach((input) => {
@@ -15360,9 +15486,8 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", CH7_ASSETS.introVideo);
         video.setAttribute("poster", CH7_ASSETS.introPoster);
-        video.muted = true;
-        video.playsInline = true;
         video.preload = "auto";
+        prepareVideoAudio(video);
 
         const source = document.createElement("source");
         source.src = CH7_ASSETS.introVideo;
@@ -15374,10 +15499,7 @@ async function fetchChoicePercentage(choiceId) {
           metadataLoaded = true;
           window.clearTimeout(this.introFallbackTimer);
           video.classList.add("is-visible");
-          const playPromise = video.play();
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => this.handleIntroFallback());
-          }
+          playPreparedVideo(video, () => this.handleIntroFallback());
         };
         video.onended = () => this.completeIntroVideo();
         video.onerror = () => this.handleIntroFallback();
@@ -15758,9 +15880,8 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", FINAL_ASSETS.introVideo);
         video.setAttribute("poster", FINAL_ASSETS.introPoster);
-        video.muted = true;
-        video.playsInline = true;
         video.preload = "auto";
+        prepareVideoAudio(video);
 
         const source = document.createElement("source");
         source.src = FINAL_ASSETS.introVideo;
@@ -15772,10 +15893,7 @@ async function fetchChoicePercentage(choiceId) {
           metadataLoaded = true;
           window.clearTimeout(this.introFallbackTimer);
           video.classList.add("is-visible");
-          const playPromise = video.play();
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => this.handleIntroFallback());
-          }
+          playPreparedVideo(video, () => this.handleIntroFallback());
         };
         video.onended = () => this.completeIntroVideo();
         video.onerror = () => this.handleIntroFallback();
