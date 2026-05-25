@@ -8684,14 +8684,12 @@
 
 
     /* ==================================================
-       2026 局部修改覆蓋：第 2 / 5 / 6 / 7 章與最後結果報告 UI
-       僅覆蓋指定 class，不改動 HTML 結構、流程、localStorage key
+       2026-05 局部修改補丁：第二章／第五章／第六章／第七章／結果報告
+       只覆寫指定 UI 與互動狀態，不改動既有流程、localStorage key 與主要 JS 結構
     ================================================== */
-
-    /* 一、第二章選項卡排版：左右切齊、等高卡、description 內部滾動 */
     .ch2-game-layout {
       align-items: stretch !important;
-      grid-template-columns: minmax(0, 1.45fr) minmax(250px, 0.88fr) !important;
+      grid-template-rows: minmax(0, 1fr) !important;
       min-height: 0 !important;
     }
 
@@ -8701,11 +8699,10 @@
       min-height: 0 !important;
       display: grid !important;
       grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-      grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
-      grid-auto-rows: minmax(0, 1fr) !important;
-      align-content: stretch !important;
-      overflow: hidden !important;
-      padding: 4px 8px 4px 4px !important;
+      grid-auto-rows: clamp(136px, 18.5vh, 176px) !important;
+      align-content: start !important;
+      overflow: auto !important;
+      scrollbar-width: thin;
     }
 
     .ch2-action-card,
@@ -8713,11 +8710,10 @@
       min-height: 0 !important;
       height: 100% !important;
       max-height: none !important;
+      overflow: hidden !important;
+      align-content: stretch !important;
       display: grid !important;
       grid-template-columns: auto minmax(0, 1fr) !important;
-      align-content: stretch !important;
-      overflow: hidden !important;
-      padding: clamp(10px, 1.25vw, 15px) !important;
     }
 
     .ch2-action-main,
@@ -8731,34 +8727,37 @@
     }
 
     .ch2-action-title,
-    .ch2-option-title {
+    .ch2-option-title,
+    .ch2-action-tags,
+    .ch2-option-tags {
       flex: 0 0 auto !important;
-      line-height: 1.22 !important;
     }
 
     .ch2-action-tags,
     .ch2-option-tags {
-      flex: 0 0 auto !important;
       display: flex !important;
-      flex-wrap: wrap !important;
-      gap: 4px !important;
-      margin: 4px 0 6px !important;
-      max-height: clamp(22px, 4.8vh, 46px) !important;
-      overflow: auto !important;
-      scrollbar-width: thin;
+      overflow: hidden !important;
+    }
+
+    .ch2-tag,
+    .ch2-option-tag,
+    .ch2-action-tag {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
     }
 
     .ch2-action-description,
     .ch2-option-description {
       flex: 1 1 auto !important;
       min-height: 0 !important;
+      max-height: none !important;
       display: block !important;
       overflow: auto !important;
-      max-height: none !important;
       -webkit-line-clamp: unset !important;
       line-clamp: unset !important;
       -webkit-box-orient: initial !important;
-      padding-right: 3px !important;
+      padding-right: 0.35rem;
       scrollbar-width: thin;
     }
 
@@ -8769,28 +8768,30 @@
     }
 
     .ch2-selected-section {
-      min-height: 0 !important;
       flex: 1 1 auto !important;
+      min-height: 0 !important;
     }
 
     .ch2-selected-list {
+      flex: 1 1 auto !important;
       min-height: 0 !important;
       max-height: none !important;
       overflow: auto !important;
     }
 
-    /* 二、第二章結果頁：固定卡片尺寸、文字區內部滾動、按鈕固定底部 */
     .ch2-summary-card {
-      height: clamp(390px, 67vh, 560px) !important;
+      width: min(78%, 920px) !important;
+      height: clamp(360px, 68vh, 560px) !important;
       max-height: 100% !important;
+      min-height: 0 !important;
       overflow: hidden !important;
-      display: flex !important;
-      flex-direction: column !important;
+      align-items: stretch !important;
     }
 
     .ch2-summary-title,
     .ch2-summary-percent,
-    .ch2-summary-headline {
+    .ch2-summary-headline,
+    .ch2-summary-actions {
       flex: 0 0 auto !important;
     }
 
@@ -8803,25 +8804,18 @@
     }
 
     .ch2-summary-event {
-      flex: 0 1 clamp(74px, 15vh, 132px) !important;
+      flex: 0 1 clamp(64px, 14vh, 132px) !important;
       min-height: 0 !important;
       overflow: auto !important;
       scrollbar-width: thin;
     }
 
     .ch2-summary-actions {
-      flex: 0 0 auto !important;
       margin-top: auto !important;
+      padding-top: clamp(6px, 1vh, 10px);
     }
 
-    /* 三、第五章影片控制搭配提示文字 */
-    .ch5-video-hint::after {
-      content: "｜向上/左前進，向下/右後退";
-    }
-
-    /* 四、第五章小結資訊圖卡放大置中 */
     .ch5-result-layout {
-      display: grid !important;
       place-items: center !important;
       align-items: center !important;
       justify-items: center !important;
@@ -8831,40 +8825,38 @@
       width: min(92%, 1180px) !important;
       height: clamp(400px, 72vh, 640px) !important;
       max-height: 100% !important;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr) !important;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
       align-items: stretch !important;
+      gap: clamp(20px, 3.5vw, 46px) !important;
     }
 
     .ch5-result-image-wrap {
-      align-self: center !important;
+      align-self: stretch !important;
       height: 100% !important;
-      max-height: 100% !important;
       aspect-ratio: auto !important;
+      min-height: 0 !important;
     }
 
     .ch5-result-content {
       min-height: 0 !important;
       max-height: 100% !important;
-      overflow: auto !important;
+      justify-content: center;
     }
 
-    /* 五、第六、七章跳過影片按鈕：預設隱藏，故事線重玩才加 is-visible */
     .ch6-skip-video-button,
     .ch7-skip-video-button {
       display: none !important;
-      align-items: center;
-      justify-content: center;
     }
 
     .ch6-skip-video-button.is-visible,
     .ch7-skip-video-button.is-visible {
       display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* 六、第六、七章前導影片後規則卡放大置中 */
     .ch6-rule-layout,
     .ch7-rule-layout {
-      display: grid !important;
       place-items: center !important;
       align-items: center !important;
       justify-items: center !important;
@@ -8876,10 +8868,8 @@
       height: clamp(360px, 62vh, 560px) !important;
       max-height: 100% !important;
       min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
       overflow: hidden !important;
+      align-items: center !important;
     }
 
     .ch6-rule-body,
@@ -8891,19 +8881,11 @@
       scrollbar-width: thin;
     }
 
-    .ch6-rule-card .primary-button,
-    .ch7-rule-card-button {
-      flex: 0 0 auto !important;
-      margin-top: auto !important;
-      align-self: center !important;
-    }
-
-    /* 八、第六章小結資訊卡放大置中 */
     .ch6-summary-layout {
-      display: grid !important;
       place-items: center !important;
       align-items: center !important;
       justify-items: center !important;
+      padding-top: clamp(12px, 2vh, 24px) !important;
     }
 
     .ch6-summary-card {
@@ -8912,161 +8894,140 @@
       max-height: 100% !important;
       min-height: 0 !important;
       overflow: hidden !important;
-      display: flex !important;
-      flex-direction: column !important;
     }
 
     .ch6-summary-body {
       flex: 1 1 auto !important;
       min-height: 0 !important;
-      max-height: none !important;
       overflow: auto !important;
       scrollbar-width: thin;
     }
 
-    .ch6-summary-stats,
+    .ch6-summary-grid,
+    .ch6-summary-actions,
     .ch6-summary-button {
       flex: 0 0 auto !important;
     }
 
-    .ch6-summary-button {
-      margin-top: auto !important;
-      align-self: center !important;
-    }
-
-    /* 九、第六章 guide 資訊卡放大、置中、尺寸一致 */
     .ch6-guide-layout {
-      display: grid !important;
-      place-items: center !important;
       align-items: center !important;
-      justify-items: center !important;
+      justify-content: center !important;
+      padding-top: clamp(12px, 2vh, 24px) !important;
     }
 
+    .ch6-guide-book,
     .ch6-guide-card {
       width: min(86%, 1040px) !important;
       height: clamp(410px, 70vh, 640px) !important;
       max-height: 100% !important;
       min-height: 0 !important;
       overflow: hidden !important;
-      display: flex !important;
-      flex-direction: column !important;
     }
 
-    .ch6-guide-tabs,
-    .ch6-guide-header,
-    .ch6-guide-actions {
-      flex: 0 0 auto !important;
+    .ch6-guide-page {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
     }
 
     .ch6-guide-body {
       flex: 1 1 auto !important;
       min-height: 0 !important;
-      max-height: none !important;
       overflow: auto !important;
       scrollbar-width: thin;
     }
 
     .ch6-guide-actions {
+      flex: 0 0 auto !important;
       margin-top: auto !important;
     }
 
-    /* 十、最後結果報告 UI 視覺優化：溫暖高級感、減少硬框線 */
     .final-report-screen {
+      padding: clamp(18px, 2.8vw, 42px) !important;
       background:
-        radial-gradient(circle at 18% 12%, rgba(255, 250, 242, 0.98), transparent 34%),
-        radial-gradient(circle at 82% 82%, rgba(217, 174, 162, 0.48), transparent 38%),
-        linear-gradient(135deg, #f7efe5 0%, #fff9f0 46%, #ead8c9 74%, #d9aea2 100%) !important;
-    }
-
-    .final-report-screen::after {
-      background:
-        radial-gradient(circle at 50% 45%, rgba(255, 250, 242, 0.26), transparent 46%),
-        linear-gradient(135deg, rgba(255, 252, 246, 0.28), rgba(151, 92, 78, 0.12)),
-        radial-gradient(circle at 50% 50%, transparent 60%, rgba(63, 48, 41, 0.12) 100%) !important;
+        radial-gradient(circle at 16% 14%, rgba(255, 252, 246, 0.96), transparent 34%),
+        radial-gradient(circle at 86% 24%, rgba(233, 207, 194, 0.66), transparent 32%),
+        radial-gradient(circle at 78% 82%, rgba(185, 120, 111, 0.28), transparent 36%),
+        linear-gradient(135deg, #f7efe5 0%, #fff9f0 48%, #ead1c3 100%) !important;
     }
 
     .final-report-card {
       width: min(90%, 1160px) !important;
+      height: 100% !important;
+      padding: clamp(14px, 2vw, 24px) !important;
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(255, 250, 242, 0.42), rgba(233, 207, 194, 0.24));
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      box-shadow: 0 24px 68px rgba(64, 45, 34, 0.16), inset 0 1px 0 rgba(255,255,255,0.5);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .final-report-title-row {
+      grid-template-columns: minmax(120px, 1fr) minmax(240px, 560px) minmax(120px, 1fr) !important;
       margin-bottom: clamp(12px, 1.8vh, 20px) !important;
     }
 
     .final-report-title {
       border: 0 !important;
       border-radius: 999px !important;
-      padding: 0.22em 0.9em 0.32em !important;
-      letter-spacing: 0.16em !important;
-      color: #3f3029 !important;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.78), rgba(233, 207, 194, 0.62)) !important;
-      box-shadow:
-        0 16px 38px rgba(91, 62, 51, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.62) !important;
+      background: linear-gradient(135deg, rgba(255, 250, 242, 0.82), rgba(233, 207, 194, 0.58)) !important;
+      color: #463833 !important;
+      letter-spacing: 0.18em !important;
+      font-size: clamp(2rem, 3.5vw, 3.9rem) !important;
+      box-shadow: 0 14px 34px rgba(91, 62, 51, 0.12), inset 0 1px 0 rgba(255,255,255,0.68) !important;
     }
 
     .final-storyline-button,
     .final-action-button {
-      border: 0 !important;
+      border: 1px solid rgba(154, 95, 80, 0.28) !important;
       border-radius: 999px !important;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.74), rgba(233, 207, 194, 0.52)) !important;
-      color: #7f4f45 !important;
-      box-shadow: 0 12px 28px rgba(91, 62, 51, 0.12), inset 0 1px 0 rgba(255,255,255,0.56) !important;
-    }
-
-    .final-storyline-button:hover,
-    .final-action-button:hover {
-      background: linear-gradient(135deg, rgba(185, 120, 111, 0.92), rgba(150, 88, 74, 0.88)) !important;
-      color: #fff9f0 !important;
+      background: linear-gradient(135deg, rgba(255, 250, 242, 0.76), rgba(233, 207, 194, 0.48)) !important;
+      color: #7b5045 !important;
+      box-shadow: 0 10px 24px rgba(91, 62, 51, 0.1) !important;
     }
 
     .final-report-body {
       border: 0 !important;
-      border-radius: 30px !important;
+      border-radius: 26px !important;
       background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.72), rgba(246, 236, 223, 0.54)),
-        rgba(255, 250, 242, 0.44) !important;
-      box-shadow:
-        0 24px 64px rgba(91, 62, 51, 0.14),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        linear-gradient(135deg, rgba(255, 252, 246, 0.78), rgba(246, 236, 223, 0.52)),
+        rgba(255, 250, 242, 0.48) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.58), 0 16px 44px rgba(64,45,34,0.1) !important;
     }
 
     .final-report-section-title {
-      color: #8f5e52 !important;
-      margin-bottom: clamp(12px, 1.7vh, 20px) !important;
+      color: #7e554b !important;
+      letter-spacing: 0.1em !important;
     }
 
     .final-report-stats {
       grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-      gap: clamp(10px, 1.5vw, 18px) !important;
     }
 
     .final-report-stat {
       border: 0 !important;
       border-radius: 22px !important;
       background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.84), rgba(246, 236, 223, 0.62) 54%, rgba(217, 174, 162, 0.28)) !important;
-      box-shadow:
-        0 14px 32px rgba(91, 62, 51, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.58) !important;
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.54), transparent 38%),
+        linear-gradient(135deg, rgba(255,250,242,0.88), rgba(233,207,194,0.54)) !important;
+      box-shadow: 0 14px 32px rgba(91,62,51,0.12), inset 0 1px 0 rgba(255,255,255,0.58) !important;
     }
 
     .final-report-stat-label {
       display: inline-flex !important;
-      align-items: center !important;
-      width: fit-content !important;
-      padding: 0.28em 0.72em !important;
-      border-radius: 999px !important;
-      margin-bottom: 0.65em !important;
-      background: rgba(255, 248, 238, 0.68) !important;
-      color: rgba(102, 83, 75, 0.86) !important;
+      width: fit-content;
+      margin-bottom: 0.6em !important;
+      padding: 0.22em 0.68em;
+      border-radius: 999px;
+      background: rgba(255, 250, 242, 0.62);
+      color: rgba(102, 83, 75, 0.88) !important;
     }
 
     .final-report-stat-value {
       color: #96584a !important;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.56);
     }
 
     .final-report-detail-box,
@@ -9074,9 +9035,8 @@
     .final-report-ending {
       border: 0 !important;
       border-radius: 22px !important;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.78), rgba(234, 216, 201, 0.48)) !important;
-      box-shadow: 0 12px 28px rgba(91, 62, 51, 0.1), inset 0 1px 0 rgba(255,255,255,0.48) !important;
+      background: linear-gradient(135deg, rgba(255,250,242,0.78), rgba(246,236,223,0.52)) !important;
+      box-shadow: 0 12px 28px rgba(91,62,51,0.1), inset 0 1px 0 rgba(255,255,255,0.48) !important;
     }
 
     .final-report-ending {
@@ -9087,32 +9047,18 @@
     .final-report-ending::before {
       content: "";
       position: absolute;
-      left: clamp(14px, 1.8vw, 22px);
-      top: clamp(14px, 1.8vw, 22px);
-      bottom: clamp(14px, 1.8vw, 22px);
+      left: clamp(12px, 1.6vw, 18px);
+      top: clamp(14px, 1.8vw, 20px);
+      bottom: clamp(14px, 1.8vw, 20px);
       width: 4px;
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(185, 120, 111, 0.9), rgba(150, 88, 74, 0.82));
-    }
-
-    .final-report-ending {
-      padding-left: clamp(28px, 4vw, 48px) !important;
-    }
-
-    .final-action-button.is-replay {
-      background: linear-gradient(135deg, rgba(233, 207, 194, 0.72), rgba(217, 174, 162, 0.54)) !important;
-      color: #3f3029 !important;
+      background: linear-gradient(180deg, #b9786f, #96584a);
     }
 
     @media (max-width: 900px) and (orientation: landscape) {
       .ch2-action-list,
       .ch2-option-list {
-        grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
-      }
-
-      .ch2-action-tags,
-      .ch2-option-tags {
-        max-height: 30px !important;
+        grid-auto-rows: clamp(104px, 21vh, 136px) !important;
       }
 
       .ch2-summary-card {
@@ -9121,78 +9067,80 @@
 
       .ch5-result-card {
         width: min(92%, 900px) !important;
-        height: clamp(300px, 74vh, 480px) !important;
-        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr) !important;
+        height: clamp(300px, 72vh, 460px) !important;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr) !important;
       }
 
       .ch6-rule-card,
       .ch7-rule-card {
-        width: min(86%, 820px) !important;
-        height: clamp(300px, 68vh, 450px) !important;
+        height: clamp(280px, 66vh, 430px) !important;
       }
 
       .ch6-summary-card {
-        width: min(86%, 820px) !important;
-        height: clamp(310px, 70vh, 460px) !important;
+        height: clamp(300px, 68vh, 450px) !important;
       }
 
+      .ch6-guide-book,
       .ch6-guide-card {
-        width: min(88%, 860px) !important;
-        height: clamp(320px, 74vh, 480px) !important;
+        height: clamp(320px, 72vh, 460px) !important;
+      }
+
+      .final-report-title {
+        font-size: clamp(1.45rem, 4vw, 2.2rem) !important;
       }
     }
 
     @media (max-height: 460px) and (orientation: landscape) {
       .ch2-action-list,
       .ch2-option-list {
-        grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
+        grid-auto-rows: clamp(86px, 23vh, 112px) !important;
       }
 
-      .ch2-action-tags,
-      .ch2-option-tags {
-        max-height: 22px !important;
+      .ch2-action-description,
+      .ch2-option-description {
+        font-size: 0.56rem !important;
+        line-height: 1.32 !important;
       }
 
       .ch2-summary-card {
-        height: clamp(250px, 76vh, 360px) !important;
+        height: clamp(238px, 74vh, 340px) !important;
+      }
+
+      .ch2-summary-event {
+        flex-basis: clamp(42px, 12vh, 76px) !important;
       }
 
       .ch5-result-card {
-        width: min(94%, 820px) !important;
-        height: clamp(245px, 76vh, 360px) !important;
+        height: clamp(240px, 74vh, 350px) !important;
         gap: 12px !important;
-      }
-
-      .ch5-result-title {
-        font-size: clamp(1rem, 2.8vw, 1.45rem) !important;
       }
 
       .ch6-rule-card,
       .ch7-rule-card {
-        width: min(86%, 760px) !important;
-        height: clamp(245px, 76vh, 350px) !important;
+        height: clamp(230px, 72vh, 330px) !important;
       }
 
       .ch6-summary-card {
-        width: min(86%, 760px) !important;
-        height: clamp(250px, 76vh, 360px) !important;
+        height: clamp(238px, 72vh, 340px) !important;
       }
 
+      .ch6-guide-book,
       .ch6-guide-card {
-        width: min(88%, 780px) !important;
-        height: clamp(260px, 78vh, 370px) !important;
+        height: clamp(250px, 74vh, 360px) !important;
       }
 
-      .final-report-body {
-        border-radius: 20px !important;
+      .final-report-card {
+        width: 94% !important;
+        padding: 10px !important;
+        border-radius: 22px !important;
       }
 
       .final-report-title {
-        letter-spacing: 0.12em !important;
+        font-size: clamp(1.05rem, 3.8vw, 1.45rem) !important;
       }
     }
 
-</style>
+  </style>
 </head>
 
 <body>
@@ -9725,7 +9673,7 @@
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
         <div class="ch6-guide-layout">
-          <article class="ch6-guide-book">
+          <article class="ch6-guide-book ch6-guide-card">
             <div class="ch6-guide-tabs">
               <button class="ch6-guide-tab is-active" id="ch6GuideArtistTab" type="button" data-guide-side="artist">美甲師</button>
               <button class="ch6-guide-tab" id="ch6GuideConsumerTab" type="button" data-guide-side="consumer">消費者</button>
@@ -14337,7 +14285,8 @@ async function fetchChoicePercentage(choiceId) {
       handleWheel(event) {
         if (!this.dom.videoScreen.classList.contains("is-active")) return;
         event.preventDefault();
-        this.scrubVideo(event.deltaY * CH5_WHEEL_SENSITIVITY);
+        const deltaSeconds = event.deltaY * CH5_WHEEL_SENSITIVITY;
+        this.scrubVideo(deltaSeconds);
       },
 
       handleTouchStart(event) {
@@ -14356,10 +14305,10 @@ async function fetchChoicePercentage(choiceId) {
 
         const deltaX = this.touchStartX - touch.clientX;
         const deltaY = this.touchStartY - touch.clientY;
-        const dominantDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
+        const primaryDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
 
-        if (Math.abs(dominantDelta) > 0) {
-          this.scrubVideo(dominantDelta * CH5_TOUCH_SENSITIVITY);
+        if (Math.abs(primaryDelta) > 0) {
+          this.scrubVideo(primaryDelta * CH5_TOUCH_SENSITIVITY);
           this.touchStartX = touch.clientX;
           this.touchStartY = touch.clientY;
         }
@@ -14377,13 +14326,11 @@ async function fetchChoicePercentage(choiceId) {
           return;
         }
 
-        const duration = video.duration;
         const delta = Number(deltaSeconds) || 0;
-        const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
-        const nextTime = Math.max(0, Math.min(duration, current + delta));
+        const nextTime = Math.max(0, Math.min(video.duration, video.currentTime + delta));
         video.currentTime = nextTime;
         video.classList.add("is-visible");
-        this.updateProgress(nextTime / duration);
+        this.updateProgress(nextTime / video.duration);
 
         const playPromise = video.play();
         if (playPromise && typeof playPromise.catch === "function") {
@@ -14392,7 +14339,7 @@ async function fetchChoicePercentage(choiceId) {
 
         this.pauseVideoAfterInputStops(150);
 
-        if (delta > 0 && nextTime >= duration - 0.15) {
+        if (delta > 0 && nextTime >= video.duration - 0.15) {
           this.completeVideo();
         }
       },
@@ -14634,20 +14581,23 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.guideConsumerTab?.addEventListener("click", () => this.switchGuideSide("consumer"));
       },
 
+      toggleIntroSkipButton(isVisible = false) {
+        this.dom.skipVideoButton?.classList.toggle("is-visible", Boolean(isVisible));
+      },
+
       start({ skipIntro = false, skipRule = false, resetProgress = false, allowSkipIntro = false } = {}) {
         Storyline.unlockChapter(6);
         Storyline.setCurrentChapter(6);
         const savedState = Storyline.state.chapterSix || createDefaultChapterSixState();
         setChapterSixState(resetProgress ? createDefaultChapterSixState() : savedState);
         if (resetProgress) this.syncStateToStoryline();
+        this.allowSkipIntro = Boolean(allowSkipIntro);
+        this.toggleIntroSkipButton(false);
         this.updateHud({ includeChapterSix: chapterSixState.completed });
         this.closeChoiceModal();
         this.closeSystemModal();
-        this.allowSkipIntro = Boolean(allowSkipIntro);
-        this.updateSkipButtonVisibility();
 
         if (skipIntro) {
-          this.dom.skipVideoButton?.classList.remove("is-visible");
           if (skipRule) {
             this.showChatScreen();
           } else {
@@ -14659,22 +14609,13 @@ async function fetchChoicePercentage(choiceId) {
         this.playIntroVideo();
       },
 
-      updateSkipButtonVisibility() {
-        this.dom.skipVideoButton?.classList.toggle("is-visible", Boolean(this.allowSkipIntro));
-      },
-
-      updateSkipButtonVisibility() {
-        this.dom.skipVideoButton?.classList.toggle("is-visible", Boolean(this.allowSkipIntro));
-      },
-
       playIntroVideo() {
         window.clearTimeout(this.introFallbackTimer);
-        this.updateSkipButtonVisibility();
-        this.updateSkipButtonVisibility();
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(CH6_ASSETS.introPoster, "ch6-intro-poster");
         ChapterOne.setDarkOverlay(false);
         this.updateHud({ includeChapterSix: false });
+        this.toggleIntroSkipButton(this.allowSkipIntro);
         showScreen(this.dom.videoScreen);
 
         const video = this.dom.introVideo;
@@ -14719,6 +14660,7 @@ async function fetchChoicePercentage(choiceId) {
 
       handleIntroFallback() {
         window.clearTimeout(this.introFallbackTimer);
+        this.toggleIntroSkipButton(false);
         const video = this.dom.introVideo;
         if (video) {
           video.pause();
@@ -14730,7 +14672,7 @@ async function fetchChoicePercentage(choiceId) {
 
       completeIntroVideo() {
         window.clearTimeout(this.introFallbackTimer);
-        this.dom.skipVideoButton?.classList.remove("is-visible");
+        this.toggleIntroSkipButton(false);
         const video = this.dom.introVideo;
         if (video) {
           video.pause();
@@ -15357,9 +15299,15 @@ async function fetchChoicePercentage(choiceId) {
         });
       },
 
+      toggleIntroSkipButton(isVisible = false) {
+        this.dom.skipVideoButton?.classList.toggle("is-visible", Boolean(isVisible));
+      },
+
       start({ skipIntro = false, skipRule = false, allowSkipIntro = false } = {}) {
         Storyline.unlockChapter(7);
         Storyline.setCurrentChapter(7);
+        this.allowSkipIntro = Boolean(allowSkipIntro);
+        this.toggleIntroSkipButton(false);
 
         // 一般從第六章銜接進入第七章時，表單必須是空白，讓玩家自行設定數值；
         // 只有從故事線回溯第七章時，才沿用 localStorage 裡已輸入過的規則。
@@ -15376,11 +15324,8 @@ async function fetchChoicePercentage(choiceId) {
 
         this.updateHud();
         this.showValidationMessage("");
-        this.allowSkipIntro = Boolean(allowSkipIntro);
-        this.updateSkipButtonVisibility();
 
         if (skipIntro) {
-          this.dom.skipVideoButton?.classList.remove("is-visible");
           if (skipRule) {
             this.showFormScreen();
           } else {
@@ -15400,6 +15345,7 @@ async function fetchChoicePercentage(choiceId) {
         ChapterOne.setBackground(CH7_ASSETS.introPoster, "ch7-intro-poster");
         ChapterOne.setDarkOverlay(false);
         this.updateHud();
+        this.toggleIntroSkipButton(this.allowSkipIntro);
         showScreen(this.dom.introScreen);
 
         const video = this.dom.introVideo;
@@ -15444,6 +15390,7 @@ async function fetchChoicePercentage(choiceId) {
 
       handleIntroFallback() {
         window.clearTimeout(this.introFallbackTimer);
+        this.toggleIntroSkipButton(false);
         this.introUsedFallback = true;
         this.introFinalStillUrl = CH7_ASSETS.introFinalFallback;
         const video = this.dom.introVideo;
@@ -15475,7 +15422,7 @@ async function fetchChoicePercentage(choiceId) {
 
       completeIntroVideo({ useFallback = false } = {}) {
         window.clearTimeout(this.introFallbackTimer);
-        this.dom.skipVideoButton?.classList.remove("is-visible");
+        this.toggleIntroSkipButton(false);
         const video = this.dom.introVideo;
         let finalBackground = this.introFinalStillUrl || "";
 
@@ -16306,8 +16253,6 @@ async function fetchChoicePercentage(choiceId) {
 
         if (chapterNumber === 6) {
           ChapterSix.start({
-            skipIntro: false,
-            skipRule: false,
             resetProgress: true,
             allowSkipIntro: true
           });
@@ -16317,8 +16262,6 @@ async function fetchChoicePercentage(choiceId) {
 
         if (chapterNumber === 7) {
           ChapterSeven.start({
-            skipIntro: false,
-            skipRule: false,
             allowSkipIntro: true
           });
           this.saveState();
