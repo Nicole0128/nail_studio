@@ -159,6 +159,26 @@
       opacity: 1;
     }
 
+    .game-frame.is-video-playing .screen,
+    .game-frame.is-video-playing .dark-overlay,
+    .game-frame.is-video-playing .background-image,
+    .game-frame.is-video-playing .scene-video {
+      transition-duration: 0.18s !important;
+    }
+
+    .game-frame.is-video-playing .game-hud,
+    .game-frame.is-video-playing .chapter-chip,
+    .game-frame.is-video-playing .result-card,
+    .game-frame.is-video-playing .transition-card,
+    .game-frame.is-video-playing .ch2-rule-card,
+    .game-frame.is-video-playing .ch3-rule-card,
+    .game-frame.is-video-playing .ch4-rule-card,
+    .game-frame.is-video-playing .ch6-rule-card,
+    .game-frame.is-video-playing .ch7-rule-card {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
     .screen {
       z-index: 5;
       opacity: 0;
@@ -10140,6 +10160,34 @@
       return !isAudioUnlocked || !error || error.name === "NotAllowedError";
     }
 
+    function setVideoPerformanceMode(isPlaying) {
+      const gameFrame = document.getElementById("gameFrame");
+      if (!gameFrame) return;
+      gameFrame.classList.toggle("is-video-playing", Boolean(isPlaying));
+    }
+
+    function releaseVideoElement(video) {
+      if (!video) return;
+
+      try {
+        video.pause();
+      } catch (error) {
+        console.warn("影片暫停失敗：", error);
+      }
+
+      video.removeAttribute("src");
+      video.querySelectorAll("source").forEach((source) => {
+        source.removeAttribute("src");
+        source.remove();
+      });
+
+      try {
+        video.load();
+      } catch (error) {
+        console.warn("影片資源釋放失敗：", error);
+      }
+    }
+
     function showVideoPlayFallback(video, retryPlay) {
       const gameFrame = document.getElementById("gameFrame");
       if (!gameFrame || !video) return;
@@ -10168,20 +10216,39 @@
     function playPreparedVideo(video, onFail, options = {}) {
       if (!video) return null;
 
+      const markPlaying = () => setVideoPerformanceMode(true);
+      const markStopped = () => setVideoPerformanceMode(false);
+
+      video.addEventListener("playing", markPlaying, { once: true });
+      video.addEventListener("ended", markStopped, { once: true });
+      video.addEventListener("error", markStopped, { once: true });
+
       prepareVideoAudio(video);
       const playPromise = video.play();
 
       if (playPromise && typeof playPromise.catch === "function") {
         playPromise.catch((error) => {
+          video.removeEventListener("playing", markPlaying);
+          video.removeEventListener("ended", markStopped);
+          video.removeEventListener("error", markStopped);
+
           if (shouldOfferManualVideoPlay(error)) {
             options.onBlocked?.(error);
             showVideoPlayFallback(video, () => {
+              video.addEventListener("playing", markPlaying, { once: true });
+              video.addEventListener("ended", markStopped, { once: true });
+              video.addEventListener("error", markStopped, { once: true });
+
               prepareVideoAudio(video);
               const retryPromise = video.play();
 
               if (retryPromise && typeof retryPromise.catch === "function") {
                 retryPromise.catch((retryError) => {
+                  video.removeEventListener("playing", markPlaying);
+                  video.removeEventListener("ended", markStopped);
+                  video.removeEventListener("error", markStopped);
                   removeVideoPlayFallbackButton();
+                  setVideoPerformanceMode(false);
                   onFail?.(retryError);
                 });
               }
@@ -10189,6 +10256,7 @@
             return;
           }
 
+          setVideoPerformanceMode(false);
           onFail?.(error);
         });
       }
@@ -12336,10 +12404,20 @@ async function fetchChoicePercentage(choiceId) {
       return `NT$${number.toLocaleString("zh-TW")}`;
     }
 
+    let currentActiveScreen = null;
+
     function showScreen(activeScreen) {
-      document.querySelectorAll(".game-frame .screen").forEach((screen) => {
-        screen.classList.toggle("is-active", screen === activeScreen);
-      });
+      if (currentActiveScreen && currentActiveScreen !== activeScreen) {
+        currentActiveScreen.classList.remove("is-active");
+      }
+
+      if (!activeScreen) {
+        currentActiveScreen = null;
+        return;
+      }
+
+      activeScreen.classList.add("is-active");
+      currentActiveScreen = activeScreen;
     }
 
     function calculateChapterTwoPlan(selectedIds = []) {
@@ -12525,6 +12603,7 @@ async function fetchChoicePercentage(choiceId) {
 
     const ChapterOne = {
       dom: {},
+      backgroundCache: new Map(),
 
       init() {
         this.cacheDom();
@@ -12728,6 +12807,7 @@ async function fetchChoicePercentage(choiceId) {
 
         let settled = false;
         let started = false;
+        let hasTriedPlay = false;
 
         const cleanup = () => {
           video.removeEventListener("playing", handleStarted);
@@ -12743,6 +12823,7 @@ async function fetchChoicePercentage(choiceId) {
           if (settled) return;
           settled = true;
           cleanup();
+          setVideoPerformanceMode(false);
           onFail();
         };
 
@@ -12751,6 +12832,7 @@ async function fetchChoicePercentage(choiceId) {
           started = true;
           window.clearTimeout(startGuard);
           removeVideoPlayFallbackButton();
+          setVideoPerformanceMode(true);
           onStarted();
         };
 
@@ -12758,6 +12840,7 @@ async function fetchChoicePercentage(choiceId) {
           if (settled) return;
           settled = true;
           cleanup();
+          setVideoPerformanceMode(false);
           onEnded();
         };
 
@@ -12766,6 +12849,9 @@ async function fetchChoicePercentage(choiceId) {
         };
 
         const tryPlay = () => {
+          if (hasTriedPlay || settled) return;
+          hasTriedPlay = true;
+
           playPreparedVideo(video, finishFail, {
             onBlocked: () => {
               window.clearTimeout(startGuard);
@@ -12817,11 +12903,15 @@ async function fetchChoicePercentage(choiceId) {
       setBackground(imageUrl, mode) {
         this.dom.backgroundLayer.dataset.mode = mode;
 
-        // 先讓 <img> 直接帶入 src，方便你在檢查元素時確認路徑。
-        this.applyBackgroundImage(imageUrl);
+        const cachedUrl = this.backgroundCache.get(imageUrl);
+        if (cachedUrl) {
+          this.applyBackgroundImage(cachedUrl);
+          return;
+        }
 
-        // 再自動嘗試常見路徑與副檔名，避免因 images/image、PNG/png、jpg/png 寫法不同而看不到。
+        // 自動嘗試常見路徑與副檔名，避免因 images/image、PNG/png、jpg/png 寫法不同而看不到。
         this.resolveImagePath(imageUrl).then((resolvedUrl) => {
+          this.backgroundCache.set(imageUrl, resolvedUrl);
           if (this.dom.backgroundLayer.dataset.mode === mode) {
             this.applyBackgroundImage(resolvedUrl);
           }
@@ -12832,6 +12922,17 @@ async function fetchChoicePercentage(choiceId) {
         const img = this.dom.backgroundImage;
 
         if (!img) return;
+
+        let nextSrc = imageUrl;
+        try {
+          nextSrc = new URL(imageUrl, window.location.href).href;
+        } catch (error) {
+          nextSrc = imageUrl;
+        }
+
+        if (img.getAttribute("src") === imageUrl || img.src === nextSrc) {
+          return;
+        }
 
         img.classList.remove("is-visible");
         img.onload = () => {
@@ -12905,9 +13006,16 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       clearVideoLayer() {
+        if (!this.dom.videoLayer) return;
+
+        this.dom.videoLayer.querySelectorAll("video").forEach((video) => {
+          releaseVideoElement(video);
+        });
+
         this.dom.videoLayer.innerHTML = "";
         // 保持影片層透明，避免空影片層覆蓋封面底圖。
         this.dom.videoLayer.style.background = "transparent";
+        setVideoPerformanceMode(false);
       },
 
       showOnly(activeScreen) {
@@ -16085,7 +16193,7 @@ async function fetchChoicePercentage(choiceId) {
 
         Storyline.state = createDefaultDiaryState();
         storyProgress = Storyline.state;
-        Storyline.saveState();
+        Storyline.saveStateNow();
         Storyline.render();
 
         const video = this.dom.introVideo;
@@ -16110,7 +16218,7 @@ async function fetchChoicePercentage(choiceId) {
         Storyline.state.currentChapter = 8;
         Storyline.state.highestUnlockedChapter = Math.max(8, Storyline.state.highestUnlockedChapter || 1);
         storyProgress = Storyline.state;
-        Storyline.saveState();
+        Storyline.saveStateNow();
         Storyline.render();
       }
     };
@@ -16119,6 +16227,7 @@ async function fetchChoicePercentage(choiceId) {
     const Storyline = {
       state: createDefaultDiaryState(),
       dom: {},
+      saveTimer: null,
 
       init() {
         this.cacheDom();
@@ -16395,7 +16504,7 @@ async function fetchChoicePercentage(choiceId) {
       resetAfterChapter(chapterNumber) {
         // 回溯時只重玩畫面，不清除 unlockedChapters / completedChapters，避免後面已完成章節被重新鎖起來。
         this.state.currentChapter = chapterNumber;
-        this.saveState();
+        this.saveStateNow();
         this.render();
       },
 
@@ -16418,6 +16527,16 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       saveState() {
+        window.clearTimeout(this.saveTimer);
+        this.saveTimer = window.setTimeout(() => {
+          this.saveTimer = null;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+        }, 120);
+      },
+
+      saveStateNow() {
+        window.clearTimeout(this.saveTimer);
+        this.saveTimer = null;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
       },
 
@@ -16511,7 +16630,7 @@ async function fetchChoicePercentage(choiceId) {
         );
 
         storyProgress = this.state;
-        this.saveState();
+        this.saveStateNow();
         this.render();
       }
     };
