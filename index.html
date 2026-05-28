@@ -717,11 +717,11 @@
 
     .game-frame[class*="ch1-scrolly-step"] .scene-video {
       transition: opacity 0.45s ease;
-      will-change: transform, opacity;
     }
 
     .game-frame[class*="ch1-scrolly-step"] .scene-video.is-visible {
       opacity: 1;
+      will-change: transform;
       transform:
         scale(calc(1.03 + var(--ch1-progress, 0) * 0.08))
         translate3d(
@@ -12938,6 +12938,9 @@ async function fetchChoicePercentage(choiceId) {
         this.startScrollyIntro(video);
       },
 
+      // 第一章前導影片會被 currentTime / fastSeek 控制，影片本身建議輸出為：
+      // H.264 MP4、1280x720 或 1920x1080 以內、keyframe interval 0.5～1 秒、避免 4K／過高 bitrate；
+      // keyframe 間距太長會讓 seek 依賴關鍵影格時更容易卡頓。
       startScrollyIntro(video) {
         this.cleanupScrollyIntro();
 
@@ -12965,6 +12968,16 @@ async function fetchChoicePercentage(choiceId) {
           progressBar: null,
           continueButton: null,
           cards: [],
+          seekRafId: null,
+          isSeeking: false,
+          pendingSeekTime: null,
+          pendingSeekTimeout: null,
+          lastSeekAt: 0,
+          lastAppliedVideoTime: 0,
+          minSeekInterval: 110,
+          seekThreshold: 0.12,
+          forceSeekThreshold: 0.28,
+          videoSeekTick: 0,
           videoFrameTick: 0,
           lastVideoTime: -1
         };
@@ -12989,6 +13002,29 @@ async function fetchChoicePercentage(choiceId) {
             this.startScrollyFallbackIntro();
           };
 
+          const handleSeeked = () => {
+            const currentState = this.scrollyState;
+            if (!currentState || currentState !== state) return;
+
+            currentState.isSeeking = false;
+
+            if (currentState.pendingSeekTime != null) {
+              const diff = Math.abs((Number(video.currentTime) || 0) - currentState.pendingSeekTime);
+
+              if (diff > currentState.seekThreshold) {
+                window.clearTimeout(currentState.pendingSeekTimeout);
+                currentState.pendingSeekTimeout = window.setTimeout(() => {
+                  if (this.scrollyState === currentState) {
+                    currentState.pendingSeekTimeout = null;
+                    this.applyScrollyVideoSeek(false);
+                  }
+                }, 30);
+              } else {
+                currentState.pendingSeekTime = null;
+              }
+            }
+          };
+
           state.fallbackTimer = window.setTimeout(() => {
             if (!Number.isFinite(video.duration) || video.duration <= 0) {
               failToFallback();
@@ -13001,6 +13037,7 @@ async function fetchChoicePercentage(choiceId) {
           }, { once: true });
 
           this.addScrollyListener(video, "loadeddata", syncFirstFrame, { once: true });
+          this.addScrollyListener(video, "seeked", handleSeeked);
           this.addScrollyListener(video, "error", failToFallback, { once: true });
 
           try {
@@ -13046,6 +13083,16 @@ async function fetchChoicePercentage(choiceId) {
           progressBar: null,
           continueButton: null,
           cards: [],
+          seekRafId: null,
+          isSeeking: false,
+          pendingSeekTime: null,
+          pendingSeekTimeout: null,
+          lastSeekAt: 0,
+          lastAppliedVideoTime: 0,
+          minSeekInterval: 110,
+          seekThreshold: 0.12,
+          forceSeekThreshold: 0.28,
+          videoSeekTick: 0,
           videoFrameTick: 0,
           lastVideoTime: -1
         };
@@ -13079,7 +13126,7 @@ async function fetchChoicePercentage(choiceId) {
             return;
           }
 
-          this.setScrollyTargetProgress(state.targetProgress + delta * 0.00038);
+          this.setScrollyTargetProgress(state.targetProgress + delta * 0.00032);
         }, { passive: false });
 
         this.addScrollyListener(screen, "touchstart", (event) => {
@@ -13104,7 +13151,7 @@ async function fetchChoicePercentage(choiceId) {
             return;
           }
 
-          this.setScrollyTargetProgress(state.targetProgress + deltaY * 0.0011);
+          this.setScrollyTargetProgress(state.targetProgress + deltaY * 0.00092);
         }, { passive: false });
 
         this.addScrollyListener(screen, "touchend", () => {
@@ -13266,7 +13313,11 @@ async function fetchChoicePercentage(choiceId) {
           this.updateScrollyStepClass(activeStepIndex);
         }
 
-        this.syncScrollyVideoToProgress(progress, immediate);
+        state.videoSeekTick = (state.videoSeekTick || 0) + 1;
+
+        if (immediate || state.videoSeekTick % 4 === 0) {
+          this.syncScrollyVideoToProgress(progress, immediate);
+        }
       },
 
       updateScrollyCssVars(progress, activeStepIndex) {
@@ -13370,23 +13421,69 @@ async function fetchChoicePercentage(choiceId) {
         const duration = Number(video.duration);
         if (!Number.isFinite(duration) || duration <= 0) return;
 
-        state.videoFrameTick += 1;
-
+        const safeProgress = this.clampScrollyProgress(progress);
         const targetTime = Math.min(
-          Math.max(duration * this.clampScrollyProgress(progress), 0),
-          Math.max(duration - 0.06, 0)
+          Math.max(duration * safeProgress, 0),
+          Math.max(duration - 0.08, 0)
         );
 
-        if (!force && Math.abs(targetTime - video.currentTime) <= 0.06) {
+        this.queueScrollyVideoSeek(targetTime, force);
+      },
+
+      queueScrollyVideoSeek(targetTime, force = false) {
+        const state = this.scrollyState;
+        const video = state?.video;
+        if (!state || !video || state.isFallback) return;
+
+        const now = performance.now();
+        const current = Number(video.currentTime) || 0;
+        const diff = Math.abs(targetTime - current);
+
+        if (!force && diff < state.seekThreshold) {
           return;
         }
 
+        state.pendingSeekTime = targetTime;
+
+        if (state.isSeeking && !force) {
+          return;
+        }
+
+        if (!force && now - state.lastSeekAt < state.minSeekInterval && diff < state.forceSeekThreshold) {
+          return;
+        }
+
+        this.applyScrollyVideoSeek(force);
+      },
+
+      applyScrollyVideoSeek(force = false) {
+        const state = this.scrollyState;
+        const video = state?.video;
+
+        if (!state || !video || state.isFallback) return;
+        if (state.pendingSeekTime == null) return;
+
+        const targetTime = state.pendingSeekTime;
+        state.pendingSeekTime = null;
+        state.isSeeking = true;
+        state.lastSeekAt = performance.now();
+
         try {
-          video.pause();
-          video.currentTime = targetTime;
+          if (!video.paused) {
+            video.pause();
+          }
+
+          if (typeof video.fastSeek === "function") {
+            video.fastSeek(targetTime);
+          } else {
+            video.currentTime = targetTime;
+          }
+
+          state.lastAppliedVideoTime = targetTime;
           state.lastVideoTime = targetTime;
         } catch (error) {
           console.warn("第一章前導影片定位失敗，保留目前畫面。", error);
+          state.isSeeking = false;
         }
       },
 
@@ -13428,9 +13525,16 @@ async function fetchChoicePercentage(choiceId) {
             target.removeEventListener(type, handler, listenerOptions);
           });
           window.clearTimeout(state.fallbackTimer);
+          window.clearTimeout(state.pendingSeekTimeout);
           if (state.rafId) {
             window.cancelAnimationFrame(state.rafId);
           }
+          if (state.seekRafId) {
+            window.cancelAnimationFrame(state.seekRafId);
+          }
+          state.pendingSeekTime = null;
+          state.pendingSeekTimeout = null;
+          state.isSeeking = false;
         }
 
         this.scrollyState = null;
@@ -17433,3 +17537,4 @@ async function fetchChoicePercentage(choiceId) {
   </script>
 </body>
 </html>
+  
