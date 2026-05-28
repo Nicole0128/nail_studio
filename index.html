@@ -159,26 +159,6 @@
       opacity: 1;
     }
 
-    .game-frame.is-video-playing .screen,
-    .game-frame.is-video-playing .dark-overlay,
-    .game-frame.is-video-playing .background-image,
-    .game-frame.is-video-playing .scene-video {
-      transition-duration: 0.18s !important;
-    }
-
-    .game-frame.is-video-playing .game-hud,
-    .game-frame.is-video-playing .chapter-chip,
-    .game-frame.is-video-playing .result-card,
-    .game-frame.is-video-playing .transition-card,
-    .game-frame.is-video-playing .ch2-rule-card,
-    .game-frame.is-video-playing .ch3-rule-card,
-    .game-frame.is-video-playing .ch4-rule-card,
-    .game-frame.is-video-playing .ch6-rule-card,
-    .game-frame.is-video-playing .ch7-rule-card {
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-    }
-
     .screen {
       z-index: 5;
       opacity: 0;
@@ -538,6 +518,296 @@
       letter-spacing: 0.14em;
     }
 
+
+    /* ==================================================
+       第一章前導：影片＋文字卡視差敘事
+       只作用於第一章前導，不影響後續章節影片與選擇流程
+    ================================================== */
+    .ch1-scrolly-intro-screen {
+      display: block;
+      overflow: hidden;
+      touch-action: none;
+      background: transparent;
+    }
+
+    .ch1-scrolly-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: auto;
+    }
+
+    .ch1-scrolly-layer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 52% 45%, rgba(20, 14, 11, 0.03), rgba(20, 14, 11, 0.16) 72%, rgba(20, 14, 11, 0.34) 100%),
+        linear-gradient(90deg, rgba(20, 14, 11, 0.5), rgba(20, 14, 11, 0.12) 42%, rgba(20, 14, 11, 0.34));
+    }
+
+    .ch1-scrolly-progress {
+      position: absolute;
+      left: clamp(28px, 4.2vw, 64px);
+      right: clamp(28px, 4.2vw, 64px);
+      top: clamp(22px, 3.8vh, 42px);
+      z-index: 3;
+      height: 5px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 248, 238, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 24px rgba(18, 11, 8, 0.18);
+    }
+
+    .ch1-scrolly-progress-bar {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(255, 250, 242, 0.92), rgba(217, 174, 162, 0.96));
+      transform-origin: left center;
+      transition: width 0.18s linear;
+      will-change: width;
+    }
+
+    .ch1-scrolly-card-stage {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      transform: translate3d(
+        calc(var(--ch1-progress, 0) * 1.2%),
+        calc(var(--ch1-progress, 0) * -1.2%),
+        0
+      );
+      transition: transform 0.34s linear;
+      will-change: transform;
+    }
+
+    .ch1-scrolly-card {
+      position: absolute;
+      left: clamp(32px, 6vw, 82px);
+      bottom: clamp(62px, 12vh, 118px);
+      z-index: 2;
+      width: min(42%, 520px);
+      height: auto;
+      max-height: min(58vh, 360px);
+      overflow: auto;
+      padding: clamp(16px, 2.2vw, 26px);
+      border-radius: clamp(20px, 2.4vw, 30px);
+      color: rgba(255, 250, 242, 0.96);
+      background:
+        linear-gradient(135deg, rgba(39, 28, 23, 0.78), rgba(92, 60, 50, 0.52));
+      border: 1px solid rgba(255, 236, 220, 0.22);
+      box-shadow:
+        0 24px 58px rgba(12, 8, 6, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translate3d(0, 46px, 0);
+      pointer-events: none;
+      transition:
+        opacity 0.72s cubic-bezier(.22, .61, .36, 1),
+        transform 0.72s cubic-bezier(.22, .61, .36, 1),
+        left 0.72s cubic-bezier(.22, .61, .36, 1),
+        right 0.72s cubic-bezier(.22, .61, .36, 1);
+      scrollbar-width: thin;
+      will-change: transform, opacity;
+    }
+
+    .ch1-scrolly-card[data-step="1"],
+    .ch1-scrolly-card[data-step="3"] {
+      left: auto;
+      right: clamp(32px, 6vw, 82px);
+    }
+
+    .ch1-scrolly-card.is-active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      pointer-events: auto;
+    }
+
+    .ch1-scrolly-card.is-before {
+      opacity: 0;
+      transform: translate3d(0, -46px, 0);
+    }
+
+    .ch1-scrolly-card.is-after {
+      opacity: 0;
+      transform: translate3d(0, 46px, 0);
+    }
+
+    .ch1-scrolly-text {
+      margin: 0;
+      color: rgba(255, 248, 238, 0.9);
+      font-family: var(--font-main);
+      font-size: clamp(0.92rem, 1.22vw, 1.08rem);
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+      font-weight: 500;
+      text-align: justify;
+    }
+
+    .ch1-scrolly-footer {
+      position: absolute;
+      left: clamp(28px, 4.2vw, 64px);
+      right: clamp(28px, 4.2vw, 64px);
+      bottom: clamp(16px, 3vh, 28px);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, 1.8vw, 18px);
+      pointer-events: none;
+    }
+
+    .ch1-scrolly-hint {
+      padding: 0.58em 1.08em;
+      border-radius: 999px;
+      color: rgba(255, 248, 238, 0.88);
+      background: rgba(55, 38, 31, 0.52);
+      border: 1px solid rgba(255, 236, 220, 0.22);
+      box-shadow: 0 12px 28px rgba(15, 10, 8, 0.22);
+      font-size: clamp(0.72rem, 1vw, 0.88rem);
+      font-weight: 850;
+      letter-spacing: 0.08em;
+    }
+
+    .ch1-scrolly-continue {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      min-height: clamp(38px, 5.2vh, 50px);
+      padding: 0.68em 1.6em;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      border-radius: 999px;
+      cursor: pointer;
+      color: #3c2a24;
+      background: linear-gradient(135deg, rgba(255, 249, 239, 0.96), rgba(218, 172, 155, 0.86));
+      box-shadow:
+        0 14px 34px rgba(28, 17, 12, 0.26),
+        inset 0 1px 0 rgba(255, 255, 255, 0.64);
+      font-weight: 900;
+      font-size: clamp(0.86rem, 1.18vw, 1rem);
+      letter-spacing: 0.08em;
+      transform: translateY(8px);
+      transition:
+        opacity 0.4s ease,
+        visibility 0.4s ease,
+        transform 0.4s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .ch1-scrolly-continue.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .ch1-scrolly-continue:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 18px 42px rgba(28, 17, 12, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .game-frame[class*="ch1-scrolly-step"] .scene-video {
+      transition: opacity 0.45s ease;
+      will-change: transform, opacity;
+    }
+
+    .game-frame[class*="ch1-scrolly-step"] .scene-video.is-visible {
+      opacity: 1;
+      transform:
+        scale(calc(1.03 + var(--ch1-progress, 0) * 0.08))
+        translate3d(
+          var(--ch1-video-x, 0%),
+          var(--ch1-video-y, 0%),
+          0
+        );
+    }
+
+    .game-frame.ch1-scrolly-step-1 .ch1-scrolly-layer::before,
+    .game-frame.ch1-scrolly-step-3 .ch1-scrolly-layer::before {
+      background:
+        radial-gradient(circle at 48% 45%, rgba(20, 14, 11, 0.03), rgba(20, 14, 11, 0.16) 72%, rgba(20, 14, 11, 0.34) 100%),
+        linear-gradient(270deg, rgba(20, 14, 11, 0.48), rgba(20, 14, 11, 0.12) 42%, rgba(20, 14, 11, 0.32));
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      .ch1-scrolly-progress {
+        left: 22px;
+        right: 22px;
+        top: 18px;
+        height: 4px;
+      }
+
+      .ch1-scrolly-card {
+        left: 24px;
+        bottom: 54px;
+        width: min(48%, 430px);
+        height: auto;
+        max-height: min(58vh, 260px);
+        padding: 14px 17px;
+        border-radius: 22px;
+      }
+
+      .ch1-scrolly-card[data-step="1"],
+      .ch1-scrolly-card[data-step="3"] {
+        right: 24px;
+      }
+
+      .ch1-scrolly-text {
+        font-size: 0.72rem;
+        line-height: 1.72;
+      }
+
+      .ch1-scrolly-footer {
+        left: 18px;
+        right: 18px;
+        bottom: 12px;
+      }
+
+      .ch1-scrolly-hint,
+      .ch1-scrolly-continue {
+        font-size: 0.68rem;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch1-scrolly-progress {
+        top: 12px;
+      }
+
+      .ch1-scrolly-card {
+        bottom: 38px;
+        width: min(45%, 390px);
+        height: auto;
+        max-height: min(58vh, 190px);
+        padding: 10px 13px;
+        border-radius: 18px;
+      }
+
+      .ch1-scrolly-text {
+        font-size: 0.62rem;
+        line-height: 1.58;
+      }
+
+      .ch1-scrolly-hint {
+        padding: 0.42em 0.86em;
+        font-size: 0.58rem;
+      }
+
+      .ch1-scrolly-continue {
+        min-height: 30px;
+        padding: 0.46em 1.1em;
+        font-size: 0.62rem;
+      }
+    }
 
     /* ==================================================
        第二章新增樣式
@@ -9205,6 +9475,8 @@
       <div class="video-layer" id="videoLayer"></div>
       <div class="dark-overlay" id="darkOverlay"></div>
 
+      <section class="screen ch1-scrolly-intro-screen" id="ch1ScrollyIntroScreen" aria-label="第一章前導滾動敘事"></section>
+
       <section class="screen cover-screen is-active" id="coverScreen" aria-label="工作室空景封面">
         <div class="chapter-chip">指尖創業日記　第一章</div>
         <button class="enter-button" id="enterButton" type="button">進入工作室</button>
@@ -9944,6 +10216,34 @@
       videoFinalFallback: "images/ch1-protagonist-final.png"
     };
 
+    const CH1_INTRO_STEPS = [
+      {
+        progress: 0,
+        title: "剛畢業後，林夏還沒有找到確定的方向",
+        body: "夜裡，她在求職網站和履歷表之間停下滑鼠。比起投出下一封履歷，她更想知道：自己還能不能走一條不一樣的路。"
+      },
+      {
+        progress: 0.24,
+        title: "一則限時動態，把她帶進美甲師的帳號",
+        body: "手機跳出的，是朋友剛做好的精緻美甲。被標記的帳號、居家工作室的照片，讓她第一次把「創業」和「美甲」放在同一個句子裡。"
+      },
+      {
+        progress: 0.48,
+        title: "在社群上，美甲看起來像能從房間開始",
+        body: "「本月預約已滿」、「新手作品紀錄」、「居家工作室」這些字眼，讓門檻看起來比想像中更低：不用店面、不用學歷，只要有作品，也許就能開始。"
+      },
+      {
+        progress: 0.72,
+        title: "她在筆記本上寫下：美甲？",
+        body: "這個問號不只是興趣，也是一個職涯選擇的開始。只是，社群上看起來漂亮的路，真的能成為穩定的工作嗎？"
+      },
+      {
+        progress: 0.94,
+        title: "如果這真的是一條路",
+        body: "朋友的訊息再次跳出：「妳不是想創業？美甲現在很紅欸。」現在，輪到你替林夏做出第一個選擇：為什麼想成為美甲師？"
+      }
+    ];
+
 
     const CH2_ASSETS = {
       introVideo: "videos/ch2-intro.mp4",
@@ -10160,34 +10460,6 @@
       return !isAudioUnlocked || !error || error.name === "NotAllowedError";
     }
 
-    function setVideoPerformanceMode(isPlaying) {
-      const gameFrame = document.getElementById("gameFrame");
-      if (!gameFrame) return;
-      gameFrame.classList.toggle("is-video-playing", Boolean(isPlaying));
-    }
-
-    function releaseVideoElement(video) {
-      if (!video) return;
-
-      try {
-        video.pause();
-      } catch (error) {
-        console.warn("影片暫停失敗：", error);
-      }
-
-      video.removeAttribute("src");
-      video.querySelectorAll("source").forEach((source) => {
-        source.removeAttribute("src");
-        source.remove();
-      });
-
-      try {
-        video.load();
-      } catch (error) {
-        console.warn("影片資源釋放失敗：", error);
-      }
-    }
-
     function showVideoPlayFallback(video, retryPlay) {
       const gameFrame = document.getElementById("gameFrame");
       if (!gameFrame || !video) return;
@@ -10216,39 +10488,20 @@
     function playPreparedVideo(video, onFail, options = {}) {
       if (!video) return null;
 
-      const markPlaying = () => setVideoPerformanceMode(true);
-      const markStopped = () => setVideoPerformanceMode(false);
-
-      video.addEventListener("playing", markPlaying, { once: true });
-      video.addEventListener("ended", markStopped, { once: true });
-      video.addEventListener("error", markStopped, { once: true });
-
       prepareVideoAudio(video);
       const playPromise = video.play();
 
       if (playPromise && typeof playPromise.catch === "function") {
         playPromise.catch((error) => {
-          video.removeEventListener("playing", markPlaying);
-          video.removeEventListener("ended", markStopped);
-          video.removeEventListener("error", markStopped);
-
           if (shouldOfferManualVideoPlay(error)) {
             options.onBlocked?.(error);
             showVideoPlayFallback(video, () => {
-              video.addEventListener("playing", markPlaying, { once: true });
-              video.addEventListener("ended", markStopped, { once: true });
-              video.addEventListener("error", markStopped, { once: true });
-
               prepareVideoAudio(video);
               const retryPromise = video.play();
 
               if (retryPromise && typeof retryPromise.catch === "function") {
                 retryPromise.catch((retryError) => {
-                  video.removeEventListener("playing", markPlaying);
-                  video.removeEventListener("ended", markStopped);
-                  video.removeEventListener("error", markStopped);
                   removeVideoPlayFallbackButton();
-                  setVideoPerformanceMode(false);
                   onFail?.(retryError);
                 });
               }
@@ -10256,7 +10509,6 @@
             return;
           }
 
-          setVideoPerformanceMode(false);
           onFail?.(error);
         });
       }
@@ -12404,20 +12656,10 @@ async function fetchChoicePercentage(choiceId) {
       return `NT$${number.toLocaleString("zh-TW")}`;
     }
 
-    let currentActiveScreen = null;
-
     function showScreen(activeScreen) {
-      if (currentActiveScreen && currentActiveScreen !== activeScreen) {
-        currentActiveScreen.classList.remove("is-active");
-      }
-
-      if (!activeScreen) {
-        currentActiveScreen = null;
-        return;
-      }
-
-      activeScreen.classList.add("is-active");
-      currentActiveScreen = activeScreen;
+      document.querySelectorAll(".game-frame .screen").forEach((screen) => {
+        screen.classList.toggle("is-active", screen === activeScreen);
+      });
     }
 
     function calculateChapterTwoPlan(selectedIds = []) {
@@ -12603,7 +12845,7 @@ async function fetchChoicePercentage(choiceId) {
 
     const ChapterOne = {
       dom: {},
-      backgroundCache: new Map(),
+      scrollyState: null,
 
       init() {
         this.cacheDom();
@@ -12618,6 +12860,7 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.backgroundImage = document.getElementById("backgroundImage");
         this.dom.videoLayer = document.getElementById("videoLayer");
         this.dom.darkOverlay = document.getElementById("darkOverlay");
+        this.dom.ch1ScrollyIntroScreen = document.getElementById("ch1ScrollyIntroScreen");
         this.dom.coverScreen = document.getElementById("coverScreen");
         this.dom.choiceScreen = document.getElementById("choiceScreen");
         this.dom.resultScreen = document.getElementById("resultScreen");
@@ -12658,6 +12901,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showCover() {
+        this.cleanupScrollyIntro();
+
         chapterOneState = {
           selectedChoiceId: null,
           selectedChoiceLabel: null,
@@ -12678,38 +12923,542 @@ async function fetchChoicePercentage(choiceId) {
 
       playEnterVideo() {
         this.showOnly(null);
+        this.cleanupScrollyIntro();
         this.setBackground(CH1_ASSETS.chapterPoster, "chapter-video-poster");
-        this.setDarkOverlay(false);
+        this.setDarkOverlay(true, "rgba(20, 16, 14, 0.22)");
 
         const video = this.createVideo({
           src: CH1_ASSETS.chapterVideo,
           poster: CH1_ASSETS.chapterPoster,
-          label: "第一章進入工作室影片"
+          label: "第一章前導滾動敘事影片"
         });
 
         this.clearVideoLayer();
         this.dom.videoLayer.appendChild(video);
+        this.startScrollyIntro(video);
+      },
 
-        this.playVideoSafely(video, {
-          failAfter: 7000,
-          onStarted: () => {
-            video.classList.add("is-visible");
-          },
-          onEnded: () => {
-            // 第一章目前只使用這一支影片；影片結束後保留最後一格作為選擇題背景。
+      startScrollyIntro(video) {
+        this.cleanupScrollyIntro();
+
+        const screen = this.dom.ch1ScrollyIntroScreen;
+        if (!screen) {
+          this.showChoiceScreen();
+          return;
+        }
+
+        const state = {
+          video,
+          scrollProgress: 0,
+          targetProgress: 0,
+          rafId: null,
+          activeStepIndex: 0,
+          isEndingReady: false,
+          endingReadyAt: 0,
+          isFallback: false,
+          isFinished: false,
+          touchStartY: 0,
+          touchLastY: 0,
+          touchCanFinish: false,
+          listeners: [],
+          fallbackTimer: null,
+          progressBar: null,
+          continueButton: null,
+          cards: [],
+          videoFrameTick: 0,
+          lastVideoTime: -1
+        };
+
+        this.scrollyState = state;
+        this.renderScrollyIntro(0, { immediate: true });
+        this.showOnly(screen);
+        this.updateScrollyFrame(true);
+
+        if (video) {
+          video.pause();
+          video.classList.add("is-visible");
+
+          const syncFirstFrame = () => {
+            if (this.scrollyState !== state || state.isFallback) return;
             video.pause();
-            video.classList.add("is-visible");
-            this.setDarkOverlay(true, "rgba(20, 16, 14, 0.45)");
-            window.setTimeout(() => this.showChoiceScreen(), 420);
-          },
-          onFail: () => {
-            // 若影片不存在或無法播放，改用最後畫面備用圖，流程仍繼續。
-            this.clearVideoLayer();
-            this.setBackground(CH1_ASSETS.videoFinalFallback, "video-final-fallback");
-            this.setDarkOverlay(true, "rgba(20, 16, 14, 0.45)");
-            window.setTimeout(() => this.showChoiceScreen(), 320);
+            this.syncScrollyVideoToProgress(0, true);
+          };
+
+          const failToFallback = () => {
+            if (this.scrollyState !== state || state.isFinished || state.isFallback) return;
+            this.startScrollyFallbackIntro();
+          };
+
+          state.fallbackTimer = window.setTimeout(() => {
+            if (!Number.isFinite(video.duration) || video.duration <= 0) {
+              failToFallback();
+            }
+          }, 7000);
+
+          this.addScrollyListener(video, "loadedmetadata", () => {
+            window.clearTimeout(state.fallbackTimer);
+            syncFirstFrame();
+          }, { once: true });
+
+          this.addScrollyListener(video, "loadeddata", syncFirstFrame, { once: true });
+          this.addScrollyListener(video, "error", failToFallback, { once: true });
+
+          try {
+            video.load();
+          } catch (error) {
+            failToFallback();
+          }
+
+          if (Number.isFinite(video.duration) && video.duration > 0) {
+            window.clearTimeout(state.fallbackTimer);
+            syncFirstFrame();
+          }
+        }
+
+        this.bindScrollyIntroEvents();
+        this.startScrollyAnimationLoop();
+      },
+
+      startScrollyFallbackIntro() {
+        this.cleanupScrollyIntro();
+
+        const screen = this.dom.ch1ScrollyIntroScreen;
+
+        this.clearVideoLayer();
+        this.setBackground(CH1_ASSETS.videoFinalFallback, "video-final-fallback");
+        this.setDarkOverlay(true, "rgba(20, 16, 14, 0.45)");
+
+        const state = {
+          video: null,
+          scrollProgress: 0,
+          targetProgress: 0,
+          rafId: null,
+          activeStepIndex: 0,
+          isEndingReady: false,
+          endingReadyAt: 0,
+          isFallback: true,
+          isFinished: false,
+          touchStartY: 0,
+          touchLastY: 0,
+          touchCanFinish: false,
+          listeners: [],
+          fallbackTimer: null,
+          progressBar: null,
+          continueButton: null,
+          cards: [],
+          videoFrameTick: 0,
+          lastVideoTime: -1
+        };
+
+        this.scrollyState = state;
+        this.renderScrollyIntro(0, { immediate: true });
+        this.showOnly(screen);
+        this.updateScrollyFrame(true);
+        this.bindScrollyIntroEvents();
+        this.startScrollyAnimationLoop();
+      },
+
+      bindScrollyIntroEvents() {
+        const state = this.scrollyState;
+        const screen = this.dom.ch1ScrollyIntroScreen;
+
+        if (!state || !screen) return;
+
+        this.addScrollyListener(screen, "wheel", (event) => {
+          event.preventDefault();
+          const delta = event.deltaY || 0;
+          if (Math.abs(delta) < 2) return;
+
+          if (
+            delta > 0 &&
+            state.isEndingReady &&
+            state.targetProgress >= 0.985 &&
+            performance.now() - state.endingReadyAt > 120
+          ) {
+            this.finishScrollyIntro();
+            return;
+          }
+
+          this.setScrollyTargetProgress(state.targetProgress + delta * 0.00038);
+        }, { passive: false });
+
+        this.addScrollyListener(screen, "touchstart", (event) => {
+          if (!event.touches || !event.touches.length) return;
+          state.touchStartY = event.touches[0].clientY;
+          state.touchLastY = state.touchStartY;
+          state.touchCanFinish = Boolean(state.isEndingReady && state.targetProgress >= 0.985);
+        }, { passive: true });
+
+        this.addScrollyListener(screen, "touchmove", (event) => {
+          event.preventDefault();
+          if (!event.touches || !event.touches.length) return;
+
+          const currentY = event.touches[0].clientY;
+          const deltaY = state.touchLastY - currentY;
+          state.touchLastY = currentY;
+
+          if (Math.abs(deltaY) < 0.5) return;
+
+          if (deltaY > 0 && state.touchCanFinish && state.isEndingReady && state.targetProgress >= 0.985) {
+            this.finishScrollyIntro();
+            return;
+          }
+
+          this.setScrollyTargetProgress(state.targetProgress + deltaY * 0.0011);
+        }, { passive: false });
+
+        this.addScrollyListener(screen, "touchend", () => {
+          state.touchCanFinish = false;
+        }, { passive: true });
+      },
+
+      addScrollyListener(target, type, handler, options) {
+        if (!target || !this.scrollyState) return;
+
+        target.addEventListener(type, handler, options);
+        this.scrollyState.listeners.push({ target, type, handler, options });
+      },
+
+      escapeScrollyText(value) {
+        const div = document.createElement("div");
+        div.textContent = String(value ?? "");
+        return div.innerHTML;
+      },
+
+      composeScrollyNarration(step) {
+        const title = String(step?.title ?? "").trim();
+        const body = String(step?.body ?? "").trim();
+        if (!title) return body;
+        if (!body) return title;
+
+        const needsStop = !/[。！？!?：；;，,、]$/.test(title);
+        return `${title}${needsStop ? "。" : ""}${body}`;
+      },
+
+      clampScrollyProgress(value) {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return 0;
+        return Math.max(0, Math.min(1, number));
+      },
+
+      getScrollyCardRanges() {
+        return [
+          { start: 0, end: 0.18 },
+          { start: 0.18, end: 0.38 },
+          { start: 0.38, end: 0.6 },
+          { start: 0.6, end: 0.8 },
+          { start: 0.8, end: 1 }
+        ];
+      },
+
+      renderScrollyIntro(stepIndex = 0, options = {}) {
+        const screen = this.dom.ch1ScrollyIntroScreen;
+        const state = this.scrollyState;
+
+        if (!screen || !state) return;
+
+        if (!screen.querySelector(".ch1-scrolly-layer")) {
+          const cardHtml = CH1_INTRO_STEPS.map((step, index) => `
+            <article class="ch1-scrolly-card" data-step="${index}">
+              <p class="ch1-scrolly-text">${this.escapeScrollyText(this.composeScrollyNarration(step))}</p>
+            </article>
+          `).join("");
+
+          screen.innerHTML = `
+            <div class="ch1-scrolly-layer">
+              <div class="ch1-scrolly-progress" aria-hidden="true">
+                <span class="ch1-scrolly-progress-bar"></span>
+              </div>
+
+              <div class="ch1-scrolly-card-stage">
+                ${cardHtml}
+              </div>
+
+              <div class="ch1-scrolly-footer">
+                <div class="ch1-scrolly-hint">上下滑動控制影片</div>
+                <button class="ch1-scrolly-continue" type="button">進入選擇</button>
+              </div>
+            </div>
+          `;
+        }
+
+        state.progressBar = screen.querySelector(".ch1-scrolly-progress-bar");
+        state.continueButton = screen.querySelector(".ch1-scrolly-continue");
+        state.cards = Array.from(screen.querySelectorAll(".ch1-scrolly-card"));
+
+        if (state.continueButton) {
+          state.continueButton.onclick = () => this.finishScrollyIntro();
+        }
+
+        const initialStep = CH1_INTRO_STEPS[stepIndex] || CH1_INTRO_STEPS[0];
+        if (options.immediate && initialStep) {
+          state.scrollProgress = this.clampScrollyProgress(initialStep.progress);
+          state.targetProgress = state.scrollProgress;
+        }
+
+        this.updateScrollyFrame(true);
+      },
+
+      setScrollyTargetProgress(value) {
+        const state = this.scrollyState;
+        if (!state || state.isFinished) return;
+
+        state.targetProgress = this.clampScrollyProgress(value);
+
+        if (!state.rafId) {
+          this.startScrollyAnimationLoop();
+        }
+      },
+
+      startScrollyAnimationLoop() {
+        const state = this.scrollyState;
+        if (!state || state.rafId || state.isFinished) return;
+
+        const tick = () => {
+          if (this.scrollyState !== state || state.isFinished) return;
+
+          const diff = state.targetProgress - state.scrollProgress;
+          if (Math.abs(diff) < 0.0006) {
+            state.scrollProgress = state.targetProgress;
+          } else {
+            state.scrollProgress += diff * 0.075;
+          }
+
+          this.updateScrollyFrame(false);
+          state.rafId = window.requestAnimationFrame(tick);
+        };
+
+        state.rafId = window.requestAnimationFrame(tick);
+      },
+
+      updateScrollyFrame(immediate = false) {
+        const state = this.scrollyState;
+        if (!state) return;
+
+        const progress = this.clampScrollyProgress(state.scrollProgress);
+        const targetProgress = this.clampScrollyProgress(state.targetProgress);
+        const activeStepIndex = this.getActiveScrollyStepIndex(progress);
+
+        this.updateScrollyCssVars(progress, activeStepIndex);
+        this.updateScrollyCards(progress);
+
+        if (state.progressBar) {
+          state.progressBar.style.width = `${Math.round(progress * 1000) / 10}%`;
+        }
+
+        if (state.continueButton) {
+          const shouldShowContinue = targetProgress >= 0.985 || progress >= 0.985;
+          state.continueButton.classList.toggle("is-visible", shouldShowContinue);
+        }
+
+        if ((targetProgress >= 0.985 || progress >= 0.985) && !state.isEndingReady) {
+          state.isEndingReady = true;
+          state.endingReadyAt = performance.now();
+        }
+
+        if (targetProgress < 0.965 && progress < 0.965) {
+          state.isEndingReady = false;
+          state.endingReadyAt = 0;
+        }
+
+        if (activeStepIndex !== state.activeStepIndex || immediate) {
+          state.activeStepIndex = activeStepIndex;
+          this.updateScrollyStepClass(activeStepIndex);
+        }
+
+        this.syncScrollyVideoToProgress(progress, immediate);
+      },
+
+      updateScrollyCssVars(progress, activeStepIndex) {
+        const frame = this.dom.gameFrame;
+        if (!frame) return;
+
+        const ranges = this.getScrollyCardRanges();
+        const range = ranges[activeStepIndex] || ranges[0];
+        const segmentRange = Math.max((range.end ?? 1) - (range.start ?? 0), 0.001);
+        const cardProgress = this.clampScrollyProgress((progress - (range.start ?? 0)) / segmentRange);
+
+        frame.style.setProperty("--ch1-progress", progress.toFixed(4));
+        frame.style.setProperty("--ch1-card-progress", cardProgress.toFixed(4));
+        frame.style.setProperty("--ch1-video-x", `${(-2.4 * progress).toFixed(3)}%`);
+        frame.style.setProperty("--ch1-video-y", `${(-1.2 * progress).toFixed(3)}%`);
+      },
+
+      updateScrollyCards(progress) {
+        const state = this.scrollyState;
+        if (!state || !state.cards || !state.cards.length) return;
+
+        const ranges = this.getScrollyCardRanges();
+
+        state.cards.forEach((card, index) => {
+          const range = ranges[index] || { start: 0, end: 1 };
+          const start = range.start;
+          const end = range.end;
+          const local = (progress - start) / Math.max(end - start, 0.001);
+
+          let opacity = 0;
+          let translateY = 46;
+          let stateClass = "is-after";
+
+          if (local < 0) {
+            opacity = 0;
+            translateY = 46;
+            stateClass = "is-after";
+          } else if (local < 0.16) {
+            const t = local / 0.16;
+            opacity = t;
+            translateY = 46 * (1 - t);
+            stateClass = "is-active";
+          } else if (local <= 0.82) {
+            opacity = 1;
+            translateY = 0;
+            stateClass = "is-active";
+          } else if (local <= 1) {
+            const t = (local - 0.82) / 0.18;
+            opacity = 1 - t;
+            translateY = -46 * t;
+            stateClass = "is-active";
+          } else {
+            opacity = 0;
+            translateY = -46;
+            stateClass = "is-before";
+          }
+
+          card.classList.toggle("is-before", stateClass === "is-before");
+          card.classList.toggle("is-active", stateClass === "is-active");
+          card.classList.toggle("is-after", stateClass === "is-after");
+          card.style.opacity = String(Math.max(0, Math.min(1, opacity)));
+          card.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`;
+          card.style.zIndex = stateClass === "is-active" ? "3" : "2";
+        });
+      },
+
+      getActiveScrollyStepIndex(progress) {
+        const ranges = this.getScrollyCardRanges();
+        const safeProgress = this.clampScrollyProgress(progress);
+
+        for (let index = 0; index < ranges.length; index += 1) {
+          const range = ranges[index];
+          const isLast = index === ranges.length - 1;
+          if (safeProgress >= range.start && (safeProgress < range.end || isLast)) {
+            return index;
+          }
+        }
+
+        return 0;
+      },
+
+      updateScrollyStepClass(stepIndex) {
+        const frame = this.dom.gameFrame;
+        if (!frame) return;
+
+        Array.from(frame.classList).forEach((className) => {
+          if (className.startsWith("ch1-scrolly-step-")) {
+            frame.classList.remove(className);
           }
         });
+
+        frame.classList.add(`ch1-scrolly-step-${stepIndex}`);
+      },
+
+      syncScrollyVideoToProgress(progress, force = false) {
+        const state = this.scrollyState;
+        const video = state?.video;
+
+        if (!video || state?.isFallback) return;
+
+        const duration = Number(video.duration);
+        if (!Number.isFinite(duration) || duration <= 0) return;
+
+        state.videoFrameTick += 1;
+
+        const targetTime = Math.min(
+          Math.max(duration * this.clampScrollyProgress(progress), 0),
+          Math.max(duration - 0.06, 0)
+        );
+
+        if (!force && Math.abs(targetTime - video.currentTime) <= 0.06) {
+          return;
+        }
+
+        try {
+          video.pause();
+          video.currentTime = targetTime;
+          state.lastVideoTime = targetTime;
+        } catch (error) {
+          console.warn("第一章前導影片定位失敗，保留目前畫面。", error);
+        }
+      },
+
+      finishScrollyIntro() {
+        const state = this.scrollyState;
+        if (state?.isFinished) return;
+
+        if (state) {
+          state.isFinished = true;
+          state.targetProgress = 1;
+          state.scrollProgress = 1;
+          this.updateScrollyFrame(true);
+        }
+
+        const video = state?.video;
+        if (video && !state.isFallback) {
+          const duration = Number(video.duration);
+          try {
+            video.pause();
+            if (Number.isFinite(duration) && duration > 0) {
+              video.currentTime = Math.max(duration - 0.08, 0);
+            }
+            video.classList.add("is-visible");
+          } catch (error) {
+            console.warn("第一章前導結尾停格失敗，改以目前影格繼續。", error);
+          }
+        }
+
+        this.cleanupScrollyIntro({ keepScreenContent: true, keepStepClass: true, keepCssVars: true });
+        this.setDarkOverlay(true, "rgba(20, 16, 14, 0.45)");
+        this.showChoiceScreen();
+      },
+
+      cleanupScrollyIntro(options = {}) {
+        const state = this.scrollyState;
+
+        if (state) {
+          state.listeners.forEach(({ target, type, handler, options: listenerOptions }) => {
+            target.removeEventListener(type, handler, listenerOptions);
+          });
+          window.clearTimeout(state.fallbackTimer);
+          if (state.rafId) {
+            window.cancelAnimationFrame(state.rafId);
+          }
+        }
+
+        this.scrollyState = null;
+
+        if (!options.keepStepClass) {
+          const frame = this.dom.gameFrame;
+          if (frame) {
+            Array.from(frame.classList).forEach((className) => {
+              if (className.startsWith("ch1-scrolly-step-")) {
+                frame.classList.remove(className);
+              }
+            });
+          }
+        }
+
+        if (!options.keepCssVars) {
+          const frame = this.dom.gameFrame;
+          if (frame) {
+            frame.style.removeProperty("--ch1-progress");
+            frame.style.removeProperty("--ch1-card-progress");
+            frame.style.removeProperty("--ch1-video-x");
+            frame.style.removeProperty("--ch1-video-y");
+          }
+        }
+
+        if (!options.keepScreenContent && this.dom.ch1ScrollyIntroScreen) {
+          this.dom.ch1ScrollyIntroScreen.innerHTML = "";
+        }
       },
 
       showChoiceScreen() {
@@ -12807,7 +13556,6 @@ async function fetchChoicePercentage(choiceId) {
 
         let settled = false;
         let started = false;
-        let hasTriedPlay = false;
 
         const cleanup = () => {
           video.removeEventListener("playing", handleStarted);
@@ -12823,7 +13571,6 @@ async function fetchChoicePercentage(choiceId) {
           if (settled) return;
           settled = true;
           cleanup();
-          setVideoPerformanceMode(false);
           onFail();
         };
 
@@ -12832,7 +13579,6 @@ async function fetchChoicePercentage(choiceId) {
           started = true;
           window.clearTimeout(startGuard);
           removeVideoPlayFallbackButton();
-          setVideoPerformanceMode(true);
           onStarted();
         };
 
@@ -12840,7 +13586,6 @@ async function fetchChoicePercentage(choiceId) {
           if (settled) return;
           settled = true;
           cleanup();
-          setVideoPerformanceMode(false);
           onEnded();
         };
 
@@ -12849,9 +13594,6 @@ async function fetchChoicePercentage(choiceId) {
         };
 
         const tryPlay = () => {
-          if (hasTriedPlay || settled) return;
-          hasTriedPlay = true;
-
           playPreparedVideo(video, finishFail, {
             onBlocked: () => {
               window.clearTimeout(startGuard);
@@ -12903,15 +13645,11 @@ async function fetchChoicePercentage(choiceId) {
       setBackground(imageUrl, mode) {
         this.dom.backgroundLayer.dataset.mode = mode;
 
-        const cachedUrl = this.backgroundCache.get(imageUrl);
-        if (cachedUrl) {
-          this.applyBackgroundImage(cachedUrl);
-          return;
-        }
+        // 先讓 <img> 直接帶入 src，方便你在檢查元素時確認路徑。
+        this.applyBackgroundImage(imageUrl);
 
-        // 自動嘗試常見路徑與副檔名，避免因 images/image、PNG/png、jpg/png 寫法不同而看不到。
+        // 再自動嘗試常見路徑與副檔名，避免因 images/image、PNG/png、jpg/png 寫法不同而看不到。
         this.resolveImagePath(imageUrl).then((resolvedUrl) => {
-          this.backgroundCache.set(imageUrl, resolvedUrl);
           if (this.dom.backgroundLayer.dataset.mode === mode) {
             this.applyBackgroundImage(resolvedUrl);
           }
@@ -12922,17 +13660,6 @@ async function fetchChoicePercentage(choiceId) {
         const img = this.dom.backgroundImage;
 
         if (!img) return;
-
-        let nextSrc = imageUrl;
-        try {
-          nextSrc = new URL(imageUrl, window.location.href).href;
-        } catch (error) {
-          nextSrc = imageUrl;
-        }
-
-        if (img.getAttribute("src") === imageUrl || img.src === nextSrc) {
-          return;
-        }
 
         img.classList.remove("is-visible");
         img.onload = () => {
@@ -13006,16 +13733,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       clearVideoLayer() {
-        if (!this.dom.videoLayer) return;
-
-        this.dom.videoLayer.querySelectorAll("video").forEach((video) => {
-          releaseVideoElement(video);
-        });
-
+        this.cleanupScrollyIntro();
         this.dom.videoLayer.innerHTML = "";
         // 保持影片層透明，避免空影片層覆蓋封面底圖。
         this.dom.videoLayer.style.background = "transparent";
-        setVideoPerformanceMode(false);
       },
 
       showOnly(activeScreen) {
@@ -16193,7 +16914,7 @@ async function fetchChoicePercentage(choiceId) {
 
         Storyline.state = createDefaultDiaryState();
         storyProgress = Storyline.state;
-        Storyline.saveStateNow();
+        Storyline.saveState();
         Storyline.render();
 
         const video = this.dom.introVideo;
@@ -16218,7 +16939,7 @@ async function fetchChoicePercentage(choiceId) {
         Storyline.state.currentChapter = 8;
         Storyline.state.highestUnlockedChapter = Math.max(8, Storyline.state.highestUnlockedChapter || 1);
         storyProgress = Storyline.state;
-        Storyline.saveStateNow();
+        Storyline.saveState();
         Storyline.render();
       }
     };
@@ -16227,7 +16948,6 @@ async function fetchChoicePercentage(choiceId) {
     const Storyline = {
       state: createDefaultDiaryState(),
       dom: {},
-      saveTimer: null,
 
       init() {
         this.cacheDom();
@@ -16504,7 +17224,7 @@ async function fetchChoicePercentage(choiceId) {
       resetAfterChapter(chapterNumber) {
         // 回溯時只重玩畫面，不清除 unlockedChapters / completedChapters，避免後面已完成章節被重新鎖起來。
         this.state.currentChapter = chapterNumber;
-        this.saveStateNow();
+        this.saveState();
         this.render();
       },
 
@@ -16527,16 +17247,6 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       saveState() {
-        window.clearTimeout(this.saveTimer);
-        this.saveTimer = window.setTimeout(() => {
-          this.saveTimer = null;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
-        }, 120);
-      },
-
-      saveStateNow() {
-        window.clearTimeout(this.saveTimer);
-        this.saveTimer = null;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
       },
 
@@ -16630,7 +17340,7 @@ async function fetchChoicePercentage(choiceId) {
         );
 
         storyProgress = this.state;
-        this.saveStateNow();
+        this.saveState();
         this.render();
       }
     };
