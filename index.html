@@ -12972,13 +12972,18 @@ async function fetchChoicePercentage(choiceId) {
           isSeeking: false,
           pendingSeekTime: null,
           pendingSeekTimeout: null,
-          lastSeekAt: 0,
+
+          // latest target wins：永遠記住最新一次想要 seek 到哪裡
+          lastRequestedSeekTime: null,
           lastAppliedVideoTime: 0,
-          minSeekInterval: 110,
-          seekThreshold: 0.12,
-          forceSeekThreshold: 0.28,
-          videoSeekTick: 0,
-          videoFrameTick: 0,
+          lastSeekAt: 0,
+
+          // 避免極小變化一直 seek；但也不能節流太重
+          seekThreshold: 0.06,
+          largeJumpThreshold: 0.35,
+          minSeekInterval: 45,
+
+          // 保留相容欄位，避免其他既有程式若有讀取時出錯
           lastVideoTime: -1
         };
 
@@ -12988,6 +12993,12 @@ async function fetchChoicePercentage(choiceId) {
         this.updateScrollyFrame(true);
 
         if (video) {
+          // 只針對第一章前導 scrollytelling 影片補強預載與 inline 播放設定
+          video.preload = "auto";
+          video.playsInline = true;
+          video.setAttribute("preload", "auto");
+          video.setAttribute("playsinline", "");
+
           video.pause();
           video.classList.add("is-visible");
 
@@ -13008,21 +13019,22 @@ async function fetchChoicePercentage(choiceId) {
 
             currentState.isSeeking = false;
 
-            if (currentState.pendingSeekTime != null) {
-              const diff = Math.abs((Number(video.currentTime) || 0) - currentState.pendingSeekTime);
+            const pending = currentState.pendingSeekTime;
+            if (pending == null) return;
 
-              if (diff > currentState.seekThreshold) {
-                window.clearTimeout(currentState.pendingSeekTimeout);
-                currentState.pendingSeekTimeout = window.setTimeout(() => {
-                  if (this.scrollyState === currentState) {
-                    currentState.pendingSeekTimeout = null;
-                    this.applyScrollyVideoSeek(false);
-                  }
-                }, 30);
-              } else {
-                currentState.pendingSeekTime = null;
-              }
+            const current = Number(video.currentTime) || 0;
+            const diff = Math.abs(current - pending);
+
+            if (diff > currentState.seekThreshold) {
+              // 不用 setTimeout 補 seek。
+              // 保留最新 pending target，交回 RAF queue 層處理，避免 seeked → setTimeout → seek 的延遲鏈。
+              this.queueScrollyVideoSeek(pending, false);
+              return;
             }
+
+            // 已經接近最新目標，清掉 pending。
+            currentState.pendingSeekTime = null;
+            currentState.lastAppliedVideoTime = current;
           };
 
           state.fallbackTimer = window.setTimeout(() => {
@@ -13087,13 +13099,18 @@ async function fetchChoicePercentage(choiceId) {
           isSeeking: false,
           pendingSeekTime: null,
           pendingSeekTimeout: null,
-          lastSeekAt: 0,
+
+          // latest target wins：永遠記住最新一次想要 seek 到哪裡
+          lastRequestedSeekTime: null,
           lastAppliedVideoTime: 0,
-          minSeekInterval: 110,
-          seekThreshold: 0.12,
-          forceSeekThreshold: 0.28,
-          videoSeekTick: 0,
-          videoFrameTick: 0,
+          lastSeekAt: 0,
+
+          // 避免極小變化一直 seek；但也不能節流太重
+          seekThreshold: 0.06,
+          largeJumpThreshold: 0.35,
+          minSeekInterval: 45,
+
+          // 保留相容欄位，避免其他既有程式若有讀取時出錯
           lastVideoTime: -1
         };
 
@@ -13313,11 +13330,8 @@ async function fetchChoicePercentage(choiceId) {
           this.updateScrollyStepClass(activeStepIndex);
         }
 
-        state.videoSeekTick = (state.videoSeekTick || 0) + 1;
-
-        if (immediate || state.videoSeekTick % 4 === 0) {
-          this.syncScrollyVideoToProgress(progress, immediate);
-        }
+        // 每次 frame 都提供最新 progress；真正 currentTime 寫入頻率交給 queue 層控制。
+        this.syncScrollyVideoToProgress(progress, immediate);
       },
 
       updateScrollyCssVars(progress, activeStepIndex) {
@@ -13433,53 +13447,107 @@ async function fetchChoicePercentage(choiceId) {
       queueScrollyVideoSeek(targetTime, force = false) {
         const state = this.scrollyState;
         const video = state?.video;
-        if (!state || !video || state.isFallback) return;
 
-        const now = performance.now();
+        if (!state || !video || state.isFallback || state.isFinished) return;
+
+        const safeTargetTime = Math.max(0, Number(targetTime) || 0);
+
+        // latest target wins：
+        // 不管前一次 seek 是否完成，都先記住最新目標。
+        state.pendingSeekTime = safeTargetTime;
+
         const current = Number(video.currentTime) || 0;
-        const diff = Math.abs(targetTime - current);
+        const diff = Math.abs(safeTargetTime - current);
 
-        if (!force && diff < state.seekThreshold) {
+        // 最新目標已經很接近目前影格，直接清掉 pending，避免微小抖動一直 seek。
+        if (diff < state.seekThreshold) {
+          state.pendingSeekTime = null;
+          state.lastAppliedVideoTime = current;
           return;
         }
 
-        state.pendingSeekTime = targetTime;
-
+        // 如果影片正在 seek，不要丟掉新 target。
+        // 等 seeked 事件回來後，handleSeeked 會把 pendingSeekTime 再丟回 queue。
         if (state.isSeeking && !force) {
           return;
         }
 
-        if (!force && now - state.lastSeekAt < state.minSeekInterval && diff < state.forceSeekThreshold) {
-          return;
-        }
+        // 已經有 RAF 等待處理，就不要重複建立。
+        // pendingSeekTime 已經被更新，所以該 RAF 執行時會吃到最新 target。
+        if (state.seekRafId) return;
 
-        this.applyScrollyVideoSeek(force);
+        state.seekRafId = window.requestAnimationFrame(() => {
+          if (this.scrollyState !== state) return;
+
+          state.seekRafId = null;
+          this.applyScrollyVideoSeek(force);
+        });
       },
 
       applyScrollyVideoSeek(force = false) {
         const state = this.scrollyState;
         const video = state?.video;
 
-        if (!state || !video || state.isFallback) return;
+        if (!state || !video || state.isFallback || state.isFinished) return;
         if (state.pendingSeekTime == null) return;
 
         const targetTime = state.pendingSeekTime;
+        const current = Number(video.currentTime) || 0;
+        const diff = Math.abs(targetTime - current);
+
+        // 差距太小就不要 seek，避免 currentTime 被密集寫入。
+        if (diff < state.seekThreshold) {
+          state.pendingSeekTime = null;
+          state.lastAppliedVideoTime = current;
+          return;
+        }
+
+        // 如果上一個 seek 還沒完成，不要硬插新的 currentTime。
+        // 新 target 已經留在 pendingSeekTime，等 seeked 後補到最新位置。
+        if (state.isSeeking && !force) {
+          return;
+        }
+
+        const now = performance.now();
+        const isLargeJump = diff >= state.largeJumpThreshold;
+
+        // 節流：不是大跳躍、也不是 force，而且距離上次 seek 太短，就延到下一個 RAF。
+        // 注意：不是直接 return 掉，否則停下來時可能補不到正確位置。
+        if (!force && !isLargeJump && now - state.lastSeekAt < state.minSeekInterval) {
+          if (!state.seekRafId) {
+            state.seekRafId = window.requestAnimationFrame(() => {
+              if (this.scrollyState !== state) return;
+
+              state.seekRafId = null;
+              this.applyScrollyVideoSeek(false);
+            });
+          }
+          return;
+        }
+
+        // 若 fastSeek 反覆落在關鍵影格附近，第二次同 target 改用 currentTime 精準修正，
+        // 避免 fastSeek → seeked → fastSeek 的迴圈。
+        const isRepeatedTarget =
+          state.lastRequestedSeekTime != null &&
+          Math.abs(targetTime - state.lastRequestedSeekTime) < state.seekThreshold;
+
         state.pendingSeekTime = null;
+        state.lastRequestedSeekTime = targetTime;
+        state.lastAppliedVideoTime = targetTime;
+        state.lastSeekAt = now;
         state.isSeeking = true;
-        state.lastSeekAt = performance.now();
 
         try {
           if (!video.paused) {
             video.pause();
           }
 
-          if (typeof video.fastSeek === "function") {
+          if (isLargeJump && !isRepeatedTarget && typeof video.fastSeek === "function") {
             video.fastSeek(targetTime);
           } else {
             video.currentTime = targetTime;
           }
 
-          state.lastAppliedVideoTime = targetTime;
           state.lastVideoTime = targetTime;
         } catch (error) {
           console.warn("第一章前導影片定位失敗，保留目前畫面。", error);
@@ -13532,8 +13600,11 @@ async function fetchChoicePercentage(choiceId) {
           if (state.seekRafId) {
             window.cancelAnimationFrame(state.seekRafId);
           }
+          state.rafId = null;
+          state.seekRafId = null;
           state.pendingSeekTime = null;
           state.pendingSeekTimeout = null;
+          state.lastRequestedSeekTime = null;
           state.isSeeking = false;
         }
 
