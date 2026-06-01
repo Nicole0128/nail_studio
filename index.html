@@ -147,6 +147,17 @@
       opacity: 1;
     }
 
+    .ch1-scrolly-frame-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
     .dark-overlay {
       z-index: 3;
       pointer-events: none;
@@ -549,31 +560,6 @@
         linear-gradient(90deg, rgba(20, 14, 11, 0.5), rgba(20, 14, 11, 0.12) 42%, rgba(20, 14, 11, 0.34));
     }
 
-    .ch1-scrolly-progress {
-      position: absolute;
-      left: clamp(28px, 4.2vw, 64px);
-      right: clamp(28px, 4.2vw, 64px);
-      top: clamp(22px, 3.8vh, 42px);
-      z-index: 3;
-      height: 5px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(255, 248, 238, 0.24);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 24px rgba(18, 11, 8, 0.18);
-    }
-
-    .ch1-scrolly-progress-bar {
-      display: block;
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, rgba(255, 250, 242, 0.92), rgba(217, 174, 162, 0.96));
-      transform-origin: left center;
-      transition: width 0.18s linear;
-      will-change: width;
-    }
-
     .ch1-scrolly-card-stage {
       position: absolute;
       inset: 0;
@@ -651,70 +637,6 @@
       text-align: justify;
     }
 
-    .ch1-scrolly-footer {
-      position: absolute;
-      left: clamp(28px, 4.2vw, 64px);
-      right: clamp(28px, 4.2vw, 64px);
-      bottom: clamp(16px, 3vh, 28px);
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(10px, 1.8vw, 18px);
-      pointer-events: none;
-    }
-
-    .ch1-scrolly-hint {
-      padding: 0.58em 1.08em;
-      border-radius: 999px;
-      color: rgba(255, 248, 238, 0.88);
-      background: rgba(55, 38, 31, 0.52);
-      border: 1px solid rgba(255, 236, 220, 0.22);
-      box-shadow: 0 12px 28px rgba(15, 10, 8, 0.22);
-      font-size: clamp(0.72rem, 1vw, 0.88rem);
-      font-weight: 850;
-      letter-spacing: 0.08em;
-    }
-
-    .ch1-scrolly-continue {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      min-height: clamp(38px, 5.2vh, 50px);
-      padding: 0.68em 1.6em;
-      border: 1px solid rgba(255, 255, 255, 0.62);
-      border-radius: 999px;
-      cursor: pointer;
-      color: #3c2a24;
-      background: linear-gradient(135deg, rgba(255, 249, 239, 0.96), rgba(218, 172, 155, 0.86));
-      box-shadow:
-        0 14px 34px rgba(28, 17, 12, 0.26),
-        inset 0 1px 0 rgba(255, 255, 255, 0.64);
-      font-weight: 900;
-      font-size: clamp(0.86rem, 1.18vw, 1rem);
-      letter-spacing: 0.08em;
-      transform: translateY(8px);
-      transition:
-        opacity 0.4s ease,
-        visibility 0.4s ease,
-        transform 0.4s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .ch1-scrolly-continue.is-visible {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-
-    .ch1-scrolly-continue:hover {
-      transform: translateY(-2px);
-      box-shadow:
-        0 18px 42px rgba(28, 17, 12, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.72);
-    }
-
     .game-frame[class*="ch1-scrolly-step"] .scene-video {
       transition: opacity 0.45s ease;
     }
@@ -739,13 +661,6 @@
     }
 
     @media (max-width: 900px) and (orientation: landscape) {
-      .ch1-scrolly-progress {
-        left: 22px;
-        right: 22px;
-        top: 18px;
-        height: 4px;
-      }
-
       .ch1-scrolly-card {
         left: 24px;
         bottom: 54px;
@@ -766,23 +681,9 @@
         line-height: 1.72;
       }
 
-      .ch1-scrolly-footer {
-        left: 18px;
-        right: 18px;
-        bottom: 12px;
-      }
-
-      .ch1-scrolly-hint,
-      .ch1-scrolly-continue {
-        font-size: 0.68rem;
-      }
     }
 
     @media (max-height: 460px) and (orientation: landscape) {
-      .ch1-scrolly-progress {
-        top: 12px;
-      }
-
       .ch1-scrolly-card {
         bottom: 38px;
         width: min(45%, 390px);
@@ -797,16 +698,6 @@
         line-height: 1.58;
       }
 
-      .ch1-scrolly-hint {
-        padding: 0.42em 0.86em;
-        font-size: 0.58rem;
-      }
-
-      .ch1-scrolly-continue {
-        min-height: 30px;
-        padding: 0.46em 1.1em;
-        font-size: 0.62rem;
-      }
     }
 
     /* ==================================================
@@ -10213,7 +10104,11 @@
       studioCover: "images/ch1-studio-empty.png",
       chapterVideo: "videos/ch1-enter-studio.mp4",
       chapterPoster: "images/ch1-enter-studio-poster.png",
-      videoFinalFallback: "images/ch1-protagonist-final.png"
+      videoFinalFallback: "images/ch1-protagonist-final.png",
+      ch1FramePath: "images/ch1-scrolly/ch1_",
+      ch1FrameExt: "webp",
+      ch1FrameCount: 416,
+      ch1FramePad: 4
     };
 
     const CH1_INTRO_STEPS = [
@@ -12930,17 +12825,24 @@ async function fetchChoicePercentage(choiceId) {
         const video = this.createVideo({
           src: CH1_ASSETS.chapterVideo,
           poster: CH1_ASSETS.chapterPoster,
-          label: "第一章前導滾動敘事影片"
+          label: "第一章前導影片"
         });
+
+        video.autoplay = true;
+        video.setAttribute("autoplay", "");
+        video.playsInline = true;
+        video.setAttribute("playsinline", "");
+        video.preload = "auto";
+        video.classList.add("is-visible");
+        prepareVideoAudio(video);
 
         this.clearVideoLayer();
         this.dom.videoLayer.appendChild(video);
         this.startScrollyIntro(video);
       },
 
-      // 第一章前導影片會被 currentTime / fastSeek 控制，影片本身建議輸出為：
-      // H.264 MP4、1280x720 或 1920x1080 以內、keyframe interval 0.5～1 秒、避免 4K／過高 bitrate；
-      // keyframe 間距太長會讓 seek 依賴關鍵影格時更容易卡頓。
+      // 第一章前導改為「影片自動播放 + 文字卡依照影片播放進度浮現」。
+      // 此段只讀取 video.currentTime / video.duration，不再以 wheel、touch、fastSeek 或 currentTime 寫入控制影片。
       startScrollyIntro(video) {
         this.cleanupScrollyIntro();
 
@@ -12952,120 +12854,74 @@ async function fetchChoicePercentage(choiceId) {
 
         const state = {
           video,
+          screen,
+          layer: null,
+          cards: [],
           scrollProgress: 0,
-          targetProgress: 0,
-          rafId: null,
           activeStepIndex: 0,
+          isFinished: false,
+          isFallback: false,
           isEndingReady: false,
           endingReadyAt: 0,
-          isFallback: false,
-          isFinished: false,
-          touchStartY: 0,
-          touchLastY: 0,
-          touchCanFinish: false,
+          rafId: null,
           listeners: [],
-          fallbackTimer: null,
-          progressBar: null,
-          continueButton: null,
-          cards: [],
-          seekRafId: null,
-          isSeeking: false,
-          pendingSeekTime: null,
-          pendingSeekTimeout: null,
+          fallbackTimer: null
+        };
 
-          // latest target wins：永遠記住最新一次想要 seek 到哪裡
-          lastRequestedSeekTime: null,
-          lastAppliedVideoTime: 0,
-          lastSeekAt: 0,
+        const completeScrollyIntro = () => {
+          if (this.scrollyState !== state || state.isFinished) return;
 
-          // 避免極小變化一直 seek；但也不能節流太重
-          seekThreshold: 0.06,
-          largeJumpThreshold: 0.35,
-          minSeekInterval: 45,
+          state.scrollProgress = 1;
+          this.syncScrollyIntroToVideoProgress(true);
+          state.isEndingReady = true;
+          state.endingReadyAt = performance.now();
 
-          // 保留相容欄位，避免其他既有程式若有讀取時出錯
-          lastVideoTime: -1
+          if (state.rafId) {
+            window.cancelAnimationFrame(state.rafId);
+            state.rafId = null;
+          }
+
+          window.setTimeout(() => {
+            if (this.scrollyState === state && !state.isFinished) {
+              this.finishScrollyIntro();
+            }
+          }, 500);
         };
 
         this.scrollyState = state;
         this.renderScrollyIntro(0, { immediate: true });
         this.showOnly(screen);
-        this.updateScrollyFrame(true);
 
         if (video) {
-          // 只針對第一章前導 scrollytelling 影片補強預載與 inline 播放設定
-          video.preload = "auto";
-          video.playsInline = true;
-          video.setAttribute("preload", "auto");
-          video.setAttribute("playsinline", "");
-
-          video.pause();
           video.classList.add("is-visible");
 
-          const syncFirstFrame = () => {
-            if (this.scrollyState !== state || state.isFallback) return;
-            video.pause();
-            this.syncScrollyVideoToProgress(0, true);
-          };
-
-          const failToFallback = () => {
-            if (this.scrollyState !== state || state.isFinished || state.isFallback) return;
-            this.startScrollyFallbackIntro();
-          };
-
-          const handleSeeked = () => {
-            const currentState = this.scrollyState;
-            if (!currentState || currentState !== state) return;
-
-            currentState.isSeeking = false;
-
-            const pending = currentState.pendingSeekTime;
-            if (pending == null) return;
-
-            const current = Number(video.currentTime) || 0;
-            const diff = Math.abs(current - pending);
-
-            if (diff > currentState.seekThreshold) {
-              // 不用 setTimeout 補 seek。
-              // 保留最新 pending target，交回 RAF queue 層處理，避免 seeked → setTimeout → seek 的延遲鏈。
-              this.queueScrollyVideoSeek(pending, false);
-              return;
-            }
-
-            // 已經接近最新目標，清掉 pending。
-            currentState.pendingSeekTime = null;
-            currentState.lastAppliedVideoTime = current;
-          };
-
-          state.fallbackTimer = window.setTimeout(() => {
-            if (!Number.isFinite(video.duration) || video.duration <= 0) {
-              failToFallback();
-            }
-          }, 7000);
-
           this.addScrollyListener(video, "loadedmetadata", () => {
-            window.clearTimeout(state.fallbackTimer);
-            syncFirstFrame();
+            this.syncScrollyIntroToVideoProgress(true);
           }, { once: true });
 
-          this.addScrollyListener(video, "loadeddata", syncFirstFrame, { once: true });
-          this.addScrollyListener(video, "seeked", handleSeeked);
-          this.addScrollyListener(video, "error", failToFallback, { once: true });
+          this.addScrollyListener(video, "play", () => {
+            this.syncScrollyIntroToVideoProgress(true);
+          });
 
-          try {
-            video.load();
-          } catch (error) {
-            failToFallback();
-          }
-
-          if (Number.isFinite(video.duration) && video.duration > 0) {
-            window.clearTimeout(state.fallbackTimer);
-            syncFirstFrame();
-          }
+          this.addScrollyListener(video, "ended", completeScrollyIntro);
         }
 
-        this.bindScrollyIntroEvents();
-        this.startScrollyAnimationLoop();
+        this.syncScrollyIntroToVideoProgress(true);
+
+        this.playVideoSafely(video, {
+          failAfter: 8000,
+          onStarted: () => {
+            this.syncScrollyIntroToVideoProgress(true);
+            if (!state.rafId) {
+              this.updateScrollyFrame();
+            }
+          },
+          onEnded: completeScrollyIntro,
+          onFail: () => {
+            if (this.scrollyState !== state || state.isFinished) return;
+            this.startScrollyFallbackIntro();
+          }
+        });
       },
 
       startScrollyFallbackIntro() {
@@ -13079,101 +12935,37 @@ async function fetchChoicePercentage(choiceId) {
 
         const state = {
           video: null,
-          scrollProgress: 0,
-          targetProgress: 0,
-          rafId: null,
-          activeStepIndex: 0,
-          isEndingReady: false,
-          endingReadyAt: 0,
-          isFallback: true,
-          isFinished: false,
-          touchStartY: 0,
-          touchLastY: 0,
-          touchCanFinish: false,
-          listeners: [],
-          fallbackTimer: null,
-          progressBar: null,
-          continueButton: null,
+          screen,
+          layer: null,
           cards: [],
-          seekRafId: null,
-          isSeeking: false,
-          pendingSeekTime: null,
-          pendingSeekTimeout: null,
-
-          // latest target wins：永遠記住最新一次想要 seek 到哪裡
-          lastRequestedSeekTime: null,
-          lastAppliedVideoTime: 0,
-          lastSeekAt: 0,
-
-          // 避免極小變化一直 seek；但也不能節流太重
-          seekThreshold: 0.06,
-          largeJumpThreshold: 0.35,
-          minSeekInterval: 45,
-
-          // 保留相容欄位，避免其他既有程式若有讀取時出錯
-          lastVideoTime: -1
+          scrollProgress: 1,
+          activeStepIndex: CH1_INTRO_STEPS.length - 1,
+          isFinished: false,
+          isFallback: true,
+          isEndingReady: true,
+          endingReadyAt: performance.now(),
+          rafId: null,
+          listeners: [],
+          fallbackTimer: null
         };
 
         this.scrollyState = state;
-        this.renderScrollyIntro(0, { immediate: true });
+        this.renderScrollyIntro(CH1_INTRO_STEPS.length - 1, { immediate: true });
         this.showOnly(screen);
-        this.updateScrollyFrame(true);
-        this.bindScrollyIntroEvents();
-        this.startScrollyAnimationLoop();
+        this.updateScrollyCards(1);
+        this.updateScrollyCssVars(1, CH1_INTRO_STEPS.length - 1);
+        this.updateScrollyStepClass(CH1_INTRO_STEPS.length - 1);
+
+        state.fallbackTimer = window.setTimeout(() => {
+          if (this.scrollyState === state && !state.isFinished) {
+            this.finishScrollyIntro();
+          }
+        }, 1200);
       },
 
       bindScrollyIntroEvents() {
-        const state = this.scrollyState;
-        const screen = this.dom.ch1ScrollyIntroScreen;
-
-        if (!state || !screen) return;
-
-        this.addScrollyListener(screen, "wheel", (event) => {
-          event.preventDefault();
-          const delta = event.deltaY || 0;
-          if (Math.abs(delta) < 2) return;
-
-          if (
-            delta > 0 &&
-            state.isEndingReady &&
-            state.targetProgress >= 0.985 &&
-            performance.now() - state.endingReadyAt > 120
-          ) {
-            this.finishScrollyIntro();
-            return;
-          }
-
-          this.setScrollyTargetProgress(state.targetProgress + delta * 0.00032);
-        }, { passive: false });
-
-        this.addScrollyListener(screen, "touchstart", (event) => {
-          if (!event.touches || !event.touches.length) return;
-          state.touchStartY = event.touches[0].clientY;
-          state.touchLastY = state.touchStartY;
-          state.touchCanFinish = Boolean(state.isEndingReady && state.targetProgress >= 0.985);
-        }, { passive: true });
-
-        this.addScrollyListener(screen, "touchmove", (event) => {
-          event.preventDefault();
-          if (!event.touches || !event.touches.length) return;
-
-          const currentY = event.touches[0].clientY;
-          const deltaY = state.touchLastY - currentY;
-          state.touchLastY = currentY;
-
-          if (Math.abs(deltaY) < 0.5) return;
-
-          if (deltaY > 0 && state.touchCanFinish && state.isEndingReady && state.targetProgress >= 0.985) {
-            this.finishScrollyIntro();
-            return;
-          }
-
-          this.setScrollyTargetProgress(state.targetProgress + deltaY * 0.00092);
-        }, { passive: false });
-
-        this.addScrollyListener(screen, "touchend", () => {
-          state.touchCanFinish = false;
-        }, { passive: true });
+        // 第一章前導新版不再綁定 wheel / touch 來控制影片進度。
+        // 保留空函式只為了相容既有呼叫點，避免影響其他章節。
       },
 
       addScrollyListener(target, type, handler, options) {
@@ -13197,6 +12989,33 @@ async function fetchChoicePercentage(choiceId) {
 
         const needsStop = !/[。！？!?：；;，,、]$/.test(title);
         return `${title}${needsStop ? "。" : ""}${body}`;
+      },
+
+      getCh1ScrollyFrameSrc(index) {
+        const count = CH1_ASSETS.ch1FrameCount || 1;
+        const safeIndex = Math.max(1, Math.min(count, Number(index) || 1));
+        const padded = String(safeIndex).padStart(CH1_ASSETS.ch1FramePad || 4, "0");
+        return `${CH1_ASSETS.ch1FramePath}${padded}.${CH1_ASSETS.ch1FrameExt || "webp"}`;
+      },
+
+      preloadCh1ScrollyFrames(centerIndex = 1, radius = 8) {
+        const state = this.scrollyState;
+        if (!state || !state.frameCache) return;
+
+        const count = CH1_ASSETS.ch1FrameCount || state.frameCount || 1;
+        const safeCenter = Math.max(1, Math.min(count, Number(centerIndex) || 1));
+        const safeRadius = Math.max(0, Number(radius) || 0);
+        const start = Math.max(1, safeCenter - safeRadius);
+        const end = Math.min(count, safeCenter + safeRadius);
+
+        for (let i = start; i <= end; i += 1) {
+          if (state.frameCache.has(i)) continue;
+
+          const img = new Image();
+          img.decoding = "async";
+          img.src = this.getCh1ScrollyFrameSrc(i);
+          state.frameCache.set(i, img);
+        }
       },
 
       clampScrollyProgress(value) {
@@ -13230,111 +13049,84 @@ async function fetchChoicePercentage(choiceId) {
 
           screen.innerHTML = `
             <div class="ch1-scrolly-layer">
-              <div class="ch1-scrolly-progress" aria-hidden="true">
-                <span class="ch1-scrolly-progress-bar"></span>
-              </div>
-
               <div class="ch1-scrolly-card-stage">
                 ${cardHtml}
-              </div>
-
-              <div class="ch1-scrolly-footer">
-                <div class="ch1-scrolly-hint">上下滑動控制影片</div>
-                <button class="ch1-scrolly-continue" type="button">進入選擇</button>
               </div>
             </div>
           `;
         }
 
-        state.progressBar = screen.querySelector(".ch1-scrolly-progress-bar");
-        state.continueButton = screen.querySelector(".ch1-scrolly-continue");
+        state.layer = screen.querySelector(".ch1-scrolly-layer");
         state.cards = Array.from(screen.querySelectorAll(".ch1-scrolly-card"));
 
-        if (state.continueButton) {
-          state.continueButton.onclick = () => this.finishScrollyIntro();
+        if (options.immediate) {
+          const ranges = this.getScrollyCardRanges();
+          const range = ranges[stepIndex] || ranges[0];
+          state.scrollProgress = this.clampScrollyProgress(range?.start ?? 0);
         }
 
-        const initialStep = CH1_INTRO_STEPS[stepIndex] || CH1_INTRO_STEPS[0];
-        if (options.immediate && initialStep) {
-          state.scrollProgress = this.clampScrollyProgress(initialStep.progress);
-          state.targetProgress = state.scrollProgress;
-        }
+        const initialProgress = this.clampScrollyProgress(state.scrollProgress);
+        this.updateScrollyCards(initialProgress);
+        this.updateScrollyCssVars(initialProgress, this.getActiveScrollyStepIndex(initialProgress));
+        this.updateScrollyStepClass(this.getActiveScrollyStepIndex(initialProgress));
 
-        this.updateScrollyFrame(true);
       },
 
       setScrollyTargetProgress(value) {
-        const state = this.scrollyState;
-        if (!state || state.isFinished) return;
-
-        state.targetProgress = this.clampScrollyProgress(value);
-
-        if (!state.rafId) {
-          this.startScrollyAnimationLoop();
-        }
+        // 第一章前導新版不再由玩家滑動設定 targetProgress。
+        // 保留空殼避免舊呼叫點造成錯誤。
       },
 
       startScrollyAnimationLoop() {
-        const state = this.scrollyState;
-        if (!state || state.rafId || state.isFinished) return;
-
-        const tick = () => {
-          if (this.scrollyState !== state || state.isFinished) return;
-
-          const diff = state.targetProgress - state.scrollProgress;
-          if (Math.abs(diff) < 0.0006) {
-            state.scrollProgress = state.targetProgress;
-          } else {
-            state.scrollProgress += diff * 0.075;
-          }
-
-          this.updateScrollyFrame(false);
-          state.rafId = window.requestAnimationFrame(tick);
-        };
-
-        state.rafId = window.requestAnimationFrame(tick);
+        // 第一章前導新版不再使用 targetProgress 動畫補間。
+        // 影片進度同步由 updateScrollyFrame() 每幀讀取 video.currentTime 完成。
       },
 
-      updateScrollyFrame(immediate = false) {
+      syncScrollyIntroToVideoProgress(force = false) {
         const state = this.scrollyState;
-        if (!state) return;
+        if (!state || !state.video || state.isFallback || state.isFinished) return;
 
-        const progress = this.clampScrollyProgress(state.scrollProgress);
-        const targetProgress = this.clampScrollyProgress(state.targetProgress);
-        const activeStepIndex = this.getActiveScrollyStepIndex(progress);
+        const video = state.video;
+        const duration = Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration
+          : 0;
 
-        this.updateScrollyCssVars(progress, activeStepIndex);
-        this.updateScrollyCards(progress);
+        const progress = duration > 0
+          ? this.clampScrollyProgress(video.currentTime / duration)
+          : 0;
 
-        if (state.progressBar) {
-          state.progressBar.style.width = `${Math.round(progress * 1000) / 10}%`;
-        }
+        const safeProgress = force && video.ended ? 1 : progress;
+        const activeStepIndex = this.getActiveScrollyStepIndex(safeProgress);
 
-        if (state.continueButton) {
-          const shouldShowContinue = targetProgress >= 0.985 || progress >= 0.985;
-          state.continueButton.classList.toggle("is-visible", shouldShowContinue);
-        }
+        state.scrollProgress = safeProgress;
 
-        if ((targetProgress >= 0.985 || progress >= 0.985) && !state.isEndingReady) {
-          state.isEndingReady = true;
-          state.endingReadyAt = performance.now();
-        }
+        this.updateScrollyCards(safeProgress);
+        this.updateScrollyCssVars(safeProgress, activeStepIndex);
 
-        if (targetProgress < 0.965 && progress < 0.965) {
-          state.isEndingReady = false;
-          state.endingReadyAt = 0;
-        }
-
-        if (activeStepIndex !== state.activeStepIndex || immediate) {
+        if (activeStepIndex !== state.activeStepIndex || force) {
           state.activeStepIndex = activeStepIndex;
           this.updateScrollyStepClass(activeStepIndex);
         }
 
-        // 每次 frame 都提供最新 progress；真正 currentTime 寫入頻率交給 queue 層控制。
-        this.syncScrollyVideoToProgress(progress, immediate);
       },
 
-      updateScrollyCssVars(progress, activeStepIndex) {
+      updateScrollyFrame() {
+        const state = this.scrollyState;
+        if (!state || state.isFinished || state.isFallback) return;
+
+        this.syncScrollyIntroToVideoProgress();
+
+        if (state.video?.ended) {
+          state.rafId = null;
+          return;
+        }
+
+        state.rafId = window.requestAnimationFrame(() => {
+          this.updateScrollyFrame();
+        });
+      },
+
+      updateScrollyCssVars(progress, activeStepIndex = this.getActiveScrollyStepIndex(progress)) {
         const frame = this.dom.gameFrame;
         if (!frame) return;
 
@@ -13424,6 +13216,24 @@ async function fetchChoicePercentage(choiceId) {
         });
 
         frame.classList.add(`ch1-scrolly-step-${stepIndex}`);
+      },
+
+      syncScrollyFrameToProgress(progress, force = false) {
+        const state = this.scrollyState;
+        if (!state || !state.frameImage || state.isFallback || state.isFinished) return;
+
+        const frameCount = CH1_ASSETS.ch1FrameCount || state.frameCount || 1;
+        const safeProgress = this.clampScrollyProgress(progress);
+        const frameIndex = Math.max(
+          1,
+          Math.min(frameCount, Math.round(safeProgress * (frameCount - 1)) + 1)
+        );
+
+        if (!force && frameIndex === state.currentFrameIndex) return;
+
+        state.currentFrameIndex = frameIndex;
+        state.frameImage.src = this.getCh1ScrollyFrameSrc(frameIndex);
+        this.preloadCh1ScrollyFrames(frameIndex, 10);
       },
 
       syncScrollyVideoToProgress(progress, force = false) {
@@ -13561,22 +13371,11 @@ async function fetchChoicePercentage(choiceId) {
 
         if (state) {
           state.isFinished = true;
-          state.targetProgress = 1;
           state.scrollProgress = 1;
-          this.updateScrollyFrame(true);
-        }
 
-        const video = state?.video;
-        if (video && !state.isFallback) {
-          const duration = Number(video.duration);
-          try {
-            video.pause();
-            if (Number.isFinite(duration) && duration > 0) {
-              video.currentTime = Math.max(duration - 0.08, 0);
-            }
-            video.classList.add("is-visible");
-          } catch (error) {
-            console.warn("第一章前導結尾停格失敗，改以目前影格繼續。", error);
+          if (state.rafId) {
+            window.cancelAnimationFrame(state.rafId);
+            state.rafId = null;
           }
         }
 
@@ -13589,7 +13388,15 @@ async function fetchChoicePercentage(choiceId) {
         const state = this.scrollyState;
 
         if (state) {
-          state.listeners.forEach(({ target, type, handler, options: listenerOptions }) => {
+          if (state.video) {
+            try {
+              state.video.pause();
+            } catch (error) {
+              console.warn("第一章前導影片停止失敗，略過。", error);
+            }
+          }
+
+          (state.listeners || []).forEach(({ target, type, handler, options: listenerOptions }) => {
             target.removeEventListener(type, handler, listenerOptions);
           });
           window.clearTimeout(state.fallbackTimer);
@@ -13600,12 +13407,21 @@ async function fetchChoicePercentage(choiceId) {
           if (state.seekRafId) {
             window.cancelAnimationFrame(state.seekRafId);
           }
+          if (state.frameRafId) {
+            window.cancelAnimationFrame(state.frameRafId);
+          }
           state.rafId = null;
           state.seekRafId = null;
+          state.frameRafId = null;
           state.pendingSeekTime = null;
           state.pendingSeekTimeout = null;
           state.lastRequestedSeekTime = null;
           state.isSeeking = false;
+          state.currentFrameIndex = -1;
+
+          if (state.frameCache) {
+            state.frameCache.clear();
+          }
         }
 
         this.scrollyState = null;
@@ -17608,4 +17424,6 @@ async function fetchChoicePercentage(choiceId) {
   </script>
 </body>
 </html>
+  
+  
   
