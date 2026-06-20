@@ -45,26 +45,25 @@
       width: 100vw;
       height: 100dvh;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: max(12px, env(safe-area-inset-top))
-               max(12px, env(safe-area-inset-right))
-               max(12px, env(safe-area-inset-bottom))
-               max(12px, env(safe-area-inset-left));
+      display: block;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
     }
 
     .game-frame {
       position: relative;
-      width: min(96vw, calc(96dvh * 16 / 9));
-      height: min(calc(96vw * 9 / 16), 96dvh);
-      aspect-ratio: 16 / 9;
+      width: 100vw;
+      height: 100dvh;
+      min-width: 100vw;
+      min-height: 100dvh;
+      max-width: none;
+      max-height: none;
+      aspect-ratio: auto;
       overflow: hidden;
-      border-radius: clamp(18px, 2.4vw, 34px);
-      background:
-        linear-gradient(135deg, #f7eadf, #d8b9aa);
-      box-shadow:
-        0 28px 80px rgba(77, 52, 39, 0.24),
-        0 12px 28px rgba(77, 52, 39, 0.16);
+      border-radius: 0;
+      box-shadow: none;
+      background: #120d0b;
       isolation: isolate;
     }
 
@@ -604,11 +603,7 @@
       will-change: transform, opacity;
     }
 
-    .ch1-scrolly-card[data-step="1"],
-    .ch1-scrolly-card[data-step="3"] {
-      left: auto;
-      right: clamp(32px, 6vw, 82px);
-    }
+  
 
     .ch1-scrolly-card.is-active {
       opacity: 1;
@@ -1560,9 +1555,15 @@
 
     @media (max-width: 900px) and (orientation: landscape) {
       .game-frame {
-        width: min(98vw, calc(96dvh * 16 / 9));
-        height: min(calc(98vw * 9 / 16), 96dvh);
-        border-radius: 20px;
+        width: 100vw;
+        height: 100dvh;
+        min-width: 100vw;
+        min-height: 100dvh;
+        max-width: none;
+        max-height: none;
+        aspect-ratio: auto;
+        border-radius: 0;
+        box-shadow: none;
       }
 
       .choice-zone {
@@ -4827,6 +4828,803 @@
     }
 
 
+
+
+
+    /* 第三章改版：推薦工具包選擇器 + 工具卡自由調整 */
+    .ch3-package-layout {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: grid;
+      grid-template-columns: minmax(210px, 0.76fr) minmax(360px, 1.46fr) minmax(250px, 0.9fr);
+      gap: clamp(12px, 1.8vw, 22px);
+      padding: clamp(110px, 15.5vh, 142px) clamp(22px, 3.6vw, 54px) clamp(20px, 3.2vh, 36px);
+      color: var(--brown);
+    }
+
+    .ch3-package-panel,
+    .ch3-tool-catalog,
+    .ch3-kit-panel {
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.4vh, 14px);
+      padding: clamp(14px, 1.8vw, 22px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.54);
+      background: linear-gradient(135deg, rgba(255, 250, 242, 0.82), rgba(239, 211, 198, 0.64));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 18px 46px rgba(28, 18, 14, 0.22);
+    }
+
+    .ch3-panel-head {
+      flex: 0 0 auto;
+      display: grid;
+      gap: 5px;
+    }
+
+    .ch3-panel-head h2 {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(1.08rem, 1.7vw, 1.55rem);
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+      color: rgba(58, 39, 32, 0.96);
+    }
+
+    .ch3-panel-head p {
+      margin: 0;
+      color: rgba(72, 50, 42, 0.74);
+      font-size: clamp(0.7rem, 0.95vw, 0.86rem);
+      line-height: 1.45;
+      font-weight: 750;
+    }
+
+    .ch3-package-list {
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+      padding-right: 2px;
+      scrollbar-width: thin;
+    }
+
+    .ch3-package-card {
+      width: 100%;
+      display: grid;
+      gap: 7px;
+      padding: clamp(12px, 1.45vw, 18px);
+      border-radius: 18px;
+      border: 1px solid rgba(132, 96, 83, 0.18);
+      background: rgba(255, 250, 242, 0.42);
+      color: rgba(58, 39, 32, 0.92);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .ch3-package-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 250, 242, 0.62);
+    }
+
+    .ch3-package-card.is-active {
+      border-color: rgba(154, 95, 80, 0.56);
+      background: linear-gradient(135deg, rgba(255, 248, 238, 0.92), rgba(221, 173, 156, 0.66));
+      box-shadow: 0 0 0 2px rgba(255, 246, 232, 0.52), 0 14px 32px rgba(36, 22, 17, 0.18);
+    }
+
+    .ch3-package-card-title,
+    .ch3-package-card-price {
+      font-weight: 950;
+      letter-spacing: 0.04em;
+    }
+
+    .ch3-package-card-title {
+      font-size: clamp(0.88rem, 1.16vw, 1.02rem);
+    }
+
+    .ch3-package-card-description,
+    .ch3-package-card-tools {
+      color: rgba(72, 50, 42, 0.76);
+      font-size: clamp(0.66rem, 0.86vw, 0.78rem);
+      line-height: 1.45;
+    }
+
+    .ch3-package-card-price {
+      color: #9a5f50;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-tool-tabs {
+      flex: 0 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .ch3-tool-tab {
+      min-height: 30px;
+      padding: 0.35em 0.75em;
+      border-radius: 999px;
+      border: 1px solid rgba(132, 96, 83, 0.2);
+      background: rgba(255, 250, 242, 0.44);
+      color: rgba(72, 50, 42, 0.82);
+      cursor: pointer;
+      font-size: clamp(0.66rem, 0.85vw, 0.78rem);
+      font-weight: 900;
+    }
+
+    .ch3-tool-tab.is-active {
+      background: rgba(154, 95, 80, 0.88);
+      border-color: rgba(154, 95, 80, 0.88);
+      color: #fff8ef;
+    }
+
+    .ch3-tool-card-grid {
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(156px, auto);
+      gap: clamp(10px, 1.3vw, 14px);
+      padding: 2px 4px 2px 0;
+      scrollbar-width: thin;
+    }
+
+    .ch3-tool-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: clamp(12px, 1.35vw, 16px);
+      border-radius: 18px;
+      border: 1px solid rgba(132, 96, 83, 0.16);
+      background: rgba(255, 250, 242, 0.42);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .ch3-tool-card.is-selected {
+      border-color: rgba(154, 95, 80, 0.5);
+      background: rgba(255, 246, 232, 0.68);
+      box-shadow: 0 0 0 2px rgba(255, 246, 232, 0.42);
+    }
+
+    .ch3-tool-card.is-owned {
+      border-color: rgba(166, 126, 72, 0.34);
+      background: rgba(255, 246, 219, 0.52);
+    }
+
+    .ch3-tool-card.is-key {
+      border-color: rgba(154, 95, 80, 0.44);
+    }
+
+    .ch3-tool-card-main {
+      min-height: 0;
+      display: grid;
+      gap: 7px;
+    }
+
+    .ch3-tool-card-title {
+      margin: 0;
+      font-size: clamp(0.88rem, 1.12vw, 1.04rem);
+      line-height: 1.25;
+      font-weight: 950;
+      letter-spacing: 0.05em;
+    }
+
+    .ch3-tool-card-description {
+      margin: 0;
+      color: rgba(58, 39, 32, 0.78);
+      font-size: clamp(0.68rem, 0.88vw, 0.82rem);
+      line-height: 1.5;
+    }
+
+    .ch3-tool-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .ch3-tool-card-meta span {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.22em 0.56em;
+      border-radius: 999px;
+      background: rgba(255, 250, 242, 0.58);
+      border: 1px solid rgba(132, 96, 83, 0.14);
+      color: rgba(92, 64, 53, 0.82);
+      font-size: clamp(0.58rem, 0.75vw, 0.68rem);
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .ch3-tool-card-footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .ch3-tool-card-footer strong {
+      color: #9a5f50;
+      font-size: clamp(0.78rem, 0.98vw, 0.9rem);
+      font-weight: 950;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-tool-card-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .ch3-tool-detail-button,
+    .ch3-tool-toggle {
+      min-height: 30px;
+      padding: 0.35em 0.72em;
+      border-radius: 999px;
+      border: 1px solid rgba(132, 96, 83, 0.22);
+      background: rgba(255, 250, 242, 0.58);
+      color: rgba(58, 39, 32, 0.86);
+      cursor: pointer;
+      font-size: clamp(0.64rem, 0.82vw, 0.76rem);
+      font-weight: 900;
+    }
+
+    .ch3-tool-toggle {
+      background: linear-gradient(135deg, rgba(255, 249, 239, 0.94), rgba(218, 172, 155, 0.76));
+      border-color: rgba(154, 95, 80, 0.28);
+    }
+
+    .ch3-tool-toggle:disabled {
+      cursor: not-allowed;
+      opacity: 0.62;
+    }
+
+    .ch3-kit-section {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .ch3-kit-section h3 {
+      margin: 0;
+      color: rgba(58, 39, 32, 0.9);
+      font-size: clamp(0.78rem, 1vw, 0.92rem);
+      font-weight: 950;
+      letter-spacing: 0.06em;
+    }
+
+    .ch3-kit-list {
+      min-height: 0;
+      max-height: clamp(70px, 15vh, 150px);
+      overflow: auto;
+      display: grid;
+      gap: 6px;
+      scrollbar-width: thin;
+    }
+
+    .ch3-kit-item {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 7px;
+      padding: 0.46em 0.58em;
+      border-radius: 12px;
+      background: rgba(255, 250, 242, 0.38);
+      border: 1px solid rgba(132, 96, 83, 0.12);
+      font-size: clamp(0.66rem, 0.88vw, 0.8rem);
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .ch3-kit-item span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ch3-kit-item strong {
+      color: #9a5f50;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-kit-item button {
+      min-height: 24px;
+      padding: 0.16em 0.52em;
+      border-radius: 999px;
+      border: 1px solid rgba(132, 96, 83, 0.18);
+      background: rgba(255, 250, 242, 0.62);
+      color: rgba(58, 39, 32, 0.82);
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 900;
+    }
+
+    .ch3-kit-item.is-owned {
+      grid-template-columns: minmax(0, 1fr) auto;
+      background: rgba(255, 246, 219, 0.46);
+    }
+
+    .ch3-kit-item.is-empty {
+      grid-template-columns: 1fr;
+      color: rgba(91, 69, 59, 0.58);
+    }
+
+    .ch3-kit-total {
+      display: grid;
+      gap: 6px;
+      padding: 0.62em;
+      border-radius: 14px;
+      background: rgba(255, 250, 242, 0.34);
+      border: 1px solid rgba(132, 96, 83, 0.12);
+    }
+
+    .ch3-kit-total p,
+    .ch3-evaluation-grid span {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgba(58, 39, 32, 0.82);
+      font-size: clamp(0.68rem, 0.92vw, 0.84rem);
+      font-weight: 900;
+    }
+
+    .ch3-kit-total strong,
+    .ch3-evaluation-grid strong {
+      color: #9a5f50;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-evaluation-grid {
+      display: grid;
+      gap: 5px;
+    }
+
+    .ch3-impact-box {
+      margin: 0;
+      padding: 0.72em 0.82em;
+      border-radius: 16px;
+      background: rgba(255, 238, 228, 0.48);
+      border: 1px solid rgba(154, 95, 80, 0.18);
+      color: rgba(82, 52, 42, 0.92);
+      font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+      line-height: 1.55;
+      font-weight: 850;
+    }
+
+    .ch3-confirm-purchase-button {
+      width: 100%;
+      margin-top: auto;
+      flex: 0 0 auto;
+    }
+
+    .ch3-summary-package-card {
+      width: min(86%, 1080px);
+    }
+
+    .ch3-summary-package-main {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ch3-summary-text {
+      margin: 0;
+      padding: 0.7em 0.8em;
+      border-radius: 14px;
+      background: rgba(255, 250, 242, 0.38);
+      border: 1px solid rgba(132, 96, 83, 0.1);
+      font-weight: 900;
+      color: rgba(58, 39, 32, 0.9);
+    }
+
+    .ch3-summary-impact-section {
+      grid-column: 1 / -1;
+    }
+
+    .ch3-summary-impact-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .ch3-summary-impact-list p {
+      margin: 0;
+      padding: 0.62em 0.74em;
+      border-radius: 14px;
+      background: rgba(255, 250, 242, 0.38);
+      border: 1px solid rgba(132, 96, 83, 0.1);
+      color: rgba(58, 39, 32, 0.84);
+      font-size: clamp(0.76rem, 1.05vw, 0.92rem);
+      font-weight: 850;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .ch3-package-layout {
+        grid-template-columns: 0.78fr 1.42fr 0.92fr;
+        gap: 10px;
+        padding: 78px 14px 14px;
+      }
+
+      .ch3-package-panel,
+      .ch3-tool-catalog,
+      .ch3-kit-panel {
+        padding: 11px;
+        border-radius: 18px;
+        gap: 8px;
+      }
+
+      .ch3-tool-card-grid {
+        grid-auto-rows: minmax(122px, auto);
+        gap: 8px;
+      }
+
+      .ch3-tool-card {
+        padding: 9px;
+        gap: 6px;
+        border-radius: 14px;
+      }
+
+      .ch3-tool-card-description {
+        font-size: 0.62rem;
+        line-height: 1.36;
+      }
+
+      .ch3-tool-card-meta span {
+        font-size: 0.54rem;
+        padding: 0.16em 0.42em;
+      }
+
+      .ch3-kit-list {
+        max-height: 13vh;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch3-package-layout {
+        padding: 60px 10px 10px;
+        gap: 8px;
+      }
+
+      .ch3-panel-head h2 {
+        font-size: 0.94rem;
+      }
+
+      .ch3-panel-head p,
+      .ch3-package-card-description,
+      .ch3-package-card-tools,
+      .ch3-package-card-price,
+      .ch3-tool-tab,
+      .ch3-tool-card-title,
+      .ch3-tool-card-footer strong,
+      .ch3-tool-detail-button,
+      .ch3-tool-toggle,
+      .ch3-kit-item,
+      .ch3-kit-total p,
+      .ch3-evaluation-grid span,
+      .ch3-impact-box,
+      .ch3-cart-warning {
+        font-size: 0.58rem;
+      }
+
+      .ch3-package-card {
+        padding: 8px;
+        gap: 4px;
+        border-radius: 12px;
+      }
+
+      .ch3-tool-tabs {
+        gap: 4px;
+      }
+
+      .ch3-tool-tab {
+        min-height: 24px;
+        padding: 0.24em 0.52em;
+      }
+
+      .ch3-tool-card-grid {
+        grid-auto-rows: minmax(94px, auto);
+        gap: 6px;
+      }
+
+      .ch3-tool-card {
+        padding: 7px;
+      }
+
+      .ch3-tool-card-description {
+        font-size: 0.54rem;
+        line-height: 1.28;
+      }
+
+      .ch3-tool-card-meta {
+        display: none;
+      }
+
+      .ch3-tool-detail-button,
+      .ch3-tool-toggle {
+        min-height: 24px;
+        padding: 0.18em 0.48em;
+      }
+
+      .ch3-kit-list {
+        max-height: 12vh;
+      }
+
+      .ch3-impact-box {
+        padding: 0.48em 0.58em;
+        line-height: 1.35;
+      }
+
+      .ch3-summary-package-card {
+        width: 88%;
+      }
+
+      .ch3-summary-package-main {
+        gap: 7px;
+      }
+    }
+
+
+
+    /* 第三章局部修改：工具包排序後的右欄精簡、chip 顯示與小結簡化 */
+    .ch3-kit-panel {
+      overflow: hidden;
+      gap: clamp(8px, 1.1vh, 12px);
+    }
+
+    .ch3-kit-panel .ch3-panel-head p {
+      display: none;
+    }
+
+    .ch3-kit-section {
+      flex: 0 1 auto;
+      min-height: 0;
+      gap: 6px;
+    }
+
+    .ch3-kit-list {
+      max-height: none;
+      overflow: visible;
+    }
+
+    .ch3-kit-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 6px;
+    }
+
+    .ch3-kit-item {
+      display: inline-flex;
+      width: auto;
+      max-width: 100%;
+      grid-template-columns: none;
+      align-items: center;
+      gap: 6px;
+      padding: 0.34em 0.62em;
+      border-radius: 999px;
+      font-size: clamp(0.62rem, 0.82vw, 0.76rem);
+      line-height: 1.25;
+    }
+
+    .ch3-kit-item span {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    .ch3-kit-item strong {
+      font-size: 0.95em;
+    }
+
+    .ch3-kit-item button,
+    .ch3-evaluation-section,
+    .ch3-impact-box {
+      display: none !important;
+    }
+
+    .ch3-kit-total {
+      flex: 0 0 auto;
+      padding: 0.54em 0.62em;
+    }
+
+    .ch3-kit-total p {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: clamp(0.68rem, 0.92vw, 0.84rem);
+      font-weight: 900;
+    }
+
+    .ch3-cart-warning {
+      min-height: 1.4em;
+      margin: 0;
+      font-size: clamp(0.62rem, 0.82vw, 0.76rem);
+      line-height: 1.35;
+    }
+
+    .ch3-summary-wrap {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: clamp(104px, 15vh, 136px) clamp(24px, 4vw, 58px) clamp(24px, 4vh, 44px);
+      overflow: hidden;
+    }
+
+    .ch3-summary-simple-card {
+      width: min(74%, 980px);
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 2vh, 22px);
+      padding: clamp(24px, 3.4vw, 42px);
+      overflow: hidden;
+    }
+
+    .ch3-summary-simple-card .ch3-summary-title {
+      flex: 0 0 auto;
+      margin: 0;
+      font-size: clamp(1.6rem, 3.2vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .ch3-summary-simple-section {
+      min-height: 0;
+      padding: clamp(14px, 2vw, 20px);
+      border-radius: 20px;
+      background: rgba(255, 250, 242, 0.34);
+      border: 1px solid rgba(132, 96, 83, 0.14);
+    }
+
+    .ch3-summary-simple-section h3 {
+      margin: 0 0 0.7em;
+      font-size: clamp(0.9rem, 1.25vw, 1.08rem);
+      font-weight: 950;
+      letter-spacing: 0.06em;
+    }
+
+    .ch3-summary-tool-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-height: clamp(82px, 18vh, 180px);
+      overflow: auto;
+      scrollbar-width: thin;
+    }
+
+    .ch3-summary-tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.42em 0.75em;
+      border-radius: 999px;
+      background: rgba(255, 248, 238, 0.58);
+      border: 1px solid rgba(132, 96, 83, 0.14);
+      font-size: clamp(0.72rem, 0.98vw, 0.88rem);
+      font-weight: 850;
+      line-height: 1.3;
+    }
+
+    .ch3-summary-tool-chip.is-empty {
+      color: rgba(91, 69, 59, 0.62);
+    }
+
+    .ch3-summary-money-box {
+      display: grid;
+      gap: 8px;
+    }
+
+    .ch3-summary-money-box p {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0.65em 0.8em;
+      border-radius: 14px;
+      background: rgba(255, 250, 242, 0.42);
+      border: 1px solid rgba(132, 96, 83, 0.1);
+      font-weight: 900;
+    }
+
+    .ch3-summary-money-box strong {
+      color: #9a5f50;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .ch3-summary-button {
+      flex: 0 0 auto;
+      align-self: center;
+      margin-top: auto;
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .ch3-package-layout {
+        grid-template-columns: minmax(180px, 0.72fr) minmax(300px, 1.35fr) minmax(220px, 0.86fr);
+        gap: 10px;
+        padding: 78px 14px 14px;
+      }
+
+      .ch3-kit-item {
+        font-size: 0.62rem;
+        padding: 0.28em 0.52em;
+      }
+
+      .ch3-summary-simple-card {
+        width: min(82%, 860px);
+        padding: 18px 22px;
+        gap: 10px;
+      }
+
+      .ch3-summary-simple-card .ch3-summary-title {
+        font-size: clamp(1.15rem, 2.6vw, 1.8rem);
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch3-package-layout {
+        padding: 60px 10px 10px;
+      }
+
+      .ch3-kit-panel {
+        gap: 5px;
+        padding: 8px;
+      }
+
+      .ch3-kit-section h3 {
+        font-size: 0.62rem;
+      }
+
+      .ch3-kit-item,
+      .ch3-kit-total p {
+        font-size: 0.56rem;
+      }
+
+      .ch3-summary-wrap {
+        padding: 62px 14px 10px;
+      }
+
+      .ch3-summary-simple-card {
+        width: 84%;
+        padding: 14px 18px;
+        gap: 8px;
+      }
+
+      .ch3-summary-simple-section {
+        padding: 9px;
+      }
+
+      .ch3-summary-tool-grid {
+        max-height: 16vh;
+        gap: 5px;
+      }
+
+      .ch3-summary-tool-chip,
+      .ch3-summary-money-box p {
+        font-size: 0.58rem;
+      }
+
+      .ch3-summary-button {
+        min-height: 30px;
+        padding: 0.42em 1.05em;
+        font-size: 0.64rem;
+      }
+    }
 
     /* ==================================================
        第四章：準備開業—制定價目表
@@ -9347,6 +10145,1281 @@
       }
     }
 
+  
+
+    /* ==================================================
+       FINAL OVERRIDE：橫式滿版全螢幕，取消 16:9 遊戲框
+       放在所有 CSS 最後，避免被前面的 media query 蓋掉
+    ================================================== */
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .page {
+      width: 100vw !important;
+      height: 100dvh !important;
+      min-height: 100vh !important;
+      display: block !important;
+      place-items: initial !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .game-frame {
+      position: relative !important;
+      width: 100vw !important;
+      height: 100dvh !important;
+      min-width: 100vw !important;
+      min-height: 100dvh !important;
+      max-width: none !important;
+      max-height: none !important;
+      aspect-ratio: auto !important;
+      overflow: hidden !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      background: #120d0b;
+      isolation: isolate;
+    }
+
+    .background-layer,
+    .video-layer,
+    .dark-overlay,
+    .screen {
+      position: absolute;
+      inset: 0;
+    }
+
+    .background-image,
+    .scene-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    @media (orientation: portrait) and (max-width: 1100px) {
+      .orientation-guard {
+        display: grid;
+      }
+
+      .page {
+        pointer-events: none;
+      }
+    }
+
+    /* ==================================================
+       2026 局部修改：第三章背景／小結／工具卡 + 第四章價位預設
+       只覆寫第三章與第四章指定區塊
+    ================================================== */
+    .ch3-tool-screen,
+    .ch3-summary-screen {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 250, 242, 0.92), transparent 34%),
+        radial-gradient(circle at 82% 74%, rgba(217, 174, 162, 0.42), transparent 36%),
+        linear-gradient(135deg, #f7efe5 0%, #fff9f0 48%, #e9cfc2 100%) !important;
+    }
+
+    .ch3-tool-screen::after,
+    .ch3-summary-screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255, 250, 242, 0.22), transparent 42%),
+        linear-gradient(135deg, rgba(63, 48, 41, 0.08), rgba(154, 95, 80, 0.12)) !important;
+    }
+
+    .ch3-package-layout,
+    .ch3-summary-wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ch3-tool-stage,
+    .ch3-tool-image-wrap,
+    .ch3-tool-bg,
+    .ch3-tool-background,
+    .ch3-tool-bubble-layer,
+    .ch3-tool-bubble,
+    .ch3-cart-button,
+    .ch3-progress-pill {
+      display: none !important;
+    }
+
+    .ch3-summary-screen {
+      display: block;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .ch3-summary-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: clamp(96px, 14vh, 128px) clamp(24px, 4vw, 58px) clamp(20px, 3.4vh, 38px);
+      overflow: hidden;
+    }
+
+    .ch3-summary-simple-card {
+      width: min(72vw, 1120px);
+      max-width: calc(100vw - 88px);
+      height: auto;
+      max-height: calc(100dvh - clamp(128px, 18vh, 168px));
+      display: flex;
+      flex-direction: column;
+      gap: clamp(12px, 1.7vh, 18px);
+      padding: clamp(22px, 3vw, 38px);
+      overflow: hidden;
+      border-radius: 30px;
+    }
+
+    .ch3-summary-simple-card .ch3-summary-title {
+      flex: 0 0 auto;
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2.65rem);
+      line-height: 1.15;
+      letter-spacing: 0.05em;
+    }
+
+    .ch3-summary-simple-section {
+      flex: 0 1 auto;
+      min-height: 0;
+      padding: clamp(12px, 1.7vw, 18px);
+      border-radius: 20px;
+      background: rgba(255, 250, 242, 0.36);
+      border: 1px solid rgba(132, 96, 83, 0.14);
+      overflow: hidden;
+    }
+
+    .ch3-summary-simple-section h3 {
+      margin: 0 0 0.6em;
+      font-size: clamp(0.86rem, 1.15vw, 1.02rem);
+      font-weight: 950;
+      letter-spacing: 0.06em;
+    }
+
+    .ch3-summary-tool-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 8px;
+      max-height: clamp(96px, 22vh, 210px);
+      overflow: auto;
+      padding-right: 2px;
+      scrollbar-width: thin;
+    }
+
+    .ch3-summary-tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      padding: 0.38em 0.72em;
+      border-radius: 999px;
+      background: rgba(255, 248, 238, 0.62);
+      border: 1px solid rgba(132, 96, 83, 0.14);
+      color: rgba(58, 39, 32, 0.92);
+      font-size: clamp(0.68rem, 0.92vw, 0.84rem);
+      font-weight: 850;
+      line-height: 1.25;
+      white-space: normal;
+    }
+
+    .ch3-summary-tool-chip strong {
+      color: #9a5f50;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-summary-tool-chip.is-empty {
+      color: rgba(91, 69, 59, 0.62);
+    }
+
+    .ch3-summary-money-box {
+      display: grid;
+      gap: 8px;
+    }
+
+    .ch3-summary-money-box p {
+      margin: 0;
+      min-height: clamp(34px, 4.6vh, 46px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0.56em 0.78em;
+      border-radius: 14px;
+      background: rgba(255, 250, 242, 0.44);
+      border: 1px solid rgba(132, 96, 83, 0.1);
+      font-size: clamp(0.82rem, 1.08vw, 0.96rem);
+      font-weight: 900;
+    }
+
+    .ch3-summary-money-box strong {
+      color: #9a5f50;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .ch3-summary-button {
+      flex: 0 0 auto;
+      align-self: center;
+      margin-top: 0;
+    }
+
+    .ch3-tool-catalog {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-grid {
+      min-width: 0;
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: auto;
+      align-content: start;
+      gap: clamp(10px, 1.3vw, 14px);
+      padding: 2px 4px 2px 0;
+      scrollbar-width: thin;
+    }
+
+    .ch3-tool-card {
+      min-width: 0;
+      min-height: 0;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1vh, 10px);
+      padding: clamp(10px, 1.25vw, 15px);
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-main {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      gap: 6px;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-title {
+      min-width: 0;
+      margin: 0;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .ch3-tool-card-description {
+      margin: 0;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-meta span {
+      max-width: 100%;
+      white-space: normal;
+      line-height: 1.2;
+    }
+
+    .ch3-tool-card-footer {
+      margin-top: auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ch3-tool-card-footer strong {
+      min-width: 0;
+      flex: 1 1 auto;
+      white-space: nowrap;
+    }
+
+    .ch3-tool-card-actions {
+      flex: 0 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ch3-tool-detail-button,
+    .ch3-tool-toggle {
+      min-width: 0;
+      max-width: 100%;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .ch4-note-button,
+    .ch4-note-modal {
+      display: none !important;
+    }
+
+    .ch4-pricing-card {
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      gap: clamp(8px, 1.3vh, 12px);
+    }
+
+    .ch4-pricing-title {
+      font-size: clamp(1.28rem, 2.6vw, 2.3rem);
+    }
+
+    .ch4-price-preset-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 auto clamp(8px, 1.2vh, 12px);
+    }
+
+    .ch4-price-preset-button {
+      min-height: 34px;
+      padding: 0.38em 0.95em;
+      border-radius: 999px;
+      border: 1px solid rgba(132, 96, 83, 0.22);
+      background: rgba(255, 250, 242, 0.56);
+      color: rgba(58, 39, 32, 0.86);
+      cursor: pointer;
+      font-size: clamp(0.72rem, 0.95vw, 0.86rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+
+    .ch4-price-preset-button.is-active {
+      background: rgba(154, 95, 80, 0.88);
+      border-color: rgba(154, 95, 80, 0.88);
+      color: #fff8ef;
+      box-shadow: 0 8px 20px rgba(64, 45, 34, 0.16);
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .ch3-summary-wrap { padding: 78px 16px 14px; }
+      .ch3-summary-simple-card {
+        width: min(84vw, 860px);
+        max-width: calc(100vw - 32px);
+        max-height: calc(100dvh - 96px);
+        padding: 16px 20px;
+        gap: 9px;
+        border-radius: 24px;
+      }
+      .ch3-summary-simple-card .ch3-summary-title { font-size: clamp(1.12rem, 2.6vw, 1.8rem); }
+      .ch3-summary-simple-section { padding: 10px 12px; }
+      .ch3-summary-tool-grid { max-height: 20vh; gap: 6px; }
+      .ch3-summary-tool-chip,
+      .ch3-summary-money-box p { font-size: 0.62rem; }
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      .ch3-tool-card-grid { grid-template-columns: 1fr; gap: 8px; }
+      .ch3-tool-card { padding: 8px; }
+      .ch3-tool-card-description { -webkit-line-clamp: 2; line-clamp: 2; }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch3-summary-wrap { padding: 62px 12px 10px; }
+      .ch3-summary-simple-card {
+        width: min(88vw, 820px);
+        max-height: calc(100dvh - 74px);
+        padding: 12px 16px;
+        gap: 7px;
+      }
+      .ch3-summary-simple-card .ch3-summary-title { font-size: 1.02rem; }
+      .ch3-summary-simple-section { padding: 8px; border-radius: 14px; }
+      .ch3-summary-simple-section h3 { font-size: 0.62rem; margin-bottom: 0.45em; }
+      .ch3-summary-tool-grid { max-height: 16vh; gap: 5px; }
+      .ch3-summary-tool-chip,
+      .ch3-summary-money-box p { font-size: 0.56rem; }
+      .ch3-summary-money-box p { min-height: 28px; padding: 0.36em 0.55em; }
+      .ch3-summary-button { min-height: 30px; padding: 0.42em 1.05em; font-size: 0.64rem; }
+      .ch3-tool-card-description { -webkit-line-clamp: 1; line-clamp: 1; }
+      .ch3-tool-card-meta { display: none; }
+      .ch3-tool-detail-button,
+      .ch3-tool-toggle { min-height: 24px; padding: 0.18em 0.48em; font-size: 0.56rem; }
+      .ch4-price-preset-row { gap: 5px; margin-bottom: 5px; }
+      .ch4-price-preset-button { min-height: 26px; padding: 0.24em 0.65em; font-size: 0.56rem; }
+    }
+
+
+
+    /* ==================================================
+       共用前導影片跳過按鈕 + 第三章工具卡排版修正 + 第六章案件選單
+    ================================================== */
+    .video-skip-button {
+      position: absolute;
+      right: clamp(18px, 3vw, 34px);
+      bottom: clamp(18px, 3vw, 34px);
+      z-index: 50;
+      min-height: clamp(36px, 5vh, 48px);
+      padding: 0.62em 1.25em;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      background: rgba(255, 248, 238, 0.68);
+      color: #3c2a24;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 14px 34px rgba(28, 17, 12, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.64);
+      cursor: pointer;
+      font-weight: 900;
+      font-size: clamp(0.78rem, 1.1vw, 0.96rem);
+      letter-spacing: 0.08em;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      pointer-events: auto;
+    }
+
+    .video-skip-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .video-skip-button.is-hidden {
+      display: none !important;
+    }
+
+    .ch3-tool-catalog {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-grid {
+      min-width: 0;
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: auto;
+      align-content: start;
+      gap: clamp(10px, 1.3vw, 14px);
+      padding: 2px 4px 2px 0;
+      scrollbar-width: thin;
+    }
+
+    .ch3-tool-card {
+      min-width: 0;
+      min-height: 0;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1vh, 10px);
+      padding: clamp(10px, 1.25vw, 15px);
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-main {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      gap: 6px;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-title {
+      min-width: 0;
+      margin: 0;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .ch3-tool-card-description {
+      margin: 0;
+      color: rgba(58, 39, 32, 0.78);
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-meta span {
+      max-width: 100%;
+      white-space: normal;
+      line-height: 1.2;
+    }
+
+    .ch3-tool-card-footer {
+      margin-top: auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ch3-tool-card-footer strong {
+      min-width: 0;
+      flex: 1 1 auto;
+      color: #9a5f50;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-tool-card-actions {
+      flex: 0 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ch3-tool-detail-button,
+    .ch3-tool-toggle {
+      min-width: 0;
+      max-width: 100%;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .ch6-case-select-screen,
+    .ch6-case-complete-screen {
+      display: block;
+      padding: 0;
+      overflow: hidden;
+      color: var(--brown);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 250, 242, 0.92), transparent 34%),
+        radial-gradient(circle at 82% 74%, rgba(217, 174, 162, 0.42), transparent 36%),
+        linear-gradient(135deg, #f7efe5 0%, #fff9f0 48%, #e9cfc2 100%);
+    }
+
+    .ch6-case-select-screen::after,
+    .ch6-case-complete-screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255, 250, 242, 0.22), transparent 42%),
+        linear-gradient(135deg, rgba(63, 48, 41, 0.08), rgba(154, 95, 80, 0.12));
+    }
+
+    .ch6-case-select-wrap,
+    .ch6-case-complete-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: clamp(104px, 15vh, 136px) clamp(24px, 4vw, 58px) clamp(24px, 4vh, 44px);
+      overflow: hidden;
+    }
+
+    .ch6-case-select-card,
+    .ch6-case-complete-card {
+      width: min(82vw, 1080px);
+      max-width: calc(100vw - 64px);
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 2vh, 22px);
+      padding: clamp(22px, 3vw, 38px);
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.56);
+      background: linear-gradient(135deg, rgba(255, 250, 242, 0.86), rgba(239, 211, 198, 0.66));
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 28px 72px rgba(28, 18, 14, 0.28);
+    }
+
+    .ch6-case-select-head {
+      display: grid;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .ch6-case-select-head p,
+    .ch6-case-complete-kicker {
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: rgba(154, 95, 80, 0.88);
+    }
+
+    .ch6-case-select-head h2,
+    .ch6-case-complete-card h2 {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(1.45rem, 3vw, 2.6rem);
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+    }
+
+    .ch6-case-select-head span,
+    .ch6-case-complete-card p {
+      color: rgba(72, 50, 42, 0.78);
+      font-weight: 750;
+      line-height: 1.7;
+    }
+
+    .ch6-case-grid {
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(12px, 1.8vw, 20px);
+      padding: 2px 4px 2px 0;
+      scrollbar-width: thin;
+    }
+
+    .ch6-case-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: clamp(180px, 28vh, 260px);
+      padding: clamp(14px, 1.8vw, 22px);
+      border-radius: 22px;
+      border: 1px solid rgba(132, 96, 83, 0.18);
+      background: rgba(255, 250, 242, 0.48);
+      color: rgba(58, 39, 32, 0.92);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .ch6-case-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 250, 242, 0.7);
+      box-shadow: 0 16px 36px rgba(64, 45, 34, 0.16);
+    }
+
+    .ch6-case-card.is-completed {
+      border-color: rgba(154, 95, 80, 0.48);
+      background: rgba(255, 246, 232, 0.68);
+    }
+
+    .ch6-case-status {
+      align-self: flex-start;
+      padding: 0.28em 0.7em;
+      border-radius: 999px;
+      background: rgba(154, 95, 80, 0.12);
+      color: rgba(154, 95, 80, 0.92);
+      font-size: clamp(0.64rem, 0.86vw, 0.78rem);
+      font-weight: 900;
+    }
+
+    .ch6-case-card h3 {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(1.12rem, 1.8vw, 1.55rem);
+      line-height: 1.2;
+    }
+
+    .ch6-case-card strong {
+      color: rgba(58, 39, 32, 0.9);
+      line-height: 1.35;
+    }
+
+    .ch6-case-card p {
+      margin: 0;
+      color: rgba(72, 50, 42, 0.76);
+      font-size: clamp(0.72rem, 0.98vw, 0.88rem);
+      line-height: 1.6;
+    }
+
+    .ch6-case-complete-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .ch6-primary-button,
+    .ch6-secondary-button {
+      min-height: clamp(40px, 5.6vh, 52px);
+      padding: 0.72em 1.9em;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      border-radius: 999px;
+      cursor: pointer;
+      color: #3c2a24;
+      background: linear-gradient(135deg, rgba(255, 249, 239, 0.94), rgba(218, 172, 155, 0.84));
+      box-shadow: 0 14px 34px rgba(28, 17, 12, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.64);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .ch6-secondary-button {
+      background: linear-gradient(135deg, rgba(255, 250, 242, 0.66), rgba(238, 212, 201, 0.46));
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      .ch3-tool-card-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .ch3-tool-card {
+        padding: 8px;
+      }
+
+      .ch3-tool-card-description {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .video-skip-button {
+        right: 12px;
+        bottom: 10px;
+        min-height: 30px;
+        padding: 0.42em 0.9em;
+        font-size: 0.62rem;
+      }
+
+      .ch3-tool-card-description {
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+      }
+
+      .ch3-tool-card-meta {
+        display: flex;
+      }
+
+      .ch3-tool-detail-button,
+      .ch3-tool-toggle {
+        min-height: 24px;
+        padding: 0.18em 0.48em;
+        font-size: 0.56rem;
+      }
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .ch6-case-select-wrap,
+      .ch6-case-complete-wrap {
+        padding: 78px 16px 14px;
+      }
+
+      .ch6-case-select-card,
+      .ch6-case-complete-card {
+        width: min(88vw, 900px);
+        max-width: calc(100vw - 32px);
+        padding: 16px 20px;
+        gap: 10px;
+      }
+
+      .ch6-case-grid {
+        gap: 10px;
+      }
+
+      .ch6-case-card {
+        min-height: 150px;
+        padding: 12px;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch6-case-select-wrap,
+      .ch6-case-complete-wrap {
+        padding: 62px 12px 10px;
+      }
+
+      .ch6-case-select-card,
+      .ch6-case-complete-card {
+        width: min(90vw, 860px);
+        padding: 12px 16px;
+        gap: 7px;
+      }
+
+      .ch6-case-select-head h2,
+      .ch6-case-complete-card h2 {
+        font-size: 1.05rem;
+      }
+
+      .ch6-case-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .ch6-case-card {
+        min-height: 112px;
+        padding: 8px;
+        gap: 5px;
+      }
+
+      .ch6-case-card h3 {
+        font-size: 0.86rem;
+      }
+
+      .ch6-case-card strong,
+      .ch6-case-card p,
+      .ch6-case-select-head span,
+      .ch6-case-complete-card p {
+        font-size: 0.56rem;
+        line-height: 1.35;
+      }
+
+      .ch6-primary-button,
+      .ch6-secondary-button {
+        min-height: 30px;
+        padding: 0.42em 1.05em;
+        font-size: 0.64rem;
+      }
+    }
+
+  
+
+    .ch6-case-card:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+      transform: none;
+      box-shadow: none;
+    }
+
+  
+
+    /* ==================================================
+       2026-06-20 局部修改最終覆寫：第三章卡片、全章說明卡、影片效能、第五章滑動
+       放在 CSS 最後，避免被前方重複樣式覆蓋。
+    ================================================== */
+
+    .scene-video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      opacity: 0;
+      transform: none !important;
+      filter: none !important;
+      will-change: auto !important;
+      transition: opacity 0.28s ease;
+    }
+
+    .scene-video.is-visible {
+      opacity: 1;
+      transform: none !important;
+      filter: none !important;
+      will-change: auto !important;
+    }
+
+    .game-frame[class*="ch1-scrolly-step"] .scene-video.is-visible {
+      opacity: 1;
+      transform: none !important;
+      filter: none !important;
+      will-change: auto !important;
+    }
+
+    .ch1-scrolly-card-stage {
+      transform: none !important;
+      will-change: auto !important;
+      transition: none !important;
+    }
+
+    .background-layer,
+    .background-image,
+    .dark-overlay {
+      will-change: auto !important;
+    }
+
+    .ch3-package-panel {
+      overflow: hidden;
+    }
+
+    .ch3-package-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: visible !important;
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: clamp(8px, 1.2vh, 12px);
+      padding: 0;
+    }
+
+    .ch3-package-card {
+      min-height: 0;
+      height: auto;
+      display: grid;
+      align-content: center;
+      gap: clamp(5px, 0.7vh, 8px);
+      padding: clamp(10px, 1.25vw, 16px);
+      overflow: hidden;
+    }
+
+    .ch3-package-card-title {
+      font-size: clamp(0.9rem, 1.12vw, 1.05rem);
+      line-height: 1.22;
+    }
+
+    .ch3-package-card-description {
+      font-size: clamp(0.68rem, 0.88vw, 0.8rem);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ch3-package-card-tools {
+      display: none !important;
+    }
+
+    .ch3-package-card-price {
+      font-size: clamp(0.82rem, 1.02vw, 0.95rem);
+      line-height: 1.2;
+    }
+
+    /* 第三章工具卡最終覆寫：修正本方案工具卡片被壓扁 */
+    .ch3-tool-catalog {
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-grid {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(150px, auto);
+      align-content: start;
+      gap: clamp(10px, 1.3vw, 14px);
+      padding: 2px 4px 2px 0;
+      scrollbar-width: thin;
+    }
+
+    .ch3-tool-card {
+      min-width: 0;
+      min-height: 150px;
+      height: auto !important;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1vh, 11px);
+      padding: clamp(11px, 1.3vw, 16px);
+      overflow: hidden;
+      border-radius: 18px;
+    }
+
+    .ch3-tool-card-main {
+      min-width: 0;
+      flex: 1 1 auto;
+      display: grid;
+      align-content: start;
+      gap: 6px;
+      overflow: visible;
+    }
+
+    .ch3-tool-card-title {
+      margin: 0;
+      min-width: 0;
+      font-size: clamp(0.9rem, 1.12vw, 1.05rem);
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .ch3-tool-card-description {
+      margin: 0;
+      color: rgba(58, 39, 32, 0.78);
+      font-size: clamp(0.68rem, 0.88vw, 0.82rem);
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ch3-tool-card-meta {
+      display: flex !important;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-width: 0;
+      overflow: visible;
+    }
+
+    .ch3-tool-card-meta span {
+      max-width: 100%;
+      white-space: normal;
+      line-height: 1.2;
+      padding: 0.22em 0.56em;
+    }
+
+    .ch3-tool-card-footer {
+      flex: 0 0 auto;
+      margin-top: auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ch3-tool-card-footer strong {
+      min-width: 0;
+      flex: 1 1 auto;
+      color: #9a5f50;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ch3-tool-card-actions {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+
+    .ch3-tool-detail-button,
+    .ch3-tool-toggle {
+      flex: 0 0 auto;
+      min-width: 0;
+      min-height: 30px;
+      white-space: nowrap;
+    }
+
+    /* 全章節說明與小結卡片最終覆寫：避免不必要捲動 */
+    .result-card,
+    .ch2-rule-card,
+    .ch2-summary-card,
+    .ch3-rule-card,
+    .ch3-summary-card,
+    .ch3-summary-simple-card,
+    .ch4-rule-card,
+    .ch4-price-preview-card,
+    .ch5-opening-card,
+    .ch5-result-card,
+    .ch5-rule-card,
+    .ch5-summary-card,
+    .ch6-rule-card,
+    .ch6-case-select-card,
+    .ch6-case-complete-card,
+    .ch6-guide-card,
+    .ch7-rule-card,
+    .ch7-summary-card,
+    .final-report-card {
+      max-height: calc(100dvh - clamp(110px, 16vh, 150px));
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-card {
+      width: min(68%, 760px);
+      height: auto !important;
+      min-height: auto !important;
+      max-height: calc(100dvh - 120px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .result-copy,
+    .ch2-rule-body,
+    .ch2-summary-description,
+    .ch3-rule-body,
+    .ch3-rule-body-box,
+    .ch3-summary-tool-grid,
+    .ch4-rule-body,
+    .ch5-opening-body,
+    .ch5-rule-body,
+    .ch5-summary-body,
+    .ch6-rule-body,
+    .ch6-guide-body,
+    .ch7-rule-body,
+    .final-report-body {
+      min-height: 0;
+      max-height: none;
+    }
+
+    .result-copy,
+    .ch2-rule-body,
+    .ch2-summary-description,
+    .ch3-rule-body,
+    .ch3-rule-body-box,
+    .ch4-rule-body,
+    .ch5-opening-body,
+    .ch5-rule-body,
+    .ch6-rule-body,
+    .ch7-rule-body,
+    .final-report-body {
+      overflow: visible;
+    }
+
+    .result-copy {
+      overflow: visible !important;
+      padding-right: 0;
+    }
+
+    .result-description {
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    .is-scroll-needed,
+    .card-body-scroll {
+      overflow: auto !important;
+      scrollbar-width: thin;
+    }
+
+    .ch2-summary-description,
+    .ch3-summary-tool-grid {
+      max-height: none !important;
+    }
+
+    .ch5-skip-video-button {
+      display: none !important;
+    }
+
+    .ch5-video {
+      transform: none !important;
+      filter: none !important;
+      will-change: auto !important;
+    }
+
+    .ch5-progress-fill {
+      width: 100% !important;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.08s linear;
+      will-change: transform;
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .ch3-package-list {
+        gap: 7px;
+      }
+
+      .ch3-package-card {
+        padding: 8px 10px;
+      }
+
+      .ch3-package-card-description {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+
+      .ch3-tool-card-grid {
+        grid-auto-rows: minmax(122px, auto);
+        gap: 8px;
+      }
+
+      .ch3-tool-card {
+        min-height: 122px;
+        padding: 9px;
+        gap: 6px;
+      }
+
+      .ch3-tool-card-title {
+        font-size: 0.72rem;
+      }
+
+      .ch3-tool-card-description {
+        font-size: 0.62rem;
+        line-height: 1.36;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+
+      .ch3-tool-card-meta span {
+        font-size: 0.54rem;
+        padding: 0.16em 0.42em;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch3-package-list {
+        gap: 5px;
+      }
+
+      .ch3-package-card {
+        padding: 6px 8px;
+        gap: 3px;
+      }
+
+      .ch3-package-card-title,
+      .ch3-package-card-price {
+        font-size: 0.58rem;
+      }
+
+      .ch3-package-card-description {
+        font-size: 0.52rem;
+        line-height: 1.28;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+
+      .ch3-tool-card-grid {
+        grid-auto-rows: minmax(106px, auto);
+      }
+
+      .ch3-tool-card {
+        min-height: 106px;
+        padding: 7px;
+      }
+
+      .ch3-tool-card-description {
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+      }
+
+      .ch3-tool-card-meta {
+        display: flex !important;
+      }
+
+      .ch3-tool-card-meta span {
+        font-size: 0.48rem;
+      }
+
+      .ch3-tool-detail-button,
+      .ch3-tool-toggle {
+        min-height: 24px;
+        padding: 0.18em 0.48em;
+        font-size: 0.54rem;
+      }
+    }
+
   </style>
 </head>
 
@@ -9364,6 +11437,9 @@
         <img class="background-image" id="backgroundImage" src="images/ch1-studio-empty.png" alt="" />
       </div>
       <div class="video-layer" id="videoLayer"></div>
+      <button class="video-skip-button is-hidden" id="videoSkipButton" type="button" aria-label="跳過前導影片">
+        跳過
+      </button>
       <div class="dark-overlay" id="darkOverlay"></div>
 
       <section class="screen ch1-scrolly-intro-screen" id="ch1ScrollyIntroScreen" aria-label="第一章前導滾動敘事"></section>
@@ -9509,18 +11585,18 @@
           <article class="ch3-rule-card">
             <h2 class="ch3-rule-title ch3-rule-title-box">準備開業—認識工具</h2>
             <p class="ch3-rule-body ch3-rule-body-box">
-              工具排上桌後，你才發現它們不只是「買齊」就好。每一樣工具都有用途，也可能影響施作品質、衛生安全與後續糾紛。<br><br>
-              這一章，你需要先調查桌上的工具。點擊畫面中的圓形氣泡，查看每項工具的用途與是否需要購入。部分基礎工具是開業前必備項目；若你在第二章選擇了「美甲課程」，部分工具會視為課程已附贈，不需要再次購買。<br><br>
-              請調查全部工具，並把需要的設備加入購物車。
+              工具排上桌後，你才發現它們不只是「買齊」就好。每一樣工具都會影響施作品質、衛生安全、接客效率與後續糾紛。<br><br>
+              這一章，你可以先選擇一種推薦開業方案，系統會自動幫你勾選一批工具。你也可以再依照預算與需求，手動增加或取消部分設備。<br><br>
+              如果你在第二章選擇了美甲課程，部分工具會視為課程已附贈，不需要再次購買。特別注意：消毒設備與消毒棉片會影響後續衛生糾紛的處理方式。
             </p>
             <div class="ch3-rule-button-row">
-              <button class="ch3-primary-button ch3-rule-button" id="ch3RuleButton" type="button">確認</button>
+              <button class="ch3-primary-button ch3-rule-button" id="ch3RuleButton" type="button">開始選擇工具包</button>
             </div>
           </article>
         </div>
       </section>
 
-      <section class="screen ch3-tool-screen" id="ch3ToolScreen" aria-label="第三章工具認識互動">
+      <section class="screen ch3-tool-screen" id="ch3ToolScreen" aria-label="第三章工具包選擇器">
         <div class="game-hud">
           <div class="hud-title">第三章：準備開業</div>
           <div class="hud-stat" data-hud-money>收益 $25,000</div>
@@ -9529,22 +11605,45 @@
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
 
-        <div class="ch3-tool-stage" id="ch3ToolStage" aria-label="工具桌互動區">
-          <div class="ch3-tool-image-wrap" id="ch3ToolImageWrap">
-            <img class="ch3-tool-bg ch3-tool-background" id="ch3ToolBackgroundImage" src="images/ch3-tool-desk.png" alt="" />
-            <div class="ch3-tool-bubble-layer" id="ch3ToolBubbleLayer" aria-label="工具調查點"></div>
-          </div>
+        <div class="ch3-package-layout" aria-label="開業工具包選擇器">
+          <aside class="ch3-package-panel" aria-label="推薦開業方案">
+            <div class="ch3-panel-head">
+              <h2>推薦開業方案</h2>
+              <p>選一種方案作為起點，之後仍可自由調整。</p>
+            </div>
+            <div class="ch3-package-list" id="ch3PackageList"></div>
+          </aside>
 
-          <button class="ch3-cart-button" id="ch3CartButton" type="button" aria-label="開啟購物車">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 5h2l2.2 10.5a2 2 0 0 0 2 1.6h7.4a2 2 0 0 0 1.9-1.4L21 8H7"></path>
-              <circle cx="10" cy="20" r="1.4"></circle>
-              <circle cx="18" cy="20" r="1.4"></circle>
-            </svg>
-            <span class="ch3-cart-badge" id="ch3CartBadge">0</span>
-          </button>
+          <main class="ch3-tool-catalog" aria-label="工具卡清單">
+            <div class="ch3-panel-head">
+              <h2>本方案工具</h2>
+              <p id="ch3PackageStatus">先選一種工具包，或直接手動勾選需要的工具。</p>
+            </div>
+            <div class="ch3-tool-tabs" id="ch3ToolTabs" role="tablist" aria-label="工具分類"></div>
+            <div class="ch3-tool-card-grid" id="ch3ToolCardGrid" aria-label="工具列表"></div>
+          </main>
 
-          <div class="ch3-progress-pill" id="ch3ProgressPill">已調查 0 / 10</div>
+          <aside class="ch3-kit-panel" aria-label="我的開業工具包">
+            <div class="ch3-panel-head">
+              <h2>我的開業工具包</h2>
+            </div>
+
+            <section class="ch3-kit-section">
+              <h3>已獲得工具</h3>
+              <div class="ch3-kit-list ch3-kit-chip-list" id="ch3OwnedGiftList"></div>
+            </section>
+
+            <section class="ch3-kit-section">
+              <h3>本次購買</h3>
+              <div class="ch3-kit-list ch3-kit-chip-list" id="ch3PurchaseList"></div>
+            </section>
+
+            <section class="ch3-kit-total" aria-label="本次花費">
+              <p><span>本次花費</span><strong id="ch3KitTotal">NT$ 0</strong></p>
+            </section>
+
+            <button class="ch3-primary-button ch3-confirm-purchase-button" id="ch3ConfirmPurchaseButton" type="button" disabled>確認購買</button>
+          </aside>
         </div>
 
         <div class="ch3-tool-detail-modal" id="ch3ToolDetailModal" aria-hidden="true">
@@ -9558,27 +11657,11 @@
               <div class="ch3-tool-meta" id="ch3ToolMeta"></div>
               <p class="ch3-tool-description" id="ch3ToolDescription"></p>
               <div class="ch3-tool-action-row">
-                <strong class="ch3-tool-price" id="ch3ToolPrice">$0</strong>
-                <button class="ch3-primary-button" id="ch3AddToCartButton" type="button">加入購物車</button>
+                <strong class="ch3-tool-price" id="ch3ToolPrice">NT$ 0</strong>
+                <button class="ch3-primary-button" id="ch3AddToCartButton" type="button">加入</button>
               </div>
             </div>
           </article>
-        </div>
-
-        <div class="ch3-cart-modal" id="ch3CartModal" aria-hidden="true">
-          <aside class="ch3-cart-panel" role="dialog" aria-modal="true" aria-labelledby="ch3CartTitle">
-            <div class="ch3-cart-head">
-              <h2 id="ch3CartTitle">購物車</h2>
-              <button class="ch3-modal-close" id="ch3CartClose" type="button" aria-label="關閉購物車">×</button>
-            </div>
-            <p class="ch3-cart-total" id="ch3CartTotal">目前花費：$0</p>
-            <div class="ch3-cart-list" id="ch3CartList"></div>
-            <p class="ch3-cart-warning" id="ch3CartWarning"></p>
-            <div class="ch3-cart-actions">
-              <button class="ch3-secondary-button" id="ch3CartBackButton" type="button">返回調查</button>
-              <button class="ch3-primary-button" id="ch3ConfirmPurchaseButton" type="button" disabled>確認購買</button>
-            </div>
-          </aside>
         </div>
       </section>
 
@@ -9592,17 +11675,24 @@
         </div>
 
         <div class="ch3-summary-wrap">
-          <article class="ch3-summary-card">
-            <header class="ch3-summary-header">
-              <h2 class="ch3-summary-title">已獲得物品</h2>
-              <p class="ch3-summary-delta" id="ch3SummaryDelta">此輪收益 $0</p>
-            </header>
+          <article class="ch3-summary-card ch3-summary-simple-card">
+            <h2 class="ch3-summary-title">第三章小結：你的開業工具包</h2>
 
-            <div class="ch3-owned-grid" id="ch3OwnedList" role="list" aria-label="已獲得物品列表"></div>
+            <section class="ch3-summary-simple-section">
+              <h3>最後獲得工具</h3>
+              <div class="ch3-summary-tool-grid" id="ch3SummaryPurchasedTools"></div>
+            </section>
 
-            <div class="ch3-summary-actions">
-              <button class="ch3-primary-button ch3-summary-button" id="ch3SummaryConfirmButton" type="button">確認</button>
-            </div>
+            <section class="ch3-summary-simple-section">
+              <h3>本次花費</h3>
+              <div class="ch3-summary-money-box">
+                <p><span>本次花費</span><strong id="ch3SummaryCost">NT$ 0</strong></p>
+              </div>
+            </section>
+
+            <button class="ch3-primary-button ch3-summary-button" id="ch3SummaryButton" type="button">
+              確認
+            </button>
           </article>
         </div>
       </section>
@@ -9640,20 +11730,14 @@
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
 
-        <button class="ch4-note-button" id="ch4NoteButton" type="button" aria-label="開啟定價提示">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 3.5h9.2L19 7.3v13.2H6z"></path>
-            <path d="M15 3.5v4h4"></path>
-            <path d="M8.5 10h7"></path>
-            <path d="M8.5 13h7"></path>
-            <path d="M8.5 16h4.5"></path>
-            <path d="M14.3 18.4l4.2-4.2 1.5 1.5-4.2 4.2-2 .5z"></path>
-          </svg>
-        </button>
-
         <div class="ch4-pricing-layout">
           <article class="ch4-pricing-card">
             <h2 class="ch4-pricing-title">Summer nail studio 價目表</h2>
+            <div class="ch4-price-preset-row" id="ch4PricePresetRow" aria-label="快速套用價位">
+              <button class="ch4-price-preset-button" type="button" data-price-preset="low">低價位</button>
+              <button class="ch4-price-preset-button is-active" type="button" data-price-preset="middle">中等價位</button>
+              <button class="ch4-price-preset-button" type="button" data-price-preset="high">高價位</button>
+            </div>
             <div class="ch4-price-form" id="ch4PriceForm" aria-label="價目表制定表單">
               <div class="ch4-price-column" id="ch4PriceLeftColumn"></div>
               <div class="ch4-price-column" id="ch4PriceRightColumn"></div>
@@ -9665,43 +11749,6 @@
           </article>
         </div>
 
-        <div class="ch4-note-modal" id="ch4NoteModal" aria-hidden="true">
-          <article class="ch4-note-card" role="dialog" aria-modal="true" aria-labelledby="ch4NoteTitle">
-            <h2 class="ch4-note-title" id="ch4NoteTitle">定價提示</h2>
-            <div class="ch4-note-body">
-              <p>目前業界常見價格會依地區、技術、材料與款式複雜度不同而變動。單色凝膠通常較容易比較，指定款、延甲與特殊材質則會因工時拉長而提高價格。</p>
-              <p>新手美甲師常以練習價或開幕價吸引顧客，但如果價格低於材料與時間成本，預約增加反而可能帶來更高壓力。</p>
-              <div class="ch4-note-columns">
-                <section class="ch4-note-section">
-                  <h3>目前業界普遍定價</h3>
-                  <ul>
-                    <li>單色凝膠：約 NT$800～1,500</li>
-                    <li>貓眼／鏡面：約 NT$1,000～1,800</li>
-                    <li>指定款：約 NT$1,500 起</li>
-                    <li>延甲：約 NT$1,500～3,000</li>
-                  </ul>
-                </section>
-                <section class="ch4-note-section">
-                  <h3>新手美甲師常見收費</h3>
-                  <ul>
-                    <li>單色凝膠：約 NT$399～800</li>
-                    <li>練習款：約 NT$399～999</li>
-                    <li>指定款底價：約 NT$999 起</li>
-                    <li>卸甲：約 NT$200～600</li>
-                  </ul>
-                </section>
-              </div>
-              <section class="ch4-note-section">
-                <h3>提醒</h3>
-                <p>價目表不是只要便宜就好。它也需要讓顧客理解哪些服務需要加價、哪些規則會影響預約與取消。</p>
-                <p>以上數字為遊戲中的提示資料，方便理解定價差異，並非正式調查數據。</p>
-              </section>
-            </div>
-            <div class="ch4-note-footer">
-              <button class="ch4-note-close-button" id="ch4NoteCloseButton" type="button">關閉</button>
-            </div>
-          </article>
-        </div>
       </section>
 
       <section class="screen ch4-price-preview-screen" id="ch4PricePreviewScreen" aria-label="第四章正式價目表預覽">
@@ -9745,13 +11792,13 @@
       </section>
 
       <section class="screen ch5-video-screen" id="ch5VideoScreen" aria-label="第五章第一位客人服務影片">
-        <video class="ch5-video" id="ch5ServiceVideo" playsinline preload="auto"></video>
+        <video class="ch5-video" id="ch5ServiceVideo" playsinline preload="metadata"></video>
 
         <div class="ch5-video-hint" id="ch5VideoHint">滾動或滑動，完成第一單</div>
         <div class="ch5-progress-bar" aria-hidden="true">
           <span class="ch5-progress-fill" id="ch5ProgressFill"></span>
         </div>
-        <button class="ch5-skip-video-button" id="ch5SkipVideoButton" type="button">跳過影片</button>
+        <button class="ch5-skip-video-button is-hidden" id="ch5SkipVideoButton" type="button" aria-hidden="true" tabindex="-1">跳過影片</button>
       </section>
 
       <section class="screen ch5-result-screen" id="ch5ResultScreen" aria-label="第五章完成第一單結果卡">
@@ -9791,8 +11838,7 @@
           <div class="hud-stat" data-hud-technique>技術 0%</div>
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
-        <video class="ch6-intro-video" id="ch6IntroVideo" playsinline preload="auto"></video>
-        <button class="ch6-skip-video-button" id="ch6SkipVideoButton" type="button">跳過影片</button>
+        <video class="ch6-intro-video" id="ch6IntroVideo" playsinline preload="metadata"></video>
       </section>
 
       <section class="screen ch6-rule-screen" id="ch6RuleScreen" aria-label="第六章規則說明">
@@ -9812,6 +11858,62 @@
               請閱讀對話、選擇回應，並在衝突中學會如何蒐證、溝通、補救與維權。
             </p>
             <button class="ch6-rule-button" id="ch6RuleButton" type="button">開始溝通</button>
+          </article>
+        </div>
+      </section>
+
+
+      <section class="screen ch6-case-select-screen" id="ch6CaseSelectScreen" aria-label="第六章案件選單">
+        <div class="game-hud">
+          <div class="hud-title">第六章：遇到糾紛</div>
+          <div class="hud-stat" data-hud-money>收益 $0</div>
+          <div class="hud-stat" data-hud-followers>追蹤數 0</div>
+          <div class="hud-stat" data-hud-technique>技術 0%</div>
+          <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
+        </div>
+
+        <div class="ch6-case-select-wrap">
+          <article class="ch6-case-select-card">
+            <header class="ch6-case-select-head">
+              <p>第六章：遇到糾紛</p>
+              <h2>你想先處理哪一個案件？</h2>
+              <span>每個案件代表新手美甲師可能遇到的不同風險。你可以自由選擇處理順序，也可以只處理其中一個。</span>
+            </header>
+
+            <div class="ch6-case-grid" id="ch6CaseGrid"></div>
+
+            <button class="ch6-secondary-button" id="ch6SkipToGuideButton" type="button">
+              直接查看處理方式
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen ch6-case-complete-screen" id="ch6CaseCompleteScreen" aria-label="第六章案件完成">
+        <div class="game-hud">
+          <div class="hud-title">第六章：遇到糾紛</div>
+          <div class="hud-stat" data-hud-money>收益 $0</div>
+          <div class="hud-stat" data-hud-followers>追蹤數 0</div>
+          <div class="hud-stat" data-hud-technique>技術 0%</div>
+          <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
+        </div>
+
+        <div class="ch6-case-complete-wrap">
+          <article class="ch6-case-complete-card">
+            <p class="ch6-case-complete-kicker">案件暫時告一段落</p>
+            <h2 id="ch6CaseCompleteTitle">你完成了一個案件</h2>
+            <p id="ch6CaseCompleteBody">
+              你已經完成這次溝通，可以選擇繼續處理其他案件，或直接查看遇到糾紛時雙方可以怎麼做。
+            </p>
+
+            <div class="ch6-case-complete-actions">
+              <button class="ch6-secondary-button" id="ch6BackToCaseSelectButton" type="button">
+                處理其他案件
+              </button>
+              <button class="ch6-primary-button" id="ch6GoToGuideButton" type="button">
+                進入處理方式整理
+              </button>
+            </div>
           </article>
         </div>
       </section>
@@ -9929,8 +12031,7 @@
           <div class="hud-stat" data-hud-technique>技術 0%</div>
           <button class="hud-story-button" type="button" data-storyline-open>故事線</button>
         </div>
-        <video class="ch7-intro-video" id="ch7IntroVideo" playsinline preload="auto"></video>
-        <button class="ch7-skip-video-button" id="ch7SkipVideoButton" type="button">跳過影片</button>
+        <video class="ch7-intro-video" id="ch7IntroVideo" playsinline preload="metadata"></video>
       </section>
 
       <section class="screen ch7-rule-screen" id="ch7RuleScreen" aria-label="第七章訊息卡">
@@ -10006,8 +12107,7 @@
 
 
       <section class="screen final-intro-screen" id="finalIntroScreen" aria-label="最後結果報告前導影片">
-        <video class="final-intro-video" id="finalIntroVideo" playsinline preload="auto"></video>
-        <button class="final-skip-video-button" id="finalSkipVideoButton" type="button">跳過影片</button>
+        <video class="final-intro-video" id="finalIntroVideo" playsinline preload="metadata"></video>
       </section>
 
       <section class="screen final-report-screen" id="finalReportScreen" aria-label="最後結果報告">
@@ -10114,28 +12214,28 @@
     const CH1_INTRO_STEPS = [
       {
         progress: 0,
-        title: "剛畢業後，林夏還沒有找到確定的方向",
-        body: "夜裡，她在求職網站和履歷表之間停下滑鼠。比起投出下一封履歷，她更想知道：自己還能不能走一條不一樣的路。"
+        title: "深夜的房間裡，林夏盯著電腦，房間透出微弱的光。",
+        body: "緊握著滑鼠，求職網站上的職缺一頁頁滑過，卻遲遲沒有停留。"
       },
       {
         progress: 0.24,
-        title: "一則限時動態，把她帶進美甲師的帳號",
-        body: "手機跳出的，是朋友剛做好的精緻美甲。被標記的帳號、居家工作室的照片，讓她第一次把「創業」和「美甲」放在同一個句子裡。"
+        title: "喪氣的林夏點開社群軟體，注意到了搜尋頁面上一雙雙精緻的指尖。",
+        body: "色膠在燈光下折射出細碎光澤，甲面上的立體雕花隨著鏡頭緩慢轉動。作品照之間，夾雜著工作室日常、客人回饋，以及一句句看似平凡的文字。"
       },
       {
         progress: 0.48,
-        title: "在社群上，美甲看起來像能從房間開始",
-        body: "「本月預約已滿」、「新手作品紀錄」、「居家工作室」這些字眼，讓門檻看起來比想像中更低：不用店面、不用學歷，只要有作品，也許就能開始。"
+        title: "近年來，這樣的畫面頻繁出現在社群平台之中。",
+        body: "搜尋「美甲」關鍵字，大量作品帳號與工作室頁面隨即湧現。有人單純分享作品照片，有人記錄創業日常，也有人展示從零開始到接案的成長軌跡。"
       },
       {
         progress: 0.72,
-        title: "她在筆記本上寫下：美甲？",
-        body: "這個問號不只是興趣，也是一個職涯選擇的開始。只是，社群上看起來漂亮的路，真的能成為穩定的工作嗎？"
+        title: "在社群媒體的描繪裡，美甲似乎成為一項門檻不高的創業選擇。",
+        body: "不需要大型店面，也不需要昂貴設備。只要一張桌子、一盞燈、基礎美甲工具，以及持續更新的作品集，便有機會在住宅的一隅展開自己的事業。"
       },
       {
         progress: 0.94,
-        title: "如果這真的是一條路",
-        body: "朋友的訊息再次跳出：「妳不是想創業？美甲現在很紅欸。」現在，輪到你替林夏做出第一個選擇：為什麼想成為美甲師？"
+        title: "然而，越來越多人踏入這個產業後，另一個問題也逐漸浮現：",
+        body: "成為一位美甲師，真的是那麼容易的一條路嗎？"
       }
     ];
 
@@ -10161,119 +12261,166 @@
       deskLamp: "images/tools/tool-desk-lamp.png",
       gel: "images/tools/tool-gel.jpg",
       colorChart: "images/tools/tool-color-chart.jpg",
-      glitters: "images/tools/tool-glitters.jpg"
+      glitters: "images/tools/tool-glitters.jpg",
+      photoBackdrop: "images/tools/tool-photo-backdrop.png",
+      cottonPads: "images/tools/tool-cotton-pads.png"
     };
+
+    const CH3_TOOL_CATEGORIES = ["全部", "基礎施作", "光療材料", "衛生安全", "接客與拍攝"];
 
     const CH3_TOOLS = [
       {
-        id: "disinfect",
-        name: "消毒設備",
-        required: false,
-        giftedByCourse: false,
-        price: 1800,
-        asset: CH3_ASSETS.disinfect,
-        position: { x: 13, y: 70 },
-        description:
-          "消毒設備用來清潔可重複使用的工具，降低交叉感染風險。雖然不是每個新手一開始都會購買完整設備，但衛生管理會直接影響顧客安全與專業信任。"
+        id: "dustCollector",
+        name: "集塵機",
+        category: "衛生安全",
+        description: "吸走磨甲粉塵，降低桌面髒亂與吸入粉塵的風險。",
+        price: 4200,
+        required: true,
+        giftedByCourse: true,
+        branchKey: null,
+        asset: CH3_ASSETS.dustCollector
       },
       {
         id: "brushes",
         name: "筆刷",
+        category: "基礎施作",
+        description: "用於上膠、暈染與細節繪製，是完成款式的重要工具。",
+        price: 1200,
         required: true,
         giftedByCourse: true,
-        price: 1200,
-        asset: CH3_ASSETS.brushes,
-        position: { x: 28, y: 73 },
-        description:
-          "筆刷會影響上色、暈染與細節線條，是凝膠設計中很常使用的基礎工具。筆刷狀態不佳，可能讓作品邊緣不乾淨或顏色不均。"
+        branchKey: null,
+        asset: CH3_ASSETS.brushes
       },
       {
         id: "uvLamp",
-        name: "UV燈",
+        name: "美甲 UV 燈",
+        category: "光療材料",
+        description: "讓凝膠固化，是光療美甲必備設備。",
+        price: 2500,
         required: true,
         giftedByCourse: true,
-        price: 2500,
-        asset: CH3_ASSETS.uvLamp,
-        position: { x: 15, y: 53 },
-        description:
-          "UV燈用來固化凝膠，是凝膠美甲施作中不可缺少的設備。照燈時間不足或燈具品質不穩，會影響固化效果，也可能造成後續脫落。"
+        branchKey: null,
+        asset: CH3_ASSETS.uvLamp
+      },
+      {
+        id: "disinfect",
+        name: "消毒設備",
+        category: "衛生安全",
+        description: "用於工具消毒，會影響後續衛生糾紛處理。",
+        price: 1800,
+        required: false,
+        giftedByCourse: false,
+        branchKey: "disinfection",
+        asset: CH3_ASSETS.disinfect
       },
       {
         id: "handRest",
         name: "手枕",
+        category: "基礎施作",
+        description: "讓顧客手部穩定放置，提升施作舒適度。",
+        price: 900,
         required: true,
         giftedByCourse: true,
-        price: 900,
-        asset: CH3_ASSETS.handRest,
-        position: { x: 43, y: 47 },
-        description:
-          "手枕能讓顧客手部維持穩定，也讓美甲師操作時更好控制角度。看似簡單，卻會影響施作姿勢與細節穩定度。"
+        branchKey: null,
+        asset: CH3_ASSETS.handRest
       },
       {
         id: "efile",
         name: "電動磨甲器",
-        required: true,
-        giftedByCourse: true,
+        category: "基礎施作",
+        description: "協助修整甲面與卸除舊膠，提高施作效率。",
         price: 3600,
-        asset: CH3_ASSETS.efile,
-        position: { x: 60, y: 68 },
-        description:
-          "電動磨甲器常用於卸甲、修整與前置處理，但如果角度、力道或轉速控制不好，可能磨傷甲面或造成不適。"
-      },
-      {
-        id: "dustCollector",
-        name: "集塵機",
         required: true,
         giftedByCourse: true,
-        price: 4200,
-        asset: CH3_ASSETS.dustCollector,
-        position: { x: 43, y: 68 },
-        description:
-          "集塵機能吸走磨甲時產生的粉塵，讓工作環境更乾淨，也降低長時間吸入粉塵的不適。對接案工作室來說，是安全與專業感的重要設備。"
-      },
-      {
-        id: "deskLamp",
-        name: "檯燈",
-        required: true,
-        giftedByCourse: false,
-        price: 1600,
-        asset: CH3_ASSETS.deskLamp,
-        position: { x: 86, y: 37 },
-        description:
-          "檯燈提供穩定光源，幫助美甲師看清甲面、邊緣與顏色細節。光線不足會影響作品品質，也容易讓細節瑕疵被忽略。"
-      },
-      {
-        id: "gel",
-        name: "美甲凝膠",
-        required: true,
-        giftedByCourse: true,
-        price: 3200,
-        asset: CH3_ASSETS.gel,
-        position: { x: 77, y: 67 },
-        description:
-          "美甲凝膠是完成凝膠美甲的主要材料。不同品牌與質地會影響顏色飽和度、附著度與持久度，也會影響材料成本。"
-      },
-      {
-        id: "colorChart",
-        name: "美甲色卡",
-        required: false,
-        giftedByCourse: false,
-        price: 900,
-        asset: CH3_ASSETS.colorChart,
-        position: { x: 80, y: 86 },
-        description:
-          "色卡能讓顧客更直覺地挑選顏色，也能呈現你目前擁有的色膠範圍。它不是必要設備，但能提升溝通效率。"
+        branchKey: null,
+        asset: CH3_ASSETS.efile
       },
       {
         id: "glitters",
         name: "裝飾亮片",
+        category: "光療材料",
+        description: "增加款式變化，適合做造型加價。",
+        price: 800,
         required: false,
         giftedByCourse: false,
-        price: 800,
-        asset: CH3_ASSETS.glitters,
-        position: { x: 65, y: 83 },
-        description:
-          "裝飾亮片能增加款式變化，也能讓作品更適合拍照與社群展示。不過它屬於加分材料，不一定是開業第一天就必須購入。"
+        branchKey: null,
+        asset: CH3_ASSETS.glitters
+      },
+      {
+        id: "gel",
+        name: "美甲凝膠",
+        category: "光療材料",
+        description: "光療施作的主要材料，直接影響作品質感。",
+        price: 3200,
+        required: true,
+        giftedByCourse: true,
+        branchKey: null,
+        asset: CH3_ASSETS.gel
+      },
+      {
+        id: "colorChart",
+        name: "美甲色卡",
+        category: "光療材料",
+        description: "讓顧客快速選色，也方便管理作品與材料。",
+        price: 900,
+        required: false,
+        giftedByCourse: false,
+        branchKey: null,
+        asset: CH3_ASSETS.colorChart
+      },
+      {
+        id: "deskLamp",
+        name: "檯燈",
+        category: "基礎施作",
+        description: "補足施作光線，降低看錯細節與色差的機率。",
+        price: 1600,
+        required: true,
+        giftedByCourse: false,
+        branchKey: null,
+        asset: CH3_ASSETS.deskLamp
+      },
+      {
+        id: "photoBackdrop",
+        name: "拍攝布景",
+        category: "接客與拍攝",
+        description: "提升作品照片質感，幫助 IG 經營與接案。",
+        price: 1200,
+        required: false,
+        giftedByCourse: false,
+        branchKey: null,
+        asset: CH3_ASSETS.photoBackdrop
+      },
+      {
+        id: "cottonPads",
+        name: "消毒棉片",
+        category: "衛生安全",
+        description: "清潔甲面與工具接觸區，補強基本衛生流程。",
+        price: 250,
+        required: false,
+        giftedByCourse: false,
+        branchKey: "disinfection",
+        asset: CH3_ASSETS.cottonPads
+      }
+    ];
+
+    const CH3_TOOL_PACKAGES = [
+      {
+        id: "budget",
+        name: "省錢開業包",
+        description: "保留最低限度施作設備，降低初期支出。",
+        toolIds: ["dustCollector", "brushes", "uvLamp", "handRest", "efile", "gel", "deskLamp"]
+      },
+      {
+        id: "standard",
+        name: "標準開業包",
+        description: "兼顧施作品質、接客效率與作品呈現，適合多數新手。",
+        toolIds: ["dustCollector", "brushes", "uvLamp", "handRest", "efile", "gel", "deskLamp", "glitters", "colorChart", "photoBackdrop"]
+      },
+      {
+        id: "hygiene",
+        name: "衛生安全優先包",
+        description: "優先補齊衛生與清潔工具，降低後續糾紛風險。",
+        toolIds: ["dustCollector", "brushes", "uvLamp", "disinfect", "handRest", "efile", "gel", "deskLamp", "cottonPads"]
       }
     ];
 
@@ -11983,6 +14130,49 @@
       }
     ];
 
+
+    const CH4_PRICE_PRESETS = {
+      low: {
+        singleColor: 699,
+        catEye: 899,
+        mirror: 899,
+        french: 999,
+        customDesignBase: 1299,
+        freeDesignBase: 999,
+        extension: 150,
+        ownRemovalRedo: 300,
+        otherRemovalRedo: 500,
+        ownRemovalOnly: 500,
+        otherRemovalOnly: 700
+      },
+      middle: {
+        singleColor: 999,
+        catEye: 1199,
+        mirror: 1199,
+        french: 1299,
+        customDesignBase: 1599,
+        freeDesignBase: 1299,
+        extension: 200,
+        ownRemovalRedo: 500,
+        otherRemovalRedo: 800,
+        ownRemovalOnly: 800,
+        otherRemovalOnly: 1000
+      },
+      high: {
+        singleColor: 1299,
+        catEye: 1599,
+        mirror: 1599,
+        french: 1699,
+        customDesignBase: 1999,
+        freeDesignBase: 1699,
+        extension: 250,
+        ownRemovalRedo: 700,
+        otherRemovalRedo: 1000,
+        ownRemovalOnly: 1000,
+        otherRemovalOnly: 1200
+      }
+    };
+
     const CH4_RULE_OPTIONS = {
       freeDesignRule: [
         "可提供 1～3 個喜歡的元素，其他由美甲師發揮",
@@ -12124,9 +14314,13 @@
         cartToolIds: [],
         ownedToolIds: [],
         purchasedToolIds: [],
+        lastPurchasedToolIds: [],
+        lastPurchaseCost: 0,
         shoppingCost: 0,
         moneyBeforePurchase: 0,
-        moneyAfterPurchase: 0
+        moneyAfterPurchase: 0,
+        selectedPackageId: null,
+        hasCustomizedPackage: false
       };
     }
 
@@ -12143,9 +14337,13 @@
         cartToolIds: uniqueIds(source.cartToolIds || defaults.cartToolIds),
         ownedToolIds: uniqueIds(source.ownedToolIds || defaults.ownedToolIds),
         purchasedToolIds: uniqueIds(source.purchasedToolIds || defaults.purchasedToolIds),
+        lastPurchasedToolIds: uniqueIds(source.lastPurchasedToolIds || source.purchasedToolIds || defaults.lastPurchasedToolIds),
+        lastPurchaseCost: Number(source.lastPurchaseCost || source.shoppingCost || 0),
         shoppingCost: Number(source.shoppingCost || 0),
         moneyBeforePurchase: Number(source.moneyBeforePurchase || 0),
-        moneyAfterPurchase: Number(source.moneyAfterPurchase || 0)
+        moneyAfterPurchase: Number(source.moneyAfterPurchase || 0),
+        selectedPackageId: source.selectedPackageId || defaults.selectedPackageId,
+        hasCustomizedPackage: Boolean(source.hasCustomizedPackage)
       };
     }
 
@@ -12166,18 +14364,7 @@
     }
 
     function canConfirmChapterThreePurchase() {
-      const allInvestigated = CH3_TOOLS.every((tool) =>
-        chapterThreeState.investigatedToolIds.includes(tool.id)
-      );
-
-      const requiredReady = CH3_TOOLS
-        .filter((tool) => tool.required)
-        .every((tool) =>
-          chapterThreeState.ownedToolIds.includes(tool.id) ||
-          chapterThreeState.cartToolIds.includes(tool.id)
-        );
-
-      return allInvestigated && requiredReady;
+      return Boolean(chapterThreeState.selectedPackageId || chapterThreeState.cartToolIds.length > 0);
     }
 
 
@@ -12185,7 +14372,8 @@
 
     function createDefaultChapterFourState() {
       return {
-        prices: {},
+        prices: { ...CH4_PRICE_PRESETS.middle },
+        pricePreset: "middle",
         freeDesignRule: "",
         cancellationRule: "",
         isPriceListConfirmed: false,
@@ -12209,6 +14397,7 @@
       const defaults = createDefaultChapterFourState();
       return {
         prices: normalizeChapterFourPrices(source.prices || defaults.prices),
+        pricePreset: source.pricePreset || "",
         freeDesignRule: source.freeDesignRule || defaults.freeDesignRule,
         cancellationRule: source.cancellationRule || defaults.cancellationRule,
         isPriceListConfirmed: Boolean(source.isPriceListConfirmed),
@@ -12265,6 +14454,10 @@
 
     function createDefaultChapterSixState() {
       return {
+        activeCaseId: null,
+        activeCaseIndex: 0,
+        activeRoundIndex: 0,
+        activeMessageIndex: 0,
         currentCaseIndex: 0,
         currentRoundIndex: 0,
         currentAnger: 0,
@@ -12274,6 +14467,8 @@
         followerPenalty: 0,
         lilyFinalAnger: null,
         tinaFinalAnger: null,
+        completedCaseIds: [],
+        caseResults: {},
         choices: [],
         styleScores: {
           efficient: 0,
@@ -12282,6 +14477,7 @@
         },
         resultType: "",
         completed: false,
+        isGuideViewed: false,
         guideSide: "artist",
         guidePageIndex: 0
       };
@@ -12291,9 +14487,20 @@
 
     function copyChapterSixState(source = {}) {
       const defaults = createDefaultChapterSixState();
+      const currentCaseIndex = Number(source.currentCaseIndex ?? source.activeCaseIndex ?? defaults.currentCaseIndex);
+      const currentRoundIndex = Number(source.currentRoundIndex ?? source.activeRoundIndex ?? defaults.currentRoundIndex);
+      const completedCaseIds = Array.isArray(source.completedCaseIds)
+        ? [...new Set(source.completedCaseIds.map((id) => String(id)).filter(Boolean))]
+        : [];
+      const sourceCaseResults = source.caseResults && typeof source.caseResults === "object" ? source.caseResults : {};
+
       return {
-        currentCaseIndex: Number(source.currentCaseIndex ?? defaults.currentCaseIndex),
-        currentRoundIndex: Number(source.currentRoundIndex ?? defaults.currentRoundIndex),
+        activeCaseId: source.activeCaseId ?? defaults.activeCaseId,
+        activeCaseIndex: Number(source.activeCaseIndex ?? currentCaseIndex ?? defaults.activeCaseIndex),
+        activeRoundIndex: Number(source.activeRoundIndex ?? currentRoundIndex ?? defaults.activeRoundIndex),
+        activeMessageIndex: Number(source.activeMessageIndex ?? defaults.activeMessageIndex),
+        currentCaseIndex,
+        currentRoundIndex,
         currentAnger: Number(source.currentAnger ?? defaults.currentAnger),
         pressure: Number(source.pressure ?? defaults.pressure),
         totalRevenueDelta: Number(source.totalRevenueDelta ?? defaults.totalRevenueDelta),
@@ -12301,6 +14508,8 @@
         followerPenalty: Number(source.followerPenalty ?? defaults.followerPenalty),
         lilyFinalAnger: source.lilyFinalAnger === null || source.lilyFinalAnger === undefined ? null : Number(source.lilyFinalAnger),
         tinaFinalAnger: source.tinaFinalAnger === null || source.tinaFinalAnger === undefined ? null : Number(source.tinaFinalAnger),
+        completedCaseIds,
+        caseResults: Object.fromEntries(Object.entries(sourceCaseResults).map(([caseId, result]) => [caseId, { ...(result || {}) }])),
         choices: Array.isArray(source.choices) ? source.choices.map((choice) => ({ ...choice })) : [],
         styleScores: {
           efficient: Number(source.styleScores?.efficient ?? defaults.styleScores.efficient),
@@ -12309,6 +14518,7 @@
         },
         resultType: source.resultType || defaults.resultType,
         completed: Boolean(source.completed),
+        isGuideViewed: Boolean(source.isGuideViewed ?? defaults.isGuideViewed),
         guideSide: source.guideSide || defaults.guideSide,
         guidePageIndex: Number(source.guidePageIndex ?? defaults.guidePageIndex)
       };
@@ -12377,7 +14587,7 @@
     }
 
     function hasDisinfectEquipment() {
-      return chapterThreeState.ownedToolIds.includes("disinfect");
+      return chapterThreeState.ownedToolIds.includes("disinfect") || chapterThreeState.ownedToolIds.includes("disinfection");
     }
 
     function getChapterFiveVideoAssets() {
@@ -12740,7 +14950,14 @@ async function fetchChoicePercentage(choiceId) {
 
     const ChapterOne = {
       dom: {},
+      activeVideo: null,
       scrollyState: null,
+      videoSkipState: {
+        timer: null,
+        video: null,
+        onSkip: null,
+        isActive: false
+      },
 
       init() {
         this.cacheDom();
@@ -12754,6 +14971,7 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.backgroundLayer = document.getElementById("backgroundLayer");
         this.dom.backgroundImage = document.getElementById("backgroundImage");
         this.dom.videoLayer = document.getElementById("videoLayer");
+        this.dom.videoSkipButton = document.getElementById("videoSkipButton");
         this.dom.darkOverlay = document.getElementById("darkOverlay");
         this.dom.ch1ScrollyIntroScreen = document.getElementById("ch1ScrollyIntroScreen");
         this.dom.coverScreen = document.getElementById("coverScreen");
@@ -12769,6 +14987,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       bindEvents() {
+        this.dom.videoSkipButton?.addEventListener("click", () => {
+          this.skipCurrentIntroVideo();
+        });
+
         this.dom.enterButton.addEventListener("click", () => {
           unlockGameAudio();
           this.dom.enterButton.disabled = true;
@@ -12821,6 +15043,7 @@ async function fetchChoicePercentage(choiceId) {
         this.cleanupScrollyIntro();
         this.setBackground(CH1_ASSETS.chapterPoster, "chapter-video-poster");
         this.setDarkOverlay(true, "rgba(20, 16, 14, 0.22)");
+        this.clearVideoLayer();
 
         const video = this.createVideo({
           src: CH1_ASSETS.chapterVideo,
@@ -12833,11 +15056,12 @@ async function fetchChoicePercentage(choiceId) {
         video.playsInline = true;
         video.setAttribute("playsinline", "");
         video.preload = "auto";
+        video.setAttribute("preload", "auto");
         video.classList.add("is-visible");
         prepareVideoAudio(video);
 
-        this.clearVideoLayer();
         this.dom.videoLayer.appendChild(video);
+        this.activeVideo = video;
         this.startScrollyIntro(video);
       },
 
@@ -12869,6 +15093,7 @@ async function fetchChoicePercentage(choiceId) {
         };
 
         const completeScrollyIntro = () => {
+          this.cleanupIntroVideoSkip?.();
           if (this.scrollyState !== state || state.isFinished) return;
 
           state.scrollProgress = 1;
@@ -12903,6 +15128,10 @@ async function fetchChoicePercentage(choiceId) {
             this.syncScrollyIntroToVideoProgress(true);
           });
 
+          this.addScrollyListener(video, "timeupdate", () => {
+            this.syncScrollyIntroToVideoProgress();
+          });
+
           this.addScrollyListener(video, "ended", completeScrollyIntro);
         }
 
@@ -12912,12 +15141,11 @@ async function fetchChoicePercentage(choiceId) {
           failAfter: 8000,
           onStarted: () => {
             this.syncScrollyIntroToVideoProgress(true);
-            if (!state.rafId) {
-              this.updateScrollyFrame();
-            }
+            this.setupIntroVideoSkip(video, completeScrollyIntro);
           },
           onEnded: completeScrollyIntro,
           onFail: () => {
+            this.cleanupIntroVideoSkip?.();
             if (this.scrollyState !== state || state.isFinished) return;
             this.startScrollyFallbackIntro();
           }
@@ -13026,11 +15254,11 @@ async function fetchChoicePercentage(choiceId) {
 
       getScrollyCardRanges() {
         return [
-          { start: 0, end: 0.18 },
-          { start: 0.18, end: 0.38 },
-          { start: 0.38, end: 0.6 },
-          { start: 0.6, end: 0.8 },
-          { start: 0.8, end: 1 }
+          { start: 8/ 34.7, end: 15/ 34.7 },
+          { start: 18/ 34.7, end: 21/ 34.7 },
+          { start:22/ 34.7, end: 25/ 34.7 },
+          { start: 26/ 34.7, end: 29/ 34.7 },
+          { start: 30/ 34.7, end: 1 }
         ];
       },
 
@@ -13366,6 +15594,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       finishScrollyIntro() {
+        this.cleanupIntroVideoSkip?.();
         const state = this.scrollyState;
         if (state?.isFinished) return;
 
@@ -13385,6 +15614,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       cleanupScrollyIntro(options = {}) {
+        this.cleanupIntroVideoSkip?.();
         const state = this.scrollyState;
 
         if (state) {
@@ -13523,10 +15753,10 @@ async function fetchChoicePercentage(choiceId) {
         video.setAttribute("src", src);
         video.setAttribute("poster", poster);
         video.setAttribute("playsinline", "");
-        video.setAttribute("preload", "auto");
+        video.setAttribute("preload", "metadata");
         video.setAttribute("aria-label", label);
 
-        video.preload = "auto";
+        video.preload = "metadata";
         prepareVideoAudio(video);
 
         const source = document.createElement("source");
@@ -13598,6 +15828,8 @@ async function fetchChoicePercentage(choiceId) {
           }
         }, failAfter);
 
+        this.activeVideo = video;
+
         video.addEventListener("playing", handleStarted);
         video.addEventListener("canplay", tryPlay, { once: true });
         video.addEventListener("loadeddata", tryPlay, { once: true });
@@ -13606,6 +15838,82 @@ async function fetchChoicePercentage(choiceId) {
 
         video.load();
         tryPlay();
+      },
+
+      playIntroVideoSafely(videoConfig = {}) {
+        const {
+          src,
+          poster,
+          label = "前導影片",
+          onEnded,
+          onFail,
+          failAfter = 7000,
+          skippable = true
+        } = videoConfig;
+
+        if (!src) {
+          if (typeof onFail === "function") onFail();
+          return null;
+        }
+
+        let hasCompleted = false;
+        this.stopActiveVideo?.();
+
+        const video = this.createVideo({ src, poster, label });
+        video.classList.add("is-visible");
+        video.preload = "metadata";
+
+        const complete = (payload = {}) => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          this.cleanupIntroVideoSkip?.();
+          try { video.pause(); } catch (error) {}
+          if (typeof onEnded === "function") onEnded(payload);
+        };
+
+        if (this.dom.videoLayer) {
+          this.dom.videoLayer.innerHTML = "";
+          this.dom.videoLayer.appendChild(video);
+        }
+        this.activeVideo = video;
+
+        this.playVideoSafely(video, {
+          failAfter,
+          onStarted: () => {
+            video.classList.add("is-visible");
+            if (skippable) this.setupIntroVideoSkip(video, () => complete({ skipped: true }));
+          },
+          onEnded: () => complete({ ended: true }),
+          onFail: () => {
+            this.cleanupIntroVideoSkip?.();
+            if (typeof onFail === "function") onFail();
+            else complete({ failed: true });
+          }
+        });
+
+        return video;
+      },
+
+      stopActiveVideo() {
+        const videos = [];
+        if (this.activeVideo) videos.push(this.activeVideo);
+        if (this.dom?.videoLayer) {
+          this.dom.videoLayer.querySelectorAll("video").forEach((video) => videos.push(video));
+        }
+
+        [...new Set(videos)].forEach((video) => {
+          try {
+            video.pause();
+            video.removeAttribute("src");
+            video.innerHTML = "";
+            video.load();
+          } catch (error) {}
+        });
+
+        this.activeVideo = null;
+        if (this.dom?.videoLayer) {
+          this.dom.videoLayer.innerHTML = "";
+        }
       },
 
       animatePercentage(target) {
@@ -13664,6 +15972,20 @@ async function fetchChoicePercentage(choiceId) {
         img.setAttribute("src", imageUrl);
       },
 
+      clearBackgroundForSolidScreen(mode = "solid-screen") {
+        if (this.dom.backgroundLayer) {
+          this.dom.backgroundLayer.dataset.mode = mode;
+        }
+
+        const img = this.dom.backgroundImage;
+        if (!img) return;
+
+        img.onload = null;
+        img.onerror = null;
+        img.classList.remove("is-visible");
+        img.removeAttribute("src");
+      },
+
       resolveImagePath(imageUrl) {
         const candidates = this.getImageCandidates(imageUrl);
 
@@ -13718,16 +16040,79 @@ async function fetchChoicePercentage(choiceId) {
         return [...new Set(candidates)];
       },
 
+
+      setupIntroVideoSkip(video, onSkip) {
+        this.cleanupIntroVideoSkip();
+
+        if (!video || typeof onSkip !== "function" || !this.dom.videoSkipButton) return;
+
+        this.videoSkipState = {
+          timer: null,
+          video,
+          onSkip,
+          isActive: true
+        };
+
+        this.dom.videoSkipButton.classList.add("is-hidden");
+
+        this.videoSkipState.timer = window.setTimeout(() => {
+          if (!this.videoSkipState?.isActive) return;
+          if (this.videoSkipState.video !== video) return;
+          if (video.ended) return;
+
+          this.dom.videoSkipButton?.classList.remove("is-hidden");
+        }, 5000);
+      },
+
+      cleanupIntroVideoSkip() {
+        if (this.videoSkipState?.timer) {
+          window.clearTimeout(this.videoSkipState.timer);
+        }
+
+        if (this.dom?.videoSkipButton) {
+          this.dom.videoSkipButton.classList.add("is-hidden");
+        }
+
+        this.videoSkipState = {
+          timer: null,
+          video: null,
+          onSkip: null,
+          isActive: false
+        };
+      },
+
+      skipCurrentIntroVideo() {
+        const state = this.videoSkipState;
+        if (!state || !state.isActive || typeof state.onSkip !== "function") return;
+
+        const onSkip = state.onSkip;
+        const video = state.video;
+
+        this.cleanupIntroVideoSkip();
+
+        if (video) {
+          try {
+            video.pause();
+          } catch (error) {}
+        }
+
+        onSkip({ skipped: true });
+      },
+
       setDarkOverlay(visible, color = "rgba(20, 16, 14, 0.45)") {
         this.dom.darkOverlay.style.background = color;
         this.dom.darkOverlay.classList.toggle("is-visible", Boolean(visible));
       },
 
       clearVideoLayer() {
+        this.cleanupIntroVideoSkip();
         this.cleanupScrollyIntro();
-        this.dom.videoLayer.innerHTML = "";
-        // 保持影片層透明，避免空影片層覆蓋封面底圖。
-        this.dom.videoLayer.style.background = "transparent";
+        this.stopActiveVideo?.();
+        if (this.dom.videoLayer) {
+          this.dom.videoLayer.innerHTML = "";
+          // 保持影片層透明，避免空影片層覆蓋封面底圖。
+          this.dom.videoLayer.style.background = "transparent";
+        }
       },
 
       showOnly(activeScreen) {
@@ -13855,6 +16240,7 @@ async function fetchChoicePercentage(choiceId) {
 
       playIntroVideo() {
         showScreen(null);
+        ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(CH2_ASSETS.introPoster, "ch2-intro-poster");
         ChapterOne.setDarkOverlay(false);
 
@@ -13864,26 +16250,37 @@ async function fetchChoicePercentage(choiceId) {
           label: "第二章導入影片"
         });
 
-        ChapterOne.clearVideoLayer();
         ChapterOne.dom.videoLayer.appendChild(video);
+
+        let hasCompleted = false;
+        const completeIntroVideo = () => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          ChapterOne.cleanupIntroVideoSkip();
+          video.pause();
+          video.classList.add("is-visible");
+          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
+          window.setTimeout(() => this.showRuleCard(), 420);
+        };
+
+        const failIntroVideo = () => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          ChapterOne.cleanupIntroVideoSkip();
+          ChapterOne.clearVideoLayer();
+          ChapterOne.setBackground(CH2_ASSETS.introFinalFallback, "ch2-intro-final-fallback");
+          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
+          window.setTimeout(() => this.showRuleCard(), 260);
+        };
 
         ChapterOne.playVideoSafely(video, {
           failAfter: 7000,
           onStarted: () => {
             video.classList.add("is-visible");
+            ChapterOne.setupIntroVideoSkip(video, completeIntroVideo);
           },
-          onEnded: () => {
-            video.pause();
-            video.classList.add("is-visible");
-            ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-            window.setTimeout(() => this.showRuleCard(), 420);
-          },
-          onFail: () => {
-            ChapterOne.clearVideoLayer();
-            ChapterOne.setBackground(CH2_ASSETS.introFinalFallback, "ch2-intro-final-fallback");
-            ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-            window.setTimeout(() => this.showRuleCard(), 260);
-          }
+          onEnded: completeIntroVideo,
+          onFail: failIntroVideo
         });
       },
 
@@ -14149,71 +16546,102 @@ async function fetchChoicePercentage(choiceId) {
     const ChapterThree = {
       dom: {},
       activeToolId: null,
+      activeCategory: "全部",
 
       init() {
         this.cacheDom();
         this.bindEvents();
-        window.addEventListener("resize", () => this.updateToolImageWrapSize());
-        window.addEventListener("orientationchange", () => {
-          window.setTimeout(() => this.updateToolImageWrapSize(), 120);
-        });
-        this.renderToolBubbles();
-        this.updateToolImageWrapSize();
+        this.renderPackageCards();
+        this.renderToolTabs();
+        this.renderToolCatalog();
+        this.renderKitPanel();
         this.updateHud();
-        this.updateCartBadge();
       },
 
       cacheDom() {
         this.dom.ruleScreen = document.getElementById("ch3RuleScreen");
         this.dom.ruleButton = document.getElementById("ch3RuleButton");
         this.dom.toolScreen = document.getElementById("ch3ToolScreen");
-        this.dom.toolStage = document.getElementById("ch3ToolStage");
-        this.dom.toolImageWrap = document.getElementById("ch3ToolImageWrap");
-        this.dom.toolBackgroundImage = document.getElementById("ch3ToolBackgroundImage");
-        this.dom.toolBubbleLayer = document.getElementById("ch3ToolBubbleLayer");
-        this.dom.progressPill = document.getElementById("ch3ProgressPill");
-        this.dom.cartButton = document.getElementById("ch3CartButton");
-        this.dom.cartBadge = document.getElementById("ch3CartBadge");
+        this.dom.packageList = document.getElementById("ch3PackageList");
+        this.dom.packageStatus = document.getElementById("ch3PackageStatus");
+        this.dom.toolTabs = document.getElementById("ch3ToolTabs");
+        this.dom.toolCardGrid = document.getElementById("ch3ToolCardGrid");
+        this.dom.ownedGiftList = document.getElementById("ch3OwnedGiftList");
+        this.dom.purchaseList = document.getElementById("ch3PurchaseList");
+        this.dom.kitTotal = document.getElementById("ch3KitTotal");
+        this.dom.kitRemaining = document.getElementById("ch3KitRemaining");
+        this.dom.hygieneLevel = document.getElementById("ch3HygieneLevel");
+        this.dom.budgetPressure = document.getElementById("ch3BudgetPressure");
+        this.dom.impactBox = document.getElementById("ch3ImpactBox");
+        this.dom.cartWarning = document.getElementById("ch3CartWarning");
+        this.dom.confirmPurchaseButton = document.getElementById("ch3ConfirmPurchaseButton");
         this.dom.detailModal = document.getElementById("ch3ToolDetailModal");
         this.dom.detailClose = document.getElementById("ch3ToolDetailClose");
-        this.dom.toolImageBox = document.getElementById("ch3ToolImageBox");
         this.dom.toolImage = document.getElementById("ch3ToolImage");
         this.dom.toolName = document.getElementById("ch3ToolName");
         this.dom.toolMeta = document.getElementById("ch3ToolMeta");
         this.dom.toolDescription = document.getElementById("ch3ToolDescription");
         this.dom.toolPrice = document.getElementById("ch3ToolPrice");
         this.dom.addToCartButton = document.getElementById("ch3AddToCartButton");
-        this.dom.cartModal = document.getElementById("ch3CartModal");
-        this.dom.cartClose = document.getElementById("ch3CartClose");
-        this.dom.cartBackButton = document.getElementById("ch3CartBackButton");
-        this.dom.cartTotal = document.getElementById("ch3CartTotal");
-        this.dom.cartList = document.getElementById("ch3CartList");
-        this.dom.cartWarning = document.getElementById("ch3CartWarning");
-        this.dom.confirmPurchaseButton = document.getElementById("ch3ConfirmPurchaseButton");
         this.dom.summaryScreen = document.getElementById("ch3SummaryScreen");
         this.dom.summaryDelta = document.getElementById("ch3SummaryDelta");
-        this.dom.ownedList = document.getElementById("ch3OwnedList");
-        this.dom.summaryConfirmButton = document.getElementById("ch3SummaryConfirmButton");
+        this.dom.summaryPackage = document.getElementById("ch3SummaryPackage");
+        this.dom.summaryGiftedList = document.getElementById("ch3SummaryGiftedList");
+        this.dom.summaryPurchasedList = document.getElementById("ch3SummaryPurchasedList");
+        this.dom.summaryPurchasedTools = document.getElementById("ch3SummaryPurchasedTools");
+        this.dom.summaryCost = document.getElementById("ch3SummaryCost");
+        this.dom.summaryRevenueChange = document.getElementById("ch3SummaryRevenueChange");
+        this.dom.summaryRemaining = document.getElementById("ch3SummaryRemaining");
+        this.dom.summaryImpact = document.getElementById("ch3SummaryImpact");
+        this.dom.summaryConfirmButton = document.getElementById("ch3SummaryButton") || document.getElementById("ch3SummaryConfirmButton");
       },
 
       bindEvents() {
-        this.dom.ruleButton.addEventListener("click", () => {
+        this.dom.ruleButton?.addEventListener("click", () => {
           unlockGameAudio();
           this.showToolScreen();
         });
-        this.dom.cartButton.addEventListener("click", () => this.openCart());
-        this.dom.detailClose.addEventListener("click", () => this.closeToolDetail());
-        this.dom.detailModal.addEventListener("click", (event) => {
+
+        this.dom.packageList?.addEventListener("click", (event) => {
+          const card = event.target.closest("[data-package-id]");
+          if (!card) return;
+          this.applyPackage(card.dataset.packageId);
+        });
+
+        this.dom.toolTabs?.addEventListener("click", (event) => {
+          const tab = event.target.closest("[data-category]");
+          if (!tab) return;
+          this.activeCategory = tab.dataset.category || "全部";
+          this.renderToolTabs();
+          this.renderToolCatalog();
+        });
+
+        this.dom.toolCardGrid?.addEventListener("click", (event) => {
+          const detailButton = event.target.closest("[data-detail-tool]");
+          if (detailButton) {
+            this.openToolDetail(detailButton.dataset.detailTool);
+            return;
+          }
+
+          const toggleButton = event.target.closest("[data-toggle-tool]");
+          if (toggleButton) {
+            this.toggleTool(toggleButton.dataset.toggleTool, { manual: true });
+          }
+        });
+
+        this.dom.purchaseList?.addEventListener("click", (event) => {
+          const removeButton = event.target.closest("[data-remove-tool]");
+          if (!removeButton) return;
+          this.removeFromCart(removeButton.dataset.removeTool, { manual: true });
+        });
+
+        this.dom.confirmPurchaseButton?.addEventListener("click", () => this.confirmPurchase());
+        this.dom.detailClose?.addEventListener("click", () => this.closeToolDetail());
+        this.dom.detailModal?.addEventListener("click", (event) => {
           if (event.target === this.dom.detailModal) this.closeToolDetail();
         });
-        this.dom.addToCartButton.addEventListener("click", () => this.addActiveToolToCart());
-        this.dom.cartClose.addEventListener("click", () => this.closeCart());
-        this.dom.cartBackButton.addEventListener("click", () => this.closeCart());
-        this.dom.cartModal.addEventListener("click", (event) => {
-          if (event.target === this.dom.cartModal) this.closeCart();
-        });
-        this.dom.confirmPurchaseButton.addEventListener("click", () => this.confirmPurchase());
-        this.dom.summaryConfirmButton.addEventListener("click", () => this.goToChapterFour());
+        this.dom.addToCartButton?.addEventListener("click", () => this.toggleTool(this.activeToolId, { manual: true }));
+        this.dom.summaryConfirmButton?.addEventListener("click", () => this.goToChapterFour());
       },
 
       start({ skipIntro = false, resetProgress = false } = {}) {
@@ -14221,14 +16649,12 @@ async function fetchChoicePercentage(choiceId) {
         Storyline.setCurrentChapter(3);
         this.initializeState({ resetProgress });
         this.closeToolDetail();
-        this.closeCart();
-        this.renderToolBubbles();
         this.updateHud();
-        this.updateCartBadge();
+        this.renderAll();
 
         if (skipIntro) {
           ChapterOne.clearVideoLayer();
-          ChapterOne.setBackground(CH3_ASSETS.toolDesk, "ch3-tool-screen-skip");
+          ChapterOne.clearBackgroundForSolidScreen?.("ch3-tool-screen-skip");
           ChapterOne.setDarkOverlay(false);
           this.showToolScreen({ keepState: true });
           return;
@@ -14248,8 +16674,12 @@ async function fetchChoicePercentage(choiceId) {
           chapterThreeState.moneyAfterPurchase = 0;
           chapterThreeState.shoppingCost = 0;
           chapterThreeState.purchasedToolIds = [];
+          chapterThreeState.lastPurchasedToolIds = [];
+          chapterThreeState.lastPurchaseCost = 0;
           chapterThreeState.cartToolIds = [];
           chapterThreeState.investigatedToolIds = [];
+          chapterThreeState.selectedPackageId = null;
+          chapterThreeState.hasCustomizedPackage = false;
         }
 
         if (playerSelectedNailCourse()) {
@@ -14259,8 +16689,11 @@ async function fetchChoicePercentage(choiceId) {
           ]);
         }
 
-        chapterThreeState.cartToolIds = chapterThreeState.cartToolIds.filter(
-          (id) => !chapterThreeState.ownedToolIds.includes(id)
+        chapterThreeState.cartToolIds = uniqueIds(chapterThreeState.cartToolIds).filter(
+          (id) => !chapterThreeState.ownedToolIds.includes(id) && CH3_TOOLS.some((tool) => tool.id === id)
+        );
+        chapterThreeState.ownedToolIds = uniqueIds(chapterThreeState.ownedToolIds).filter((id) =>
+          CH3_TOOLS.some((tool) => tool.id === id)
         );
 
         this.syncStateToStoryline();
@@ -14273,7 +16706,14 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       getDisplayMoney() {
-        return chapterThreeState.moneyAfterPurchase || chapterThreeState.moneyBeforePurchase || this.getBaseMoney();
+        if ((chapterThreeState.purchasedToolIds || []).length > 0 || Number(chapterThreeState.shoppingCost || 0) > 0) {
+          return Number(chapterThreeState.moneyAfterPurchase || 0);
+        }
+        return Number(chapterThreeState.moneyBeforePurchase || this.getBaseMoney());
+      },
+
+      getPreviewRemainingMoney() {
+        return Number(chapterThreeState.moneyBeforePurchase || this.getBaseMoney()) - this.getCartTotal();
       },
 
       getFollowers() {
@@ -14302,159 +16742,358 @@ async function fetchChoicePercentage(choiceId) {
 
         ChapterOne.dom.videoLayer.appendChild(video);
 
+        let hasCompleted = false;
+        const completeIntroVideo = () => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          ChapterOne.cleanupIntroVideoSkip();
+          video.pause();
+          video.classList.add("is-visible");
+          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
+          window.setTimeout(() => this.showRuleCard(), 420);
+        };
+
+        const failIntroVideo = () => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          ChapterOne.cleanupIntroVideoSkip();
+          ChapterOne.clearVideoLayer();
+          ChapterOne.setBackground(CH3_ASSETS.introFinalFallback, "ch3-intro-final-fallback");
+          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
+          window.setTimeout(() => this.showRuleCard(), 260);
+        };
+
         ChapterOne.playVideoSafely(video, {
           failAfter: 7000,
           onStarted: () => {
             video.classList.add("is-visible");
+            ChapterOne.setupIntroVideoSkip(video, completeIntroVideo);
           },
-          onEnded: () => {
-            video.pause();
-            video.classList.add("is-visible");
-            ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-            window.setTimeout(() => this.showRuleCard(), 420);
-          },
-          onFail: () => {
-            ChapterOne.clearVideoLayer();
-            ChapterOne.setBackground(CH3_ASSETS.introFinalFallback, "ch3-intro-final-fallback");
-            ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-            window.setTimeout(() => this.showRuleCard(), 260);
-          }
+          onEnded: completeIntroVideo,
+          onFail: failIntroVideo
         });
       },
 
       showRuleCard() {
         Storyline.setCurrentChapter(3);
+        this.updateHud();
         showScreen(this.dom.ruleScreen);
       },
 
       showToolScreen({ keepState = false } = {}) {
-        if (!keepState) {
-          this.syncStateToStoryline();
+        if (!keepState) this.syncStateToStoryline();
+        ChapterOne.clearVideoLayer();
+        ChapterOne.clearBackgroundForSolidScreen?.("ch3-tool-package-selector");
+        ChapterOne.setDarkOverlay(false);
+        this.renderAll();
+        this.updateHud();
+        showScreen(this.dom.toolScreen);
+      },
+
+      renderAll() {
+        this.renderPackageCards();
+        this.renderToolTabs();
+        this.renderToolCatalog();
+        this.renderKitPanel();
+      },
+
+      getPackageById(packageId) {
+        return CH3_TOOL_PACKAGES.find((item) => item.id === packageId) || null;
+      },
+
+      getToolById(toolId) {
+        return CH3_TOOLS.find((item) => item.id === toolId) || null;
+      },
+
+      getToolPrice(toolId) {
+        return this.getToolById(toolId)?.price || 0;
+      },
+
+      getToolNames(toolIds = []) {
+        return toolIds
+          .map((id) => this.getToolById(id)?.name)
+          .filter(Boolean);
+      },
+
+      getOwnedCourseGiftTools() {
+        if (!playerSelectedNailCourse()) return [];
+        const giftedIds = getChapterThreeGiftedToolIds();
+        return CH3_TOOLS.filter((tool) => giftedIds.includes(tool.id) && chapterThreeState.ownedToolIds.includes(tool.id));
+      },
+
+      getCartTools() {
+        return CH3_TOOLS.filter((tool) =>
+          chapterThreeState.cartToolIds.includes(tool.id) && !chapterThreeState.ownedToolIds.includes(tool.id)
+        );
+      },
+
+      getCartTotal() {
+        return this.getCartTools().reduce((sum, tool) => sum + Number(tool.price || 0), 0);
+      },
+
+      getPackageTotal(packageData) {
+        if (!packageData) return 0;
+        return packageData.toolIds
+          .filter((id) => !chapterThreeState.ownedToolIds.includes(id))
+          .reduce((sum, id) => sum + this.getToolPrice(id), 0);
+      },
+
+      applyPackage(packageId) {
+        const packageData = this.getPackageById(packageId);
+        if (!packageData) return;
+
+        chapterThreeState.selectedPackageId = packageData.id;
+        chapterThreeState.hasCustomizedPackage = false;
+        chapterThreeState.cartToolIds = uniqueIds(
+          packageData.toolIds.filter((id) => !chapterThreeState.ownedToolIds.includes(id))
+        );
+
+        this.syncStateToStoryline();
+        this.renderAll();
+      },
+
+      toggleTool(toolId, { manual = false } = {}) {
+        if (!toolId || chapterThreeState.ownedToolIds.includes(toolId)) return;
+        if (chapterThreeState.cartToolIds.includes(toolId)) {
+          this.removeFromCart(toolId, { manual });
+          return;
+        }
+        this.addToCart(toolId, { manual });
+      },
+
+      addToCart(toolId, { manual = false } = {}) {
+        const tool = this.getToolById(toolId);
+        if (!tool || chapterThreeState.ownedToolIds.includes(toolId)) return;
+
+        chapterThreeState.cartToolIds = uniqueIds([...chapterThreeState.cartToolIds, toolId]);
+        if (manual) chapterThreeState.hasCustomizedPackage = true;
+        this.syncStateToStoryline();
+        this.renderAll();
+        if (this.activeToolId === toolId) this.renderToolDetail(tool);
+      },
+
+      removeFromCart(toolId, { manual = false } = {}) {
+        if (chapterThreeState.ownedToolIds.includes(toolId)) return;
+
+        chapterThreeState.cartToolIds = chapterThreeState.cartToolIds.filter((id) => id !== toolId);
+        if (manual) chapterThreeState.hasCustomizedPackage = true;
+        this.syncStateToStoryline();
+        this.renderAll();
+        const tool = this.getToolById(toolId);
+        if (tool && this.activeToolId === toolId) this.renderToolDetail(tool);
+      },
+
+      renderPackageCards() {
+        if (!this.dom.packageList) return;
+        this.dom.packageList.innerHTML = CH3_TOOL_PACKAGES.map((packageData) => {
+          const isActive = chapterThreeState.selectedPackageId === packageData.id;
+          const total = this.getPackageTotal(packageData);
+          const adjustedText = isActive && chapterThreeState.hasCustomizedPackage ? "（已手動調整）" : "";
+          return `
+            <button class="ch3-package-card${isActive ? " is-active" : ""}" type="button" data-package-id="${packageData.id}">
+              <span class="ch3-package-card-title">${this.escapeHtml(packageData.name)}${adjustedText}</span>
+              <span class="ch3-package-card-description">${this.escapeHtml(packageData.description)}</span>
+              <strong class="ch3-package-card-price">預估 ${formatMoney(total)}</strong>
+            </button>
+          `;
+        }).join("");
+      },
+
+      renderToolTabs() {
+        if (!this.dom.toolTabs) return;
+        this.dom.toolTabs.innerHTML = CH3_TOOL_CATEGORIES.map((category) => `
+          <button class="ch3-tool-tab${this.activeCategory === category ? " is-active" : ""}" type="button" data-category="${category}" role="tab" aria-selected="${this.activeCategory === category ? "true" : "false"}">${category}</button>
+        `).join("");
+      },
+
+      renderToolCatalog() {
+        if (!this.dom.toolCardGrid) return;
+        const selectedPackage = this.getPackageById(chapterThreeState.selectedPackageId);
+        const packageName = selectedPackage ? selectedPackage.name : "自訂工具包";
+        const customized = selectedPackage && chapterThreeState.hasCustomizedPackage ? "（已手動調整）" : "";
+        if (this.dom.packageStatus) {
+          this.dom.packageStatus.textContent = selectedPackage
+            ? `已選擇：${packageName}${customized}。看用途後，可依照預算自行勾選或取消。`
+            : "尚未選擇推薦方案，也可以直接手動加入需要的工具。";
         }
 
-        ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH3_ASSETS.toolDesk, "ch3-tool-desk");
-        ChapterOne.setDarkOverlay(false);
-        this.setToolDeskImage(CH3_ASSETS.toolDesk);
-        this.renderToolBubbles();
-        this.updateHud();
-        this.updateCartBadge();
-        showScreen(this.dom.toolScreen);
-        window.requestAnimationFrame(() => this.updateToolImageWrapSize());
+        const tools = CH3_TOOLS
+          .map((tool, index) => ({ tool, index }))
+          .filter(({ tool }) => this.activeCategory === "全部" || tool.category === this.activeCategory)
+          .sort((a, b) => {
+            const aOwned = chapterThreeState.ownedToolIds.includes(a.tool.id);
+            const bOwned = chapterThreeState.ownedToolIds.includes(b.tool.id);
+            const aSelected = chapterThreeState.cartToolIds.includes(a.tool.id);
+            const bSelected = chapterThreeState.cartToolIds.includes(b.tool.id);
+
+            const aPriority = aOwned ? 0 : aSelected ? 1 : 2;
+            const bPriority = bOwned ? 0 : bSelected ? 1 : 2;
+
+            if (aPriority !== bPriority) return aPriority - bPriority;
+            return a.index - b.index;
+          })
+          .map(({ tool }) => tool);
+
+        this.dom.toolCardGrid.innerHTML = tools.map((tool) => this.renderToolCard(tool)).join("");
       },
 
-      setToolDeskImage(src) {
-        const img = this.dom.toolBackgroundImage;
-        if (!img) return;
+      renderToolCard(tool) {
+        const isOwned = chapterThreeState.ownedToolIds.includes(tool.id);
+        const isSelected = chapterThreeState.cartToolIds.includes(tool.id);
+        const isKey = tool.branchKey === "disinfection";
+        const tags = [];
+        tags.push(tool.required ? "開業必備" : "可自由選購");
+        if (isOwned) tags.push("課程已附贈");
+        if (isKey) tags.push("影響後續糾紛");
+        tags.push(isOwned ? "已獲得" : isSelected ? "已加入" : "未購買");
 
-        img.classList.remove("is-visible");
-        img.onload = () => {
-          img.classList.add("is-visible");
-          this.updateToolImageWrapSize();
-        };
-        img.onerror = () => {
-          img.classList.remove("is-visible");
-          console.warn("第三章工具桌圖片載入失敗，已保留漸層備用背景：", src);
-        };
-        img.src = src;
-
-        ChapterOne.resolveImagePath(src).then((resolvedUrl) => {
-          if (img.getAttribute("src") === src) img.src = resolvedUrl;
-        });
+        const priceText = isOwned ? "已獲得" : formatMoney(tool.price);
+        const buttonText = isOwned ? "已獲得" : isSelected ? "取消" : "加入";
+        return `
+          <article class="ch3-tool-card${isSelected ? " is-selected" : ""}${isOwned ? " is-owned" : ""}${isKey ? " is-key" : ""}">
+            <div class="ch3-tool-card-main">
+              <h3 class="ch3-tool-card-title">${this.escapeHtml(tool.name)}</h3>
+              <p class="ch3-tool-card-description">${this.escapeHtml(tool.description)}</p>
+              <div class="ch3-tool-card-meta">
+                ${tags.map((tag) => `<span>${this.escapeHtml(tag)}</span>`).join("")}
+              </div>
+            </div>
+            <div class="ch3-tool-card-footer">
+              <strong>${priceText}</strong>
+              <div class="ch3-tool-card-actions">
+                <button class="ch3-tool-detail-button" type="button" data-detail-tool="${tool.id}">詳細</button>
+                <button class="ch3-tool-toggle" type="button" data-toggle-tool="${tool.id}" ${isOwned ? "disabled" : ""}>${buttonText}</button>
+              </div>
+            </div>
+          </article>
+        `;
       },
 
-      updateToolImageWrapSize() {
-        const wrap = this.dom.toolImageWrap;
+      renderKitPanel() {
+        const ownedGiftTools = this.getOwnedCourseGiftTools();
+        const cartTools = this.getCartTools();
+        const total = this.getCartTotal();
 
-        if (!wrap) return;
+        if (this.dom.ownedGiftList) {
+          this.dom.ownedGiftList.innerHTML = ownedGiftTools.length
+            ? ownedGiftTools.map((tool) => `
+                <div class="ch3-kit-item is-owned">
+                  <span>${this.escapeHtml(tool.name)}｜課程已附贈</span>
+                </div>
+              `).join("")
+            : `<div class="ch3-kit-item is-empty">尚無</div>`;
+        }
 
-        // 工具桌圖片已改成 16:9，互動定位直接對應整個遊戲畫面。
-        // 不再以 4:3 比例重新計算容器，避免圖片縮小後產生留白。
-        wrap.style.width = "100%";
-        wrap.style.height = "100%";
+        if (this.dom.purchaseList) {
+          this.dom.purchaseList.innerHTML = cartTools.length
+            ? cartTools.map((tool) => `
+                <div class="ch3-kit-item">
+                  <span>${this.escapeHtml(tool.name)}</span>
+                  <strong>${formatMoney(tool.price)}</strong>
+                </div>
+              `).join("")
+            : `<div class="ch3-kit-item is-empty">尚無</div>`;
+        }
+
+        if (this.dom.kitTotal) this.dom.kitTotal.textContent = formatMoney(total);
+        if (this.dom.kitRemaining) this.dom.kitRemaining.textContent = formatMoney(this.getPreviewRemainingMoney());
+        if (this.dom.hygieneLevel) this.dom.hygieneLevel.textContent = this.getHygieneLevel();
+        if (this.dom.budgetPressure) this.dom.budgetPressure.textContent = this.getBudgetPressure();
+        if (this.dom.impactBox) this.dom.impactBox.textContent = this.getImpactText();
+        if (this.dom.cartWarning) this.dom.cartWarning.textContent = this.getCartWarning();
+        if (this.dom.confirmPurchaseButton) this.dom.confirmPurchaseButton.disabled = !canConfirmChapterThreePurchase();
       },
 
-      renderToolBubbles() {
-        this.dom.toolBubbleLayer.innerHTML = "";
-
-        CH3_TOOLS.forEach((tool) => {
-          const bubble = document.createElement("button");
-          bubble.type = "button";
-          bubble.className = "ch3-tool-bubble";
-          bubble.dataset.toolId = tool.id;
-          bubble.style.left = `${tool.position.x}%`;
-          bubble.style.top = `${tool.position.y}%`;
-          bubble.setAttribute("aria-label", `查看${tool.name}`);
-          bubble.title = tool.name;
-          bubble.innerHTML = `
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="10.5" cy="10.5" r="6.5"></circle>
-              <line x1="15.5" y1="15.5" x2="21" y2="21"></line>
-            </svg>
-            <span class="ch3-tool-check" aria-hidden="true"></span>
-          `;
-          bubble.classList.toggle("is-investigated", chapterThreeState.investigatedToolIds.includes(tool.id));
-          bubble.classList.toggle("is-owned", chapterThreeState.ownedToolIds.includes(tool.id));
-          bubble.addEventListener("click", () => this.openToolDetail(tool.id));
-          this.dom.toolBubbleLayer.appendChild(bubble);
-        });
-
-        this.updateProgressPill();
+      getHygieneLevel() {
+        const hasDisinfect = this.hasToolPrepared("disinfect");
+        const hasCotton = this.hasToolPrepared("cottonPads");
+        if (hasDisinfect && hasCotton) return "高";
+        if (hasDisinfect || hasCotton || this.hasToolPrepared("dustCollector")) return "中";
+        return "低";
       },
 
-      updateProgressPill() {
-        const count = chapterThreeState.investigatedToolIds.length;
-        this.dom.progressPill.textContent = `已調查 ${count} / ${CH3_TOOLS.length}`;
+      getBudgetPressure() {
+        const baseMoney = Number(chapterThreeState.moneyBeforePurchase || this.getBaseMoney());
+        const total = this.getCartTotal();
+        if (baseMoney <= 0 || total > baseMoney * 0.62 || this.getPreviewRemainingMoney() < 0) return "高";
+        if (total > baseMoney * 0.34) return "中";
+        return "低";
+      },
+
+      hasToolPrepared(toolId) {
+        return chapterThreeState.ownedToolIds.includes(toolId) || chapterThreeState.cartToolIds.includes(toolId);
+      },
+
+      getImpactText() {
+        const hasDisinfect = this.hasToolPrepared("disinfect");
+        const hasCotton = this.hasToolPrepared("cottonPads");
+
+        if (hasDisinfect) {
+          return "已購買消毒設備，後續遇到衛生質疑時，可以提出設備與流程說明，將降低糾紛風險。";
+        }
+
+        if (hasCotton) {
+          return "你準備了基本清潔耗材，但缺少較完整的工具消毒設備。後續衛生爭議仍可能升高。";
+        }
+
+        return "尚未購買消毒設備。後續若顧客質疑衛生流程，可能觸發額外衝突。";
+      },
+
+      getCartWarning() {
+        if (!canConfirmChapterThreePurchase()) {
+          return "請至少選擇一種工具包，或手動加入一項工具。";
+        }
+
+        const missingRequired = CH3_TOOLS.filter((tool) =>
+          tool.required &&
+          !chapterThreeState.ownedToolIds.includes(tool.id) &&
+          !chapterThreeState.cartToolIds.includes(tool.id)
+        );
+
+        if (missingRequired.length > 0) {
+          return `風險提示：${missingRequired.map((tool) => tool.name).join("、")} 尚未準備，仍可繼續，但可能影響施作品質或效率。`;
+        }
+
+        return "";
       },
 
       openToolDetail(toolId) {
-        const tool = CH3_TOOLS.find((item) => item.id === toolId);
+        const tool = this.getToolById(toolId);
         if (!tool) return;
-
         this.activeToolId = toolId;
-
-        if (!chapterThreeState.investigatedToolIds.includes(toolId)) {
-          chapterThreeState.investigatedToolIds.push(toolId);
-          chapterThreeState.investigatedToolIds = uniqueIds(chapterThreeState.investigatedToolIds);
-          this.syncStateToStoryline();
-        }
-
-        this.renderToolBubbles();
         this.renderToolDetail(tool);
-        this.dom.detailModal.classList.add("is-open");
-        this.dom.detailModal.setAttribute("aria-hidden", "false");
+        this.dom.detailModal?.classList.add("is-open");
+        this.dom.detailModal?.setAttribute("aria-hidden", "false");
       },
 
       renderToolDetail(tool) {
-        const owned = chapterThreeState.ownedToolIds.includes(tool.id);
-        const inCart = chapterThreeState.cartToolIds.includes(tool.id);
-        const requiredText = tool.required ? "開業必備" : "可自由選購";
-        const statusText = owned ? "已獲得" : inCart ? "已加入購物車" : "尚未加入";
+        const isOwned = chapterThreeState.ownedToolIds.includes(tool.id);
+        const isSelected = chapterThreeState.cartToolIds.includes(tool.id);
+        const isKey = tool.branchKey === "disinfection";
+        const statusText = isOwned ? "課程已附贈" : isSelected ? "已加入本次購買" : "尚未購買";
 
-        this.dom.toolName.textContent = tool.name;
-        this.dom.toolMeta.innerHTML = `
-          <span class="ch3-tool-chip">${requiredText}</span>
-          <span class="ch3-tool-chip">${statusText}</span>
-        `;
-        this.dom.toolDescription.textContent = tool.description;
-        this.dom.toolPrice.textContent = formatMoney(tool.price);
+        if (this.dom.toolName) this.dom.toolName.textContent = tool.name;
+        if (this.dom.toolMeta) {
+          this.dom.toolMeta.innerHTML = `
+            <span class="ch3-tool-chip">${tool.required ? "開業必備" : "可自由選購"}</span>
+            <span class="ch3-tool-chip">${statusText}</span>
+            ${isKey ? `<span class="ch3-tool-chip">影響後續糾紛</span>` : ""}
+          `;
+        }
+        if (this.dom.toolDescription) this.dom.toolDescription.textContent = tool.description;
+        if (this.dom.toolPrice) this.dom.toolPrice.textContent = isOwned ? "已獲得" : formatMoney(tool.price);
 
         this.setToolImage(tool);
 
-        if (owned) {
-          this.dom.addToCartButton.textContent = "已獲得";
-          this.dom.addToCartButton.disabled = true;
-        } else if (inCart) {
-          this.dom.addToCartButton.textContent = "已加入購物車";
-          this.dom.addToCartButton.disabled = true;
-        } else {
-          this.dom.addToCartButton.textContent = "加入購物車";
-          this.dom.addToCartButton.disabled = false;
+        if (this.dom.addToCartButton) {
+          this.dom.addToCartButton.disabled = isOwned;
+          this.dom.addToCartButton.textContent = isOwned ? "已獲得" : isSelected ? "取消購買" : "加入本次購買";
         }
       },
 
       setToolImage(tool) {
         const img = this.dom.toolImage;
+        if (!img) return;
         img.classList.remove("is-visible");
         img.alt = tool.name;
         img.onload = () => img.classList.add("is-visible");
@@ -14477,109 +17116,22 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.detailModal.setAttribute("aria-hidden", "true");
       },
 
-      addActiveToolToCart() {
-        if (!this.activeToolId) return;
-        this.addToCart(this.activeToolId);
-      },
-
-      addToCart(toolId) {
-        if (chapterThreeState.ownedToolIds.includes(toolId)) return;
-        if (chapterThreeState.cartToolIds.includes(toolId)) return;
-
-        chapterThreeState.cartToolIds.push(toolId);
-        chapterThreeState.cartToolIds = uniqueIds(chapterThreeState.cartToolIds);
-        this.syncStateToStoryline();
-        this.updateCartBadge();
-
-        const tool = CH3_TOOLS.find((item) => item.id === toolId);
-        if (tool) this.renderToolDetail(tool);
-      },
-
-      removeFromCart(toolId) {
-        chapterThreeState.cartToolIds = chapterThreeState.cartToolIds.filter((id) => id !== toolId);
-        this.syncStateToStoryline();
-        this.updateCartBadge();
-        this.renderCart();
-      },
-
-      updateCartBadge() {
-        const count = chapterThreeState.cartToolIds.length;
-        if (this.dom.cartBadge) this.dom.cartBadge.textContent = String(count);
-      },
-
-      openCart() {
-        this.renderCart();
-        this.dom.cartModal.classList.add("is-open");
-        this.dom.cartModal.setAttribute("aria-hidden", "false");
-      },
-
-      closeCart() {
-        if (!this.dom.cartModal) return;
-        this.dom.cartModal.classList.remove("is-open");
-        this.dom.cartModal.setAttribute("aria-hidden", "true");
-      },
-
-      getCartTools() {
-        return CH3_TOOLS.filter((tool) => chapterThreeState.cartToolIds.includes(tool.id));
-      },
-
-      getCartTotal() {
-        return this.getCartTools().reduce((sum, tool) => sum + tool.price, 0);
-      },
-
-      getCartWarning() {
-        const allInvestigated = CH3_TOOLS.every((tool) => chapterThreeState.investigatedToolIds.includes(tool.id));
-        if (!allInvestigated) return "請先調查完全部工具。";
-
-        const missingRequired = CH3_TOOLS.filter((tool) =>
-          tool.required &&
-          !chapterThreeState.ownedToolIds.includes(tool.id) &&
-          !chapterThreeState.cartToolIds.includes(tool.id)
-        );
-
-        if (missingRequired.length > 0) return "尚有必備工具未加入購物車。";
-        return "";
-      },
-
-      renderCart() {
-        const cartTools = this.getCartTools();
-        const total = this.getCartTotal();
-
-        this.dom.cartTotal.textContent = `目前花費：${formatMoney(total)}`;
-
-        if (cartTools.length === 0) {
-          this.dom.cartList.innerHTML = `<div class="ch3-cart-empty">尚未加入任何設備</div>`;
-        } else {
-          this.dom.cartList.innerHTML = cartTools.map((tool) => `
-            <div class="ch3-cart-item">
-              <span>${tool.name}</span>
-              <span class="ch3-cart-item-price">${formatMoney(tool.price)}</span>
-              <button class="ch3-remove-button" type="button" data-remove-tool="${tool.id}">移出</button>
-            </div>
-          `).join("");
-        }
-
-        this.dom.cartList.querySelectorAll("[data-remove-tool]").forEach((button) => {
-          button.addEventListener("click", () => this.removeFromCart(button.dataset.removeTool));
-        });
-
-        const warning = this.getCartWarning();
-        this.dom.cartWarning.textContent = warning;
-        this.dom.confirmPurchaseButton.disabled = !canConfirmChapterThreePurchase();
-      },
-
       confirmPurchase() {
         if (!canConfirmChapterThreePurchase()) {
-          this.renderCart();
+          this.renderKitPanel();
           return;
         }
 
-        const purchasedIds = [...chapterThreeState.cartToolIds];
+        const purchasedIds = uniqueIds(chapterThreeState.cartToolIds).filter(
+          (id) => !chapterThreeState.ownedToolIds.includes(id)
+        );
         const shoppingCost = this.getCartTotal();
 
         chapterThreeState.purchasedToolIds = purchasedIds;
+        chapterThreeState.lastPurchasedToolIds = [...purchasedIds];
+        chapterThreeState.lastPurchaseCost = shoppingCost;
         chapterThreeState.shoppingCost = shoppingCost;
-        chapterThreeState.moneyAfterPurchase = chapterThreeState.moneyBeforePurchase - shoppingCost;
+        chapterThreeState.moneyAfterPurchase = Number(chapterThreeState.moneyBeforePurchase || this.getBaseMoney()) - shoppingCost;
         chapterThreeState.ownedToolIds = uniqueIds([
           ...chapterThreeState.ownedToolIds,
           ...purchasedIds
@@ -14587,15 +17139,14 @@ async function fetchChoicePercentage(choiceId) {
         chapterThreeState.cartToolIds = [];
 
         this.syncStateToStoryline();
-        this.closeCart();
-        this.updateCartBadge();
+        this.closeToolDetail();
         this.updateHud();
         this.showSummary();
       },
 
       showSummary() {
         ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH3_ASSETS.toolDesk, "ch3-summary");
+        ChapterOne.clearBackgroundForSolidScreen?.("ch3-summary");
         ChapterOne.setDarkOverlay(false);
         this.renderSummary();
         this.updateHud();
@@ -14603,46 +17154,78 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       renderSummary() {
-        const ownedTools = CH3_TOOLS.filter((tool) => chapterThreeState.ownedToolIds.includes(tool.id));
-        const hasCourseGift = playerSelectedNailCourse();
-        const courseGiftedIds = hasCourseGift ? getChapterThreeGiftedToolIds() : [];
-        const shoppingCost = Number(chapterThreeState.shoppingCost || 0);
-        const deltaText = shoppingCost > 0 ? formatMoney(-shoppingCost) : "$0";
+        const finalOwnedToolIds = chapterThreeState.ownedToolIds || [];
+        const finalOwnedTools = CH3_TOOLS.filter((tool) =>
+          finalOwnedToolIds.includes(tool.id)
+        );
+        const shoppingCost = Number(
+          chapterThreeState.lastPurchaseCost || chapterThreeState.shoppingCost || 0
+        );
 
-        this.dom.summaryDelta.textContent = `此輪收益 ${deltaText}`;
-        this.dom.summaryDelta.classList.toggle("is-negative", shoppingCost > 0);
+        if (this.dom.summaryPurchasedTools) {
+          this.dom.summaryPurchasedTools.innerHTML = this.renderSummaryToolChips(
+            finalOwnedTools,
+            "尚未獲得工具"
+          );
+        }
 
-        this.dom.ownedList.innerHTML = ownedTools.length
-          ? ownedTools.map((tool) => {
-              const giftedLabel = courseGiftedIds.includes(tool.id)
-                ? `<span class="ch3-owned-note">（課程已附）</span>`
-                : "";
+        if (this.dom.summaryPurchasedList) {
+          this.dom.summaryPurchasedList.innerHTML = "";
+        }
 
-              return `
-                <div class="ch3-owned-item" role="listitem">
-                  <span class="ch3-owned-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M7 5h10v3H7z"></path>
-                      <path d="M8 8h8l-1 11H9z"></path>
-                      <path d="M10 11h4"></path>
-                    </svg>
-                  </span>
-                  <span class="ch3-owned-name">${tool.name}${giftedLabel}</span>
-                </div>
-              `;
-            }).join("")
-          : `
-            <div class="ch3-owned-item" role="listitem">
-              <span class="ch3-owned-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M7 5h10v3H7z"></path>
-                  <path d="M8 8h8l-1 11H9z"></path>
-                  <path d="M10 11h4"></path>
-                </svg>
-              </span>
-              <span class="ch3-owned-name">尚未取得工具</span>
-            </div>
-          `;
+        if (this.dom.summaryCost) this.dom.summaryCost.textContent = formatMoney(shoppingCost);
+        if (this.dom.summaryRevenueChange) this.dom.summaryRevenueChange.textContent = "";
+        if (this.dom.summaryDelta) {
+          this.dom.summaryDelta.textContent = "";
+          this.dom.summaryDelta.classList.remove("is-negative");
+        }
+        if (this.dom.summaryPackage) this.dom.summaryPackage.textContent = "";
+        if (this.dom.summaryGiftedList) this.dom.summaryGiftedList.innerHTML = "";
+        if (this.dom.summaryPurchasedList) this.dom.summaryPurchasedList.innerHTML = "";
+        if (this.dom.summaryRemaining) this.dom.summaryRemaining.textContent = "";
+        if (this.dom.summaryImpact) this.dom.summaryImpact.innerHTML = "";
+      },
+
+      renderSummaryToolChips(tools, emptyText) {
+        if (!tools.length) return `<div class="ch3-summary-tool-chip is-empty">${this.escapeHtml(emptyText)}</div>`;
+        return tools.map((tool) => `
+          <div class="ch3-summary-tool-chip">
+            <span>${this.escapeHtml(tool.name)}</span>
+            <strong>${formatMoney(tool.price)}</strong>
+          </div>
+        `).join("");
+      },
+
+      renderSummaryToolList(tools, emptyText, isGifted = false) {
+        if (!tools.length) return `<li>${this.escapeHtml(emptyText)}</li>`;
+        return tools.map((tool) => `
+          <li>
+            <span>${this.escapeHtml(tool.name)}</span>
+            <strong>${isGifted ? "課程已附贈" : formatMoney(tool.price)}</strong>
+          </li>
+        `).join("");
+      },
+
+      getSummaryImpactList() {
+        const hasDisinfect = chapterThreeState.ownedToolIds.includes("disinfect");
+        const hasPhotoBackdrop = chapterThreeState.ownedToolIds.includes("photoBackdrop");
+        const hasDesignMaterials = chapterThreeState.ownedToolIds.includes("glitters") || chapterThreeState.ownedToolIds.includes("colorChart");
+        const impact = [];
+
+        impact.push(hasDisinfect
+          ? "你補齊了消毒設備，後續遇到衛生質疑時，能更有底氣說明自己的流程。"
+          : "你暫時沒有購買消毒設備。短期節省了預算，但後續若顧客質疑衛生流程，衝突可能升高。"
+        );
+
+        if (hasPhotoBackdrop) {
+          impact.push("拍攝布景能提高作品呈現，有助於 IG 經營。");
+        }
+
+        if (hasDesignMaterials) {
+          impact.push("造型與色彩選擇更完整，後續定價與作品吸引力會更有彈性。");
+        }
+
+        return impact;
       },
 
       updateHud() {
@@ -14665,6 +17248,15 @@ async function fetchChoicePercentage(choiceId) {
         Storyline.saveState();
       },
 
+      escapeHtml(value = "") {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      },
+
       goToChapterFour() {
         goToChapterFour();
       }
@@ -14677,8 +17269,10 @@ async function fetchChoicePercentage(choiceId) {
       init() {
         this.cacheDom();
         this.bindEvents();
+        this.ensureDefaultPrices();
         this.renderPriceFields();
         this.renderRuleSelects();
+        this.updatePricePresetButtons();
         this.validateForm();
       },
 
@@ -14689,6 +17283,7 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.priceForm = document.getElementById("ch4PriceForm");
         this.dom.leftColumn = document.getElementById("ch4PriceLeftColumn");
         this.dom.rightColumn = document.getElementById("ch4PriceRightColumn");
+        this.dom.pricePresetRow = document.getElementById("ch4PricePresetRow");
         this.dom.warning = document.getElementById("ch4Warning");
         this.dom.confirmButton = document.getElementById("ch4ConfirmButton");
         this.dom.noteButton = document.getElementById("ch4NoteButton");
@@ -14700,17 +17295,22 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       bindEvents() {
-        this.dom.ruleButton.addEventListener("click", () => {
+        this.dom.ruleButton?.addEventListener("click", () => {
           unlockGameAudio();
           this.showPricingScreen();
         });
-        this.dom.noteButton.addEventListener("click", () => this.openNoteModal());
-        this.dom.noteCloseButton.addEventListener("click", () => this.closeNoteModal());
-        this.dom.noteModal.addEventListener("click", (event) => {
+        this.dom.noteButton?.addEventListener("click", () => this.openNoteModal());
+        this.dom.noteCloseButton?.addEventListener("click", () => this.closeNoteModal());
+        this.dom.noteModal?.addEventListener("click", (event) => {
           if (event.target === this.dom.noteModal) this.closeNoteModal();
         });
-        this.dom.confirmButton.addEventListener("click", () => this.confirmPriceList());
-        this.dom.publishButton.addEventListener("click", () => this.publishPriceList());
+        this.dom.pricePresetRow?.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-price-preset]");
+          if (!button) return;
+          this.applyPricePreset(button.dataset.pricePreset);
+        });
+        this.dom.confirmButton?.addEventListener("click", () => this.confirmPriceList());
+        this.dom.publishButton?.addEventListener("click", () => this.publishPriceList());
       },
 
       start({ skipIntro = false, skipRule = false, resetProgress = false } = {}) {
@@ -14743,6 +17343,7 @@ async function fetchChoicePercentage(choiceId) {
         const savedState = Storyline.state.chapterFour || createDefaultChapterFourState();
         const nextState = resetProgress ? createDefaultChapterFourState() : savedState;
         setChapterFourState(nextState);
+        this.ensureDefaultPrices();
         this.syncStateToStoryline();
       },
 
@@ -14760,23 +17361,35 @@ async function fetchChoicePercentage(choiceId) {
 
         ChapterOne.dom.videoLayer.appendChild(video);
 
+        let hasCompleted = false;
+        const completeIntroVideo = () => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          ChapterOne.cleanupIntroVideoSkip();
+          video.pause();
+          video.classList.add("is-visible");
+          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
+          window.setTimeout(() => this.showRuleCard(), 420);
+        };
+
+        const failIntroVideo = () => {
+          if (hasCompleted) return;
+          hasCompleted = true;
+          ChapterOne.cleanupIntroVideoSkip();
+          ChapterOne.clearVideoLayer();
+          ChapterOne.setBackground(CH4_ASSETS.introFinalFallback, "ch4-intro-final-fallback");
+          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
+          window.setTimeout(() => this.showRuleCard(), 260);
+        };
+
         ChapterOne.playVideoSafely(video, {
           failAfter: 7000,
           onStarted: () => {
             video.classList.add("is-visible");
+            ChapterOne.setupIntroVideoSkip(video, completeIntroVideo);
           },
-          onEnded: () => {
-            video.pause();
-            video.classList.add("is-visible");
-            ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
-            window.setTimeout(() => this.showRuleCard(), 420);
-          },
-          onFail: () => {
-            ChapterOne.clearVideoLayer();
-            ChapterOne.setBackground(CH4_ASSETS.introFinalFallback, "ch4-intro-final-fallback");
-            ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
-            window.setTimeout(() => this.showRuleCard(), 260);
-          }
+          onEnded: completeIntroVideo,
+          onFail: failIntroVideo
         });
       },
 
@@ -14793,15 +17406,65 @@ async function fetchChoicePercentage(choiceId) {
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(CH4_ASSETS.pricingBackground, "ch4-pricing-bg");
         ChapterOne.setDarkOverlay(false);
+        this.ensureDefaultPrices();
         this.renderPriceFields();
         this.renderRuleSelects();
+        this.updatePricePresetButtons();
         this.validateForm();
         this.updateHud();
         showScreen(this.dom.pricingScreen);
       },
 
+      ensureDefaultPrices() {
+        const prices = chapterFourState.prices || {};
+        const hasAnyPrice = Object.keys(prices).some((key) =>
+          prices[key] !== "" && prices[key] !== undefined && prices[key] !== null
+        );
+
+        if (!hasAnyPrice) {
+          chapterFourState.prices = { ...CH4_PRICE_PRESETS.middle };
+          chapterFourState.pricePreset = "middle";
+          return;
+        }
+
+        if (!chapterFourState.pricePreset) {
+          chapterFourState.pricePreset = this.getMatchingPricePreset() || "custom";
+        }
+      },
+
+      getMatchingPricePreset() {
+        return Object.keys(CH4_PRICE_PRESETS).find((presetId) => {
+          const preset = CH4_PRICE_PRESETS[presetId];
+          return CH4_PRICE_FIELDS.every((field) => Number(chapterFourState.prices[field.id]) === Number(preset[field.id]));
+        }) || "custom";
+      },
+
+      applyPricePreset(presetId) {
+        const preset = CH4_PRICE_PRESETS[presetId];
+        if (!preset) return;
+
+        chapterFourState.prices = { ...preset };
+        chapterFourState.pricePreset = presetId;
+        chapterFourState.isPriceListConfirmed = false;
+        chapterFourState.isPublished = false;
+
+        this.renderPriceFields();
+        this.renderRuleSelects();
+        this.updatePricePresetButtons();
+        this.validateForm();
+        this.syncStateToStoryline();
+      },
+
+      updatePricePresetButtons() {
+        document.querySelectorAll("[data-price-preset]").forEach((button) => {
+          const presetId = button.dataset.pricePreset;
+          button.classList.toggle("is-active", chapterFourState.pricePreset === presetId);
+        });
+      },
+
       renderPriceFields() {
         if (!this.dom.leftColumn || !this.dom.rightColumn) return;
+        this.ensureDefaultPrices();
 
         this.dom.leftColumn.innerHTML = "";
         this.dom.rightColumn.innerHTML = "";
@@ -14883,8 +17546,10 @@ async function fetchChoicePercentage(choiceId) {
 
       updatePrice(fieldId, value) {
         chapterFourState.prices[fieldId] = value === "" ? "" : Number(value);
+        chapterFourState.pricePreset = "custom";
         chapterFourState.isPriceListConfirmed = false;
         chapterFourState.isPublished = false;
+        this.updatePricePresetButtons();
         this.validateForm();
         this.syncStateToStoryline();
       },
@@ -14916,6 +17581,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       openNoteModal() {
+        if (!this.dom.noteModal) return;
         this.dom.noteModal.classList.add("is-open");
         this.dom.noteModal.setAttribute("aria-hidden", "false");
       },
@@ -15078,6 +17744,9 @@ async function fetchChoicePercentage(choiceId) {
       videoCompleted: false,
       touchStartX: 0,
       touchStartY: 0,
+      serviceProgress: 0,
+      pendingProgress: 0,
+      progressRafId: null,
 
       init() {
         this.cacheDom();
@@ -15162,12 +17831,19 @@ async function fetchChoicePercentage(choiceId) {
         ChapterOne.setBackground(this.activeAssets.firstFrame, "ch5-service-first-frame");
         ChapterOne.setDarkOverlay(false);
         this.updateHud({ includeChapterFive: false });
+        this.serviceProgress = 0;
+        this.pendingProgress = 0;
+        if (this.progressRafId) {
+          window.cancelAnimationFrame(this.progressRafId);
+          this.progressRafId = null;
+        }
         this.prepareVideoElement();
         this.updateVideoHint();
         this.updateProgress(0);
         this.dom.videoScreen.classList.remove("is-fallback");
         showScreen(this.dom.videoScreen);
         this.setupScrollControlledVideo();
+        ChapterOne.setupIntroVideoSkip(this.dom.video, () => this.completeVideo({ skipped: true }));
       },
 
       prepareVideoElement() {
@@ -15178,7 +17854,7 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", this.activeAssets.video);
         video.setAttribute("poster", this.activeAssets.firstFrame);
-        video.preload = "auto";
+        video.preload = "metadata";
         prepareVideoAudio(video);
         video.currentTime = 0;
 
@@ -15265,27 +17941,28 @@ async function fetchChoicePercentage(choiceId) {
         if (this.videoCompleted) return;
 
         unlockGameAudio();
-        prepareVideoAudio(video);
+        if (video) video.classList.add("is-visible");
 
-        if (!this.metadataReady || !Number.isFinite(video.duration) || video.duration <= 0) {
-          return;
-        }
-
+        const duration = this.metadataReady && video && Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration
+          : 8;
         const delta = Number(deltaSeconds) || 0;
-        const nextTime = Math.max(0, Math.min(video.duration, video.currentTime + delta));
-        video.currentTime = nextTime;
-        video.classList.add("is-visible");
-        this.updateProgress(nextTime / video.duration);
+        const nextProgress = Math.max(0, Math.min(1, (this.serviceProgress || 0) + delta / duration));
 
-        playPreparedVideo(video, () => {}, {
-          onBlocked: () => {}
+        this.pendingProgress = nextProgress;
+        if (this.progressRafId) return;
+
+        this.progressRafId = window.requestAnimationFrame(() => {
+          this.progressRafId = null;
+          if (this.videoCompleted) return;
+
+          this.serviceProgress = this.pendingProgress;
+          this.updateProgress(this.serviceProgress);
+
+          if (this.serviceProgress >= 0.985) {
+            this.completeVideo();
+          }
         });
-
-        this.pauseVideoAfterInputStops(150);
-
-        if (delta > 0 && nextTime >= video.duration - 0.15) {
-          this.completeVideo();
-        }
       },
 
       pauseVideoAfterInputStops(delay = 150) {
@@ -15298,9 +17975,16 @@ async function fetchChoicePercentage(choiceId) {
       completeVideo() {
         if (this.videoCompleted) return;
         this.videoCompleted = true;
+        ChapterOne.cleanupIntroVideoSkip();
         this.clearTimers();
         this.removeVideoControlListeners();
-        this.dom.video.pause();
+        if (this.progressRafId) {
+          window.cancelAnimationFrame(this.progressRafId);
+          this.progressRafId = null;
+        }
+        try { this.dom.video.pause(); } catch (error) {}
+        this.serviceProgress = 1;
+        this.pendingProgress = 1;
         this.updateProgress(1);
         ChapterOne.setBackground(this.activeAssets?.finalFallback || CH5_ASSETS.serviceFinalFallbackA, "ch5-service-final");
         window.setTimeout(() => this.showResult(), 320);
@@ -15308,6 +17992,7 @@ async function fetchChoicePercentage(choiceId) {
 
       handleVideoFallback() {
         if (this.videoCompleted) return;
+        ChapterOne.cleanupIntroVideoSkip();
         this.clearTimers();
         this.removeVideoControlListeners();
         this.dom.video.pause();
@@ -15321,11 +18006,19 @@ async function fetchChoicePercentage(choiceId) {
       clearTimers() {
         window.clearTimeout(this.inputPauseTimer);
         window.clearTimeout(this.fallbackTimer);
+        if (this.progressRafId) {
+          window.cancelAnimationFrame(this.progressRafId);
+          this.progressRafId = null;
+        }
       },
 
       updateProgress(progress) {
         const value = Math.max(0, Math.min(1, Number(progress) || 0));
-        if (this.dom.progressFill) this.dom.progressFill.style.width = `${value * 100}%`;
+        this.serviceProgress = value;
+        if (this.dom.progressFill) {
+          this.dom.progressFill.style.width = "100%";
+          this.dom.progressFill.style.transform = `scaleX(${value})`;
+        }
       },
 
       updateVideoHint() {
@@ -15475,6 +18168,14 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.introVideo = document.getElementById("ch6IntroVideo");
         this.dom.skipVideoButton = document.getElementById("ch6SkipVideoButton");
         this.dom.ruleScreen = document.getElementById("ch6RuleScreen");
+        this.dom.caseSelectScreen = document.getElementById("ch6CaseSelectScreen");
+        this.dom.caseGrid = document.getElementById("ch6CaseGrid");
+        this.dom.skipToGuideButton = document.getElementById("ch6SkipToGuideButton");
+        this.dom.caseCompleteScreen = document.getElementById("ch6CaseCompleteScreen");
+        this.dom.caseCompleteTitle = document.getElementById("ch6CaseCompleteTitle");
+        this.dom.caseCompleteBody = document.getElementById("ch6CaseCompleteBody");
+        this.dom.backToCaseSelectButton = document.getElementById("ch6BackToCaseSelectButton");
+        this.dom.goToGuideButton = document.getElementById("ch6GoToGuideButton");
         this.dom.ruleButton = document.getElementById("ch6RuleButton");
         this.dom.chatScreen = document.getElementById("ch6ChatScreen");
         this.dom.chatBody = document.getElementById("ch6ChatBody");
@@ -15515,8 +18216,16 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.skipVideoButton?.addEventListener("click", () => this.completeIntroVideo());
         this.dom.ruleButton?.addEventListener("click", () => {
           unlockGameAudio();
-          this.showChatScreen();
+          this.showCaseSelectScreen();
         });
+        this.dom.caseGrid?.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-case-id]");
+          if (!button) return;
+          this.selectCase(button.dataset.caseId);
+        });
+        this.dom.backToCaseSelectButton?.addEventListener("click", () => this.showCaseSelectScreen());
+        this.dom.goToGuideButton?.addEventListener("click", () => this.showDisputeGuideScreen());
+        this.dom.skipToGuideButton?.addEventListener("click", () => this.showDisputeGuideScreen());
         this.dom.systemButton?.addEventListener("click", () => this.resolveSystemCard());
         this.dom.summaryButton?.addEventListener("click", () => this.showGuide());
         this.dom.guideNextButton?.addEventListener("click", () => this.nextGuidePage());
@@ -15539,6 +18248,7 @@ async function fetchChoicePercentage(choiceId) {
         setChapterSixState(resetProgress ? createDefaultChapterSixState() : savedState);
         if (resetProgress) this.syncStateToStoryline();
         this.allowSkipIntro = Boolean(allowSkipIntro);
+        this.introCompleted = false;
         this.toggleIntroSkipButton(false);
         this.updateHud({ includeChapterSix: chapterSixState.completed });
         this.closeChoiceModal();
@@ -15546,7 +18256,7 @@ async function fetchChoicePercentage(choiceId) {
 
         if (skipIntro) {
           if (skipRule) {
-            this.showChatScreen();
+            this.showCaseSelectScreen();
           } else {
             this.showRuleCard();
           }
@@ -15557,6 +18267,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playIntroVideo() {
+        this.introCompleted = false;
         window.clearTimeout(this.introFallbackTimer);
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(CH6_ASSETS.introPoster, "ch6-intro-poster");
@@ -15577,7 +18288,7 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", CH6_ASSETS.introVideo);
         video.setAttribute("poster", CH6_ASSETS.introPoster);
-        video.preload = "auto";
+        video.preload = "metadata";
         prepareVideoAudio(video);
 
         const source = document.createElement("source");
@@ -15590,6 +18301,7 @@ async function fetchChoicePercentage(choiceId) {
           metadataLoaded = true;
           window.clearTimeout(this.introFallbackTimer);
           video.classList.add("is-visible");
+          ChapterOne.setupIntroVideoSkip(video, () => this.completeIntroVideo({ skipped: true }));
           playPreparedVideo(video, () => this.handleIntroFallback());
         };
         video.onended = () => this.completeIntroVideo();
@@ -15602,6 +18314,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       handleIntroFallback() {
+        if (this.introCompleted) return;
+        ChapterOne.cleanupIntroVideoSkip();
         window.clearTimeout(this.introFallbackTimer);
         this.toggleIntroSkipButton(false);
         const video = this.dom.introVideo;
@@ -15614,6 +18328,9 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       completeIntroVideo() {
+        if (this.introCompleted) return;
+        this.introCompleted = true;
+        ChapterOne.cleanupIntroVideoSkip();
         window.clearTimeout(this.introFallbackTimer);
         this.toggleIntroSkipButton(false);
         const video = this.dom.introVideo;
@@ -15633,13 +18350,83 @@ async function fetchChoicePercentage(choiceId) {
         showScreen(this.dom.ruleScreen);
       },
 
+      showCaseSelectScreen() {
+        chapterSixState.activeCaseId = null;
+        this.syncStateToStoryline();
+        this.renderCaseSelect();
+        this.updateHud({ includeChapterSix: true });
+        ChapterOne.clearVideoLayer();
+        ChapterOne.setBackground(CH6_ASSETS.introFinalFallback, "ch6-case-select-bg");
+        ChapterOne.setDarkOverlay(false);
+        showScreen(this.dom.caseSelectScreen);
+      },
+
+      renderCaseSelect() {
+        if (!this.dom.caseGrid) return;
+
+        this.dom.caseGrid.innerHTML = CH6_CASES.map((caseData) => {
+          const isCompleted = chapterSixState.completedCaseIds.includes(caseData.id);
+
+          return `
+            <button class="ch6-case-card${isCompleted ? " is-completed" : ""}" type="button" data-case-id="${caseData.id}" ${isCompleted ? "disabled" : ""}>
+              <span class="ch6-case-status">${isCompleted ? "已處理" : "未處理"}</span>
+              <h3>${this.escapeHtml(caseData.name)}</h3>
+              <strong>${this.escapeHtml(caseData.title)}</strong>
+              <p>${this.escapeHtml(this.getCaseIntroText(caseData))}</p>
+            </button>
+          `;
+        }).join("");
+      },
+
+      escapeHtml(value = "") {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      },
+
+      getCaseIntroText(caseData) {
+        if (caseData.id === "lily") {
+          return "客人指甲不適，質疑工具消毒與施作流程，你需要判斷如何回應與補救。";
+        }
+
+        if (caseData.id === "tina") {
+          return "客人對成品不滿並引發現場爭議，你需要處理審美落差與售後溝通。";
+        }
+
+        if (caseData.id === "regina") {
+          return "同業質疑作品抄襲並公開發文，你需要處理聲譽與智慧財產爭議。";
+        }
+
+        return "選擇一個案件，開始溝通與處理。";
+      },
+
+      selectCase(caseId) {
+        const caseIndex = CH6_CASES.findIndex((item) => item.id === caseId);
+        const caseData = CH6_CASES[caseIndex];
+        if (!caseData) return;
+
+        chapterSixState.activeCaseId = caseId;
+        chapterSixState.activeCaseIndex = caseIndex;
+        chapterSixState.currentCaseIndex = caseIndex;
+        chapterSixState.activeRoundIndex = 0;
+        chapterSixState.currentRoundIndex = 0;
+        chapterSixState.activeMessageIndex = 0;
+        chapterSixState.currentAnger = Number(caseData.initialAnger || 0);
+        this.syncStateToStoryline();
+
+        this.showChatScreen();
+        this.startCase(caseIndex, { resetCase: true });
+      },
+
       showChatScreen() {
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(CH6_ASSETS.chatBackground, "ch6-chat-bg");
         ChapterOne.setDarkOverlay(false);
         this.applyChatBackground();
         showScreen(this.dom.chatScreen);
-        this.startCase(chapterSixState.currentCaseIndex || 0, { resetCase: true });
       },
 
       applyChatBackground() {
@@ -15660,8 +18447,13 @@ async function fetchChoicePercentage(choiceId) {
           return;
         }
 
+        chapterSixState.activeCaseId = currentCase.id;
+        chapterSixState.activeCaseIndex = resolvedCaseIndex;
         chapterSixState.currentCaseIndex = resolvedCaseIndex;
-        if (resetCase) chapterSixState.currentRoundIndex = 0;
+        if (resetCase) {
+          chapterSixState.activeRoundIndex = 0;
+          chapterSixState.currentRoundIndex = 0;
+        }
         chapterSixState.currentAnger = Number(currentCase.initialAnger || 0);
         this.caseBaseline = copyChapterSixState(chapterSixState);
         this.caseBaseline.currentAnger = Number(currentCase.initialAnger || 0);
@@ -15766,6 +18558,7 @@ async function fetchChoicePercentage(choiceId) {
           }
 
           chapterSixState.currentRoundIndex = currentCase.rounds.indexOf(round);
+          chapterSixState.activeRoundIndex = chapterSixState.currentRoundIndex;
           this.syncStateToStoryline();
 
           const beforeRoundCard = this.getBeforeRoundCard(round);
@@ -16024,37 +18817,82 @@ async function fetchChoicePercentage(choiceId) {
           return;
         }
         chapterSixState.currentRoundIndex = currentCase.rounds.indexOf(nextRound);
+        chapterSixState.activeRoundIndex = chapterSixState.currentRoundIndex;
         this.syncStateToStoryline();
         await this.playCurrentRound({ force: true });
       },
 
       async goToNextCase() {
+        this.markCurrentCaseCompleted();
+        this.showCaseCompleteScreen();
+      },
+
+      markCurrentCaseCompleted() {
         const currentCase = CH6_CASES[chapterSixState.currentCaseIndex];
-        if (currentCase?.id === "lily") chapterSixState.lilyFinalAnger = chapterSixState.currentAnger;
-        if (currentCase?.id === "tina") chapterSixState.tinaFinalAnger = chapterSixState.currentAnger;
+        const caseId = chapterSixState.activeCaseId || currentCase?.id;
+        if (!caseId) return;
 
-        const nextCaseIndex = chapterSixState.currentCaseIndex + 1;
-        if (nextCaseIndex >= CH6_CASES.length) {
-          this.syncStateToStoryline();
-          this.showSummary();
-          return;
+        if (caseId === "lily") chapterSixState.lilyFinalAnger = chapterSixState.currentAnger;
+        if (caseId === "tina") chapterSixState.tinaFinalAnger = chapterSixState.currentAnger;
+
+        if (!chapterSixState.completedCaseIds.includes(caseId)) {
+          chapterSixState.completedCaseIds.push(caseId);
         }
 
-        const transitionCard = CH6_NEXT_CASE_CARDS[currentCase?.id];
-        if (transitionCard) {
-          await this.showSystemCard(transitionCard);
-        }
+        const caseChoices = chapterSixState.choices.filter((choice) => choice.caseId === caseId);
+        chapterSixState.caseResults[caseId] = {
+          completed: true,
+          anger: chapterSixState.currentAnger,
+          pressure: chapterSixState.pressure,
+          choices: caseChoices.map((choice) => ({ ...choice }))
+        };
 
-        chapterSixState.currentCaseIndex = nextCaseIndex;
-        chapterSixState.currentRoundIndex = 0;
         this.syncStateToStoryline();
-        await this.startCase(nextCaseIndex, { resetCase: true });
+      },
+
+      showCaseCompleteScreen() {
+        const completedCount = chapterSixState.completedCaseIds.length;
+        const allCompleted = completedCount >= CH6_CASES.length;
+
+        if (this.dom.caseCompleteTitle) {
+          this.dom.caseCompleteTitle.textContent = allCompleted
+            ? "所有案件都處理完了"
+            : "這個案件暫時告一段落";
+        }
+
+        if (this.dom.caseCompleteBody) {
+          this.dom.caseCompleteBody.textContent = allCompleted
+            ? "三個案件都已處理完，接下來可以整理遇到糾紛時，美甲師與消費者分別可以怎麼做。"
+            : "你可以繼續處理其他案件，也可以先進入處理方式整理。";
+        }
+
+        if (this.dom.backToCaseSelectButton) {
+          this.dom.backToCaseSelectButton.disabled = allCompleted;
+          this.dom.backToCaseSelectButton.classList.toggle("is-hidden", allCompleted);
+        }
+
+        this.updateHud({ includeChapterSix: true });
+        ChapterOne.clearVideoLayer();
+        ChapterOne.setBackground(CH6_ASSETS.introFinalFallback, "ch6-case-complete-bg");
+        ChapterOne.setDarkOverlay(false);
+        showScreen(this.dom.caseCompleteScreen);
+      },
+
+      showDisputeGuideScreen() {
+        this.showGuide();
       },
 
       calculateSummary() {
+        const completedAngers = Object.values(chapterSixState.caseResults || {})
+          .filter((result) => result?.completed)
+          .map((result) => Number(result.anger || 0));
         const lily = Number(chapterSixState.lilyFinalAnger ?? 0);
         const tina = Number(chapterSixState.tinaFinalAnger ?? 0);
-        const avgAnger = (lily + tina) / 2;
+        const fallbackAngers = [lily, tina].filter((value) => Number.isFinite(value));
+        const angerValues = completedAngers.length ? completedAngers : fallbackAngers;
+        const avgAnger = angerValues.length
+          ? angerValues.reduce((sum, value) => sum + value, 0) / angerValues.length
+          : 0;
         let followerPenalty = 0;
         if (avgAnger >= 20 && avgAnger < 40) followerPenalty = -10;
         else if (avgAnger >= 40 && avgAnger < 60) followerPenalty = -20;
@@ -16104,6 +18942,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showGuide() {
+        chapterSixState.isGuideViewed = true;
+        this.calculateSummary();
         chapterSixState.guideSide = chapterSixState.guideSide || "artist";
         chapterSixState.guidePageIndex = 0;
         this.syncStateToStoryline();
@@ -16253,6 +19093,7 @@ async function fetchChoicePercentage(choiceId) {
         Storyline.unlockChapter(7);
         Storyline.setCurrentChapter(7);
         this.allowSkipIntro = Boolean(allowSkipIntro);
+        this.introCompleted = false;
         this.toggleIntroSkipButton(false);
 
         // 一般從第六章銜接進入第七章時，表單必須是空白，讓玩家自行設定數值；
@@ -16284,6 +19125,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playIntroVideo() {
+        this.introCompleted = false;
         window.clearTimeout(this.introFallbackTimer);
         this.introFinalStillUrl = "";
         this.introUsedFallback = false;
@@ -16306,7 +19148,7 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", CH7_ASSETS.introVideo);
         video.setAttribute("poster", CH7_ASSETS.introPoster);
-        video.preload = "auto";
+        video.preload = "metadata";
         prepareVideoAudio(video);
 
         const source = document.createElement("source");
@@ -16319,6 +19161,7 @@ async function fetchChoicePercentage(choiceId) {
           metadataLoaded = true;
           window.clearTimeout(this.introFallbackTimer);
           video.classList.add("is-visible");
+          ChapterOne.setupIntroVideoSkip(video, () => this.completeIntroVideo({ skipped: true }));
           playPreparedVideo(video, () => this.handleIntroFallback());
         };
         video.onended = () => this.completeIntroVideo();
@@ -16331,6 +19174,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       handleIntroFallback() {
+        if (this.introCompleted) return;
+        ChapterOne.cleanupIntroVideoSkip();
         window.clearTimeout(this.introFallbackTimer);
         this.toggleIntroSkipButton(false);
         this.introUsedFallback = true;
@@ -16363,6 +19208,9 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       completeIntroVideo({ useFallback = false } = {}) {
+        if (this.introCompleted) return;
+        this.introCompleted = true;
+        ChapterOne.cleanupIntroVideoSkip();
         window.clearTimeout(this.introFallbackTimer);
         this.toggleIntroSkipButton(false);
         const video = this.dom.introVideo;
@@ -16682,6 +19530,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playIntroVideo() {
+        this.introCompleted = false;
         window.clearTimeout(this.introFallbackTimer);
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(FINAL_ASSETS.introPoster, "final-report-poster");
@@ -16700,7 +19549,7 @@ async function fetchChoicePercentage(choiceId) {
         video.removeAttribute("src");
         video.setAttribute("src", FINAL_ASSETS.introVideo);
         video.setAttribute("poster", FINAL_ASSETS.introPoster);
-        video.preload = "auto";
+        video.preload = "metadata";
         prepareVideoAudio(video);
 
         const source = document.createElement("source");
@@ -16713,6 +19562,7 @@ async function fetchChoicePercentage(choiceId) {
           metadataLoaded = true;
           window.clearTimeout(this.introFallbackTimer);
           video.classList.add("is-visible");
+          ChapterOne.setupIntroVideoSkip(video, () => this.completeIntroVideo({ skipped: true }));
           playPreparedVideo(video, () => this.handleIntroFallback());
         };
         video.onended = () => this.completeIntroVideo();
@@ -16725,6 +19575,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       handleIntroFallback() {
+        if (this.introCompleted) return;
+        ChapterOne.cleanupIntroVideoSkip();
         window.clearTimeout(this.introFallbackTimer);
         const video = this.dom.introVideo;
         if (video) {
@@ -16736,6 +19588,9 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       completeIntroVideo() {
+        if (this.introCompleted) return;
+        this.introCompleted = true;
+        ChapterOne.cleanupIntroVideoSkip();
         window.clearTimeout(this.introFallbackTimer);
         const video = this.dom.introVideo;
         if (video) {
@@ -17065,17 +19920,19 @@ async function fetchChoicePercentage(choiceId) {
         }
 
         if (chapterNumber === 3) {
-          const investigatedCount = this.state.chapterThree?.investigatedToolIds?.length || 0;
           const purchasedCount = this.state.chapterThree?.purchasedToolIds?.length || 0;
           const cost = this.state.chapterThree?.shoppingCost || 0;
+          const selectedPackage = CH3_TOOL_PACKAGES.find((item) => item.id === this.state.chapterThree?.selectedPackageId);
+          const packageName = selectedPackage ? selectedPackage.name : "自訂工具包";
+          const customizedText = this.state.chapterThree?.hasCustomizedPackage ? "（已手動調整）" : "";
 
           if (this.state.completedChapters.includes(3)) {
-            return `已完成工具盤點｜購買 ${purchasedCount} 項｜花費 ${formatMoney(cost)}`;
+            return `已完成工具包｜${packageName}${customizedText}｜購買 ${purchasedCount} 項｜花費 ${formatMoney(cost)}`;
           }
 
-          return investigatedCount
-            ? `已調查 ${investigatedCount} / ${CH3_TOOLS.length} 項工具`
-            : "尚未開始工具盤點";
+          return this.state.chapterThree?.selectedPackageId || (this.state.chapterThree?.cartToolIds?.length || 0) > 0
+            ? `工具包調整中｜${packageName}${customizedText}`
+            : "尚未開始選擇工具包";
         }
 
         if (chapterNumber === 4) {
