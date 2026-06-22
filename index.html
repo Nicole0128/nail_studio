@@ -11420,6 +11420,420 @@
       }
     }
 
+
+    /* ==================================================
+       2026-06 局部修正：第一章小結、最後報告、第二章純底色、第五章結果卡
+       只放在 CSS 最後覆寫，不改動章節內容與計算邏輯
+    ================================================== */
+
+    /* 第一章小結版面最終修正：放大卡片、減少左右空白 */
+    .result-screen {
+      padding: clamp(18px, 3vw, 42px);
+    }
+
+    .result-card {
+      width: min(82vw, 1040px) !important;
+      min-height: clamp(360px, 58vh, 540px) !important;
+      height: auto !important;
+      max-height: calc(100dvh - clamp(54px, 8vh, 90px)) !important;
+      padding: clamp(28px, 4vw, 52px) clamp(34px, 5vw, 66px) !important;
+      gap: clamp(14px, 2vh, 22px) !important;
+      justify-content: center;
+    }
+
+    .result-copy {
+      overflow: visible !important;
+      padding-right: 0 !important;
+    }
+
+    .result-title {
+      font-size: clamp(1.9rem, 3.8vw, 3.35rem) !important;
+      line-height: 1.18 !important;
+    }
+
+    .result-selected,
+    .result-percent {
+      font-size: clamp(1.05rem, 1.55vw, 1.35rem) !important;
+    }
+
+    .result-description {
+      font-size: clamp(0.96rem, 1.28vw, 1.16rem) !important;
+      line-height: 1.85 !important;
+    }
+
+    .start-button {
+      margin-top: clamp(10px, 2vh, 20px) !important;
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      .result-card {
+        width: min(86vw, 860px) !important;
+        min-height: clamp(300px, 66vh, 430px) !important;
+        padding: 22px 30px !important;
+      }
+
+      .result-title {
+        font-size: clamp(1.45rem, 3.4vw, 2.1rem) !important;
+      }
+
+      .result-description {
+        font-size: 0.82rem !important;
+        line-height: 1.65 !important;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .result-card {
+        width: min(88vw, 820px) !important;
+        min-height: 0 !important;
+        max-height: calc(100dvh - 36px) !important;
+        padding: 18px 26px !important;
+        gap: 8px !important;
+      }
+
+      .result-copy {
+        overflow: visible !important;
+      }
+
+      .result-title {
+        font-size: clamp(1.25rem, 3vw, 1.72rem) !important;
+      }
+
+      .result-description {
+        font-size: 0.72rem !important;
+        line-height: 1.55 !important;
+      }
+
+      .start-button {
+        min-height: 34px !important;
+        padding: 0.52em 1.35em !important;
+      }
+    }
+
+    /* 最後結果報告版面最終修正：放大、分區、避免重疊 */
+    .final-report-screen {
+      padding: clamp(18px, 3vw, 42px) !important;
+      display: grid;
+      place-items: center;
+      overflow: hidden !important;
+    }
+
+    .final-report-card {
+      width: min(88vw, 1320px) !important;
+      height: min(88dvh, 820px) !important;
+      max-height: calc(100dvh - 36px) !important;
+      display: grid !important;
+      grid-template-rows: auto minmax(0, 1fr) auto !important;
+      gap: clamp(12px, 1.8vh, 20px) !important;
+      padding: clamp(22px, 3vw, 42px) !important;
+      overflow: hidden !important;
+    }
+
+    .final-report-title-row {
+      flex: 0 0 auto !important;
+      margin-bottom: 0 !important;
+      display: grid !important;
+      grid-template-columns: 1fr auto 1fr !important;
+      align-items: center !important;
+      gap: 14px !important;
+    }
+
+    .final-report-title {
+      font-size: clamp(2rem, 4.2vw, 4rem) !important;
+      line-height: 1.08 !important;
+    }
+
+    .final-storyline-button {
+      justify-self: end !important;
+    }
+
+    .final-report-body {
+      min-height: 0 !important;
+      height: 100% !important;
+      overflow: auto !important;
+      padding: clamp(18px, 2.5vw, 34px) !important;
+      border-radius: 24px !important;
+      scrollbar-width: thin;
+    }
+
+    .final-report-stats {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: clamp(14px, 2vw, 24px) !important;
+      margin-bottom: clamp(14px, 2vh, 24px) !important;
+    }
+
+    .final-report-stat {
+      min-width: 0 !important;
+      min-height: clamp(150px, 21vh, 220px) !important;
+      padding: clamp(16px, 2vw, 24px) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+
+    .final-report-stat-value {
+      font-size: clamp(1.9rem, 3vw, 3rem) !important;
+      line-height: 1.1 !important;
+    }
+
+    .final-report-stat-desc {
+      line-height: 1.65 !important;
+    }
+
+    .final-report-details {
+      display: grid !important;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) !important;
+      gap: clamp(14px, 2vw, 24px) !important;
+      margin-bottom: clamp(14px, 2vh, 22px) !important;
+    }
+
+    .final-report-detail-box,
+    .final-report-rules,
+    .final-report-ending {
+      min-width: 0 !important;
+      padding: clamp(16px, 2vw, 24px) !important;
+      border-radius: 22px !important;
+    }
+
+    .final-report-rules {
+      max-height: clamp(180px, 28vh, 300px) !important;
+      overflow: auto !important;
+      scrollbar-width: thin;
+    }
+
+    .final-report-ending {
+      margin-bottom: 0 !important;
+    }
+
+    .final-report-actions {
+      flex: 0 0 auto !important;
+      display: flex !important;
+      justify-content: center !important;
+      flex-wrap: wrap !important;
+      gap: 10px !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .final-report-card {
+        width: min(92vw, 1040px) !important;
+        height: min(90dvh, 640px) !important;
+        padding: 18px 22px !important;
+      }
+
+      .final-report-title {
+        font-size: clamp(1.45rem, 3.8vw, 2.5rem) !important;
+      }
+
+      .final-report-body {
+        padding: 14px 16px !important;
+      }
+
+      .final-report-stat {
+        min-height: 118px !important;
+        padding: 12px !important;
+      }
+
+      .final-report-stat-desc,
+      .final-report-type-desc,
+      .final-report-rule-list,
+      .final-report-ending {
+        font-size: 0.68rem !important;
+        line-height: 1.5 !important;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .final-report-card {
+        width: 94vw !important;
+        height: calc(100dvh - 24px) !important;
+        padding: 12px 16px !important;
+        gap: 8px !important;
+      }
+
+      .final-report-title-row {
+        margin-bottom: 0 !important;
+      }
+
+      .final-report-title {
+        font-size: clamp(1.15rem, 3.8vw, 1.7rem) !important;
+      }
+
+      .final-report-body {
+        padding: 10px 12px !important;
+      }
+
+      .final-report-stats {
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .final-report-stat {
+        min-height: 92px !important;
+        padding: 8px !important;
+      }
+
+      .final-report-details {
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .final-report-rules {
+        max-height: 22vh !important;
+      }
+
+      .final-action-button {
+        min-height: 28px !important;
+        font-size: 0.62rem !important;
+        padding: 0.36em 0.8em !important;
+      }
+    }
+
+    /* 第二章遊戲過程使用純底色，不顯示影片停格 */
+    .ch2-decision-screen {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 246, 235, 0.88), transparent 32%),
+        radial-gradient(circle at 82% 70%, rgba(238, 204, 193, 0.48), transparent 34%),
+        linear-gradient(135deg, #f5eadf 0%, #fffaf2 48%, #edd7cc 100%) !important;
+    }
+
+    .ch2-decision-screen::after {
+      background: rgba(24, 17, 14, 0.08) !important;
+    }
+
+    /* 第五章完成第一單結果卡最終修正 */
+    .ch5-result-screen .ch5-result-layout {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: clamp(104px, 14vh, 132px) clamp(24px, 4vw, 58px) clamp(24px, 4vh, 44px) !important;
+      overflow: hidden;
+    }
+
+    .ch5-result-screen .ch5-result-card {
+      width: min(86vw, 1220px) !important;
+      height: min(74dvh, 620px) !important;
+      max-height: calc(100dvh - clamp(130px, 18vh, 170px)) !important;
+      display: grid !important;
+      grid-template-columns: minmax(360px, 1.05fr) minmax(320px, 0.95fr) !important;
+      gap: clamp(22px, 3vw, 42px) !important;
+      align-items: stretch !important;
+      padding: clamp(22px, 3vw, 40px) !important;
+      overflow: hidden !important;
+    }
+
+    .ch5-result-screen .ch5-result-image-wrap {
+      width: 100%;
+      height: 100%;
+      max-height: 100% !important;
+      align-self: stretch !important;
+      border-radius: 22px !important;
+      overflow: hidden !important;
+    }
+
+    .ch5-result-screen .ch5-result-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover !important;
+      object-position: center !important;
+    }
+
+    .ch5-result-screen .ch5-result-content {
+      min-height: 0 !important;
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
+      gap: clamp(10px, 1.5vh, 16px) !important;
+      overflow: hidden !important;
+      padding: 0 !important;
+    }
+
+    .ch5-result-screen .ch5-result-title {
+      flex: 0 0 auto !important;
+      white-space: normal !important;
+      font-size: clamp(1.7rem, 2.8vw, 3rem) !important;
+      line-height: 1.15 !important;
+    }
+
+    .ch5-result-screen .ch5-result-stats {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      display: grid !important;
+      gap: 8px !important;
+    }
+
+    .ch5-result-screen .ch5-result-description {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      width: 100% !important;
+      overflow: auto !important;
+      line-height: 1.75 !important;
+      scrollbar-width: thin;
+    }
+
+    .ch5-result-screen .ch5-result-button {
+      flex: 0 0 auto !important;
+      align-self: center !important;
+      margin-top: 6px !important;
+    }
+
+    @media (max-width: 1040px) and (orientation: landscape) {
+      .ch5-result-screen .ch5-result-card {
+        width: 90vw !important;
+        height: min(76dvh, 500px) !important;
+        grid-template-columns: minmax(260px, 0.95fr) minmax(260px, 1.05fr) !important;
+        gap: 16px !important;
+        padding: 18px 22px !important;
+      }
+
+      .ch5-result-screen .ch5-result-title {
+        font-size: clamp(1.25rem, 2.7vw, 1.85rem) !important;
+      }
+
+      .ch5-result-screen .ch5-result-description,
+      .ch5-result-screen .ch5-result-stat {
+        font-size: 0.68rem !important;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch5-result-screen .ch5-result-layout {
+        padding: 62px 14px 10px !important;
+      }
+
+      .ch5-result-screen .ch5-result-card {
+        width: 92vw !important;
+        height: calc(100dvh - 78px) !important;
+        grid-template-columns: minmax(220px, 0.9fr) minmax(260px, 1.1fr) !important;
+        gap: 12px !important;
+        padding: 12px 16px !important;
+      }
+
+      .ch5-result-screen .ch5-result-title {
+        font-size: 1.15rem !important;
+      }
+
+      .ch5-result-screen .ch5-result-stats {
+        gap: 5px !important;
+      }
+
+      .ch5-result-screen .ch5-result-stat,
+      .ch5-result-screen .ch5-result-description {
+        font-size: 0.58rem !important;
+        line-height: 1.42 !important;
+      }
+
+      .ch5-result-screen .ch5-result-button {
+        min-height: 30px !important;
+        padding: 0.42em 1.05em !important;
+        font-size: 0.64rem !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -12444,6 +12858,8 @@
       serviceFinalFallbackB: "images/ch5-service-without-disinfect-final.png",
       resultNailImage: "images/ch5-first-order-result.jpg"
     };
+
+    const CH5_USE_STATIC_PROGRESS_MODE = true;
 
 
     const CH6_ASSETS = {
@@ -14767,6 +15183,15 @@ async function fetchChoicePercentage(choiceId) {
       });
     }
 
+    function cancelChapterSixAsyncIfLeaving(targetChapterNumber) {
+      try {
+        if (Number(targetChapterNumber) === 6) return;
+        if (typeof ChapterSix !== "undefined" && typeof ChapterSix.cancelActiveRun === "function") {
+          ChapterSix.cancelActiveRun();
+        }
+      } catch (error) {}
+    }
+
     function calculateChapterTwoPlan(selectedIds = []) {
       const initialMoney = 25000;
       const totalWeeks = 12;
@@ -16211,15 +16636,11 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       start({ skipTransition = false, skipIntro = false } = {}) {
+        cancelChapterSixAsyncIfLeaving(2);
         Storyline.unlockChapter(2);
         Storyline.setCurrentChapter(2);
 
         if (skipTransition || skipIntro) {
-          this.resetState();
-          this.renderActionCards();
-          ChapterOne.clearVideoLayer();
-          ChapterOne.setBackground(CH2_ASSETS.introFinalFallback, "ch2-direct-decision");
-          ChapterOne.setDarkOverlay(false);
           this.showDecisionGame();
           return;
         }
@@ -16289,12 +16710,15 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showDecisionGame() {
-        ChapterOne.setBackground(CH2_ASSETS.introFinalFallback, "ch2-decision");
+        ChapterOne.clearVideoLayer();
+        ChapterOne.clearBackgroundForSolidScreen?.("ch2-decision-solid");
         ChapterOne.setDarkOverlay(false);
+
         this.resetState();
         this.renderActionCards();
         this.updateHud();
         this.updatePlanningPanel();
+
         showScreen(this.dom.ch2DecisionScreen);
       },
 
@@ -16645,6 +17069,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       start({ skipIntro = false, resetProgress = false } = {}) {
+        cancelChapterSixAsyncIfLeaving(3);
         Storyline.unlockChapter(3);
         Storyline.setCurrentChapter(3);
         this.initializeState({ resetProgress });
@@ -17145,6 +17570,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showSummary() {
+        if (Storyline.state.currentChapter !== 6) return;
+
         ChapterOne.clearVideoLayer();
         ChapterOne.clearBackgroundForSolidScreen?.("ch3-summary");
         ChapterOne.setDarkOverlay(false);
@@ -17314,6 +17741,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       start({ skipIntro = false, skipRule = false, resetProgress = false } = {}) {
+        cancelChapterSixAsyncIfLeaving(4);
         Storyline.unlockChapter(4);
         Storyline.setCurrentChapter(4);
         this.initializeState({ resetProgress });
@@ -17787,6 +18215,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       start({ skipOpeningCard = false } = {}) {
+        cancelChapterSixAsyncIfLeaving(5);
         Storyline.unlockChapter(5);
         Storyline.setCurrentChapter(5);
         this.activeAssets = this.getVideoAssets();
@@ -17848,15 +18277,32 @@ async function fetchChoicePercentage(choiceId) {
 
       prepareVideoElement() {
         const video = this.dom.video;
+        if (!video) return;
+
         video.classList.remove("is-visible");
         video.innerHTML = "";
-        video.pause();
+        try { video.pause(); } catch (error) {}
         video.removeAttribute("src");
-        video.setAttribute("src", this.activeAssets.video);
+        video.removeAttribute("data-src");
+        video.removeAttribute("data-loaded");
         video.setAttribute("poster", this.activeAssets.firstFrame);
         video.preload = "metadata";
+        video.onloadedmetadata = null;
+        video.onloadeddata = null;
+        video.onended = null;
+        video.onerror = null;
+        this.metadataReady = false;
+
+        if (CH5_USE_STATIC_PROGRESS_MODE) {
+          this.metadataReady = false;
+          try { video.load(); } catch (error) {}
+          this.updateProgress(0);
+          return;
+        }
+
+        video.setAttribute("src", this.activeAssets.video);
         prepareVideoAudio(video);
-        video.currentTime = 0;
+        try { video.currentTime = 0; } catch (error) {}
 
         const source = document.createElement("source");
         source.setAttribute("src", this.activeAssets.video);
@@ -17937,15 +18383,15 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       scrubVideo(deltaSeconds) {
-        const video = this.dom.video;
         if (this.videoCompleted) return;
 
         unlockGameAudio();
-        if (video) video.classList.add("is-visible");
 
+        const video = this.dom.video;
         const duration = this.metadataReady && video && Number.isFinite(video.duration) && video.duration > 0
           ? video.duration
           : 8;
+
         const delta = Number(deltaSeconds) || 0;
         const nextProgress = Math.max(0, Math.min(1, (this.serviceProgress || 0) + delta / duration));
 
@@ -17959,6 +18405,15 @@ async function fetchChoicePercentage(choiceId) {
           this.serviceProgress = this.pendingProgress;
           this.updateProgress(this.serviceProgress);
 
+          if (!CH5_USE_STATIC_PROGRESS_MODE && video && this.metadataReady && Number.isFinite(video.duration) && video.duration > 0) {
+            const targetTime = Math.min(video.duration - 0.05, Math.max(0, video.duration * this.serviceProgress));
+            if (Math.abs((video.currentTime || 0) - targetTime) > 0.35) {
+              try {
+                video.currentTime = targetTime;
+              } catch (error) {}
+            }
+          }
+
           if (this.serviceProgress >= 0.985) {
             this.completeVideo();
           }
@@ -17968,26 +18423,37 @@ async function fetchChoicePercentage(choiceId) {
       pauseVideoAfterInputStops(delay = 150) {
         window.clearTimeout(this.inputPauseTimer);
         this.inputPauseTimer = window.setTimeout(() => {
-          if (!this.videoCompleted) this.dom.video.pause();
+          try {
+            this.dom.video?.pause();
+          } catch (error) {}
         }, delay);
       },
 
-      completeVideo() {
+      completeVideo(payload = {}) {
         if (this.videoCompleted) return;
         this.videoCompleted = true;
-        ChapterOne.cleanupIntroVideoSkip();
+
+        ChapterOne.cleanupIntroVideoSkip?.();
         this.clearTimers();
         this.removeVideoControlListeners();
-        if (this.progressRafId) {
-          window.cancelAnimationFrame(this.progressRafId);
-          this.progressRafId = null;
+
+        const video = this.dom.video;
+        if (video) {
+          try {
+            video.pause();
+            video.removeAttribute("src");
+            video.innerHTML = "";
+            video.load();
+            video.classList.remove("is-visible");
+          } catch (error) {}
         }
-        try { this.dom.video.pause(); } catch (error) {}
+
         this.serviceProgress = 1;
         this.pendingProgress = 1;
         this.updateProgress(1);
+
         ChapterOne.setBackground(this.activeAssets?.finalFallback || CH5_ASSETS.serviceFinalFallbackA, "ch5-service-final");
-        window.setTimeout(() => this.showResult(), 320);
+        window.setTimeout(() => this.showResult(), 220);
       },
 
       handleVideoFallback() {
@@ -18153,7 +18619,10 @@ async function fetchChoicePercentage(choiceId) {
       dom: {},
       introFallbackTimer: null,
       activeSystemResolve: null,
+      messageTimer: null,
+      activeRunToken: null,
       isPlaying: false,
+      isPlayingMessages: false,
       caseBaseline: null,
       allowSkipIntro: false,
 
@@ -18241,7 +18710,51 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.skipVideoButton?.classList.toggle("is-visible", Boolean(isVisible));
       },
 
+      createRunToken() {
+        const token = `${Date.now()}-${Math.random()}`;
+        this.activeRunToken = token;
+        return token;
+      },
+
+      isRunTokenActive(token) {
+        return Boolean(token) && this.activeRunToken === token && Storyline.state.currentChapter === 6;
+      },
+
+      cancelActiveRun() {
+        this.activeRunToken = null;
+        this.isPlaying = false;
+        this.isPlayingMessages = false;
+
+        window.clearTimeout(this.messageTimer);
+        this.messageTimer = null;
+
+        this.closeSystemModal?.();
+        this.closeChoiceModal?.();
+
+        if (this.activeSystemResolve) {
+          const resolve = this.activeSystemResolve;
+          this.activeSystemResolve = null;
+          resolve({ cancelled: true });
+        }
+      },
+
+      waitChapterSix(ms, token) {
+        return new Promise((resolve) => {
+          if (!this.isRunTokenActive(token)) {
+            resolve(false);
+            return;
+          }
+
+          window.clearTimeout(this.messageTimer);
+          this.messageTimer = window.setTimeout(() => {
+            this.messageTimer = null;
+            resolve(this.isRunTokenActive(token));
+          }, ms);
+        });
+      },
+
       start({ skipIntro = false, skipRule = false, resetProgress = false, allowSkipIntro = false } = {}) {
+        this.cancelActiveRun();
         Storyline.unlockChapter(6);
         Storyline.setCurrentChapter(6);
         const savedState = Storyline.state.chapterSix || createDefaultChapterSixState();
@@ -18351,6 +18864,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showCaseSelectScreen() {
+        this.cancelActiveRun();
+        if (Storyline.state.currentChapter !== 6) return;
         chapterSixState.activeCaseId = null;
         this.syncStateToStoryline();
         this.renderCaseSelect();
@@ -18406,8 +18921,9 @@ async function fetchChoicePercentage(choiceId) {
       selectCase(caseId) {
         const caseIndex = CH6_CASES.findIndex((item) => item.id === caseId);
         const caseData = CH6_CASES[caseIndex];
-        if (!caseData) return;
+        if (!caseData || Storyline.state.currentChapter !== 6) return;
 
+        this.cancelActiveRun();
         chapterSixState.activeCaseId = caseId;
         chapterSixState.activeCaseIndex = caseIndex;
         chapterSixState.currentCaseIndex = caseIndex;
@@ -18438,12 +18954,16 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       async startCase(caseIndex = 0, { resetCase = true } = {}) {
+        const token = this.createRunToken();
+
+        if (!this.isRunTokenActive(token)) return;
+
         const resolvedCaseIndex = typeof caseIndex === "string"
           ? CH6_CASES.findIndex((item) => item.id === caseIndex)
           : caseIndex;
         const currentCase = CH6_CASES[resolvedCaseIndex];
         if (!currentCase) {
-          this.showSummary();
+          this.showDisputeGuideScreen();
           return;
         }
 
@@ -18463,10 +18983,16 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.chatBody.innerHTML = "";
 
         if (currentCase.caseIntro) {
-          await this.showSystemCard(currentCase.caseIntro.body || currentCase.caseIntro.text || "", currentCase.caseIntro.title || "案件系統提示");
+          await this.showSystemCard(
+            currentCase.caseIntro.body || currentCase.caseIntro.text || "",
+            currentCase.caseIntro.title || "案件說明",
+            currentCase.caseIntro.buttonLabel || "開始溝通"
+          );
         }
 
-        await this.playCurrentRound({ force: true });
+        if (!this.isRunTokenActive(token)) return;
+
+        await this.playCurrentRound({ force: true, token });
       },
 
       updateCaseHeader(currentCase) {
@@ -18546,14 +19072,17 @@ async function fetchChoicePercentage(choiceId) {
         }
       },
 
-      async playCurrentRound({ force = false } = {}) {
+      async playCurrentRound({ force = false, token = this.activeRunToken } = {}) {
+        if (!this.isRunTokenActive(token)) return;
         if (this.isPlaying && !force) return;
         this.isPlaying = true;
         try {
+          if (!this.isRunTokenActive(token)) return;
+
           const currentCase = CH6_CASES[chapterSixState.currentCaseIndex];
           const round = this.getPlayableRound(currentCase, chapterSixState.currentRoundIndex);
           if (!round) {
-            await this.goToNextCase();
+            await this.goToNextCase(token);
             return;
           }
 
@@ -18564,21 +19093,28 @@ async function fetchChoicePercentage(choiceId) {
           const beforeRoundCard = this.getBeforeRoundCard(round);
           if (beforeRoundCard) {
             await this.showSystemCard(beforeRoundCard.body || beforeRoundCard.text || "", beforeRoundCard.title || "系統提示");
+            if (!this.isRunTokenActive(token)) return;
           }
 
           if (round.preMessagesWhenDisinfect && hasDisinfectEquipment()) {
-            await this.playMessages(round.preMessagesWhenDisinfect);
+            await this.playMessages(round.preMessagesWhenDisinfect, token);
+            if (!this.isRunTokenActive(token)) return;
           }
 
-          await this.playMessages(round.messages || []);
+          await this.playMessages(round.messages || [], token);
+          if (!this.isRunTokenActive(token)) return;
 
           for (const card of round.systemCards || []) {
             await this.showSystemCard(card);
+            if (!this.isRunTokenActive(token)) return;
           }
 
+          if (!this.isRunTokenActive(token)) return;
           this.showChoiceModal(round);
         } finally {
-          this.isPlaying = false;
+          if (this.isRunTokenActive(token)) {
+            this.isPlaying = false;
+          }
         }
       },
 
@@ -18605,21 +19141,39 @@ async function fetchChoicePercentage(choiceId) {
         return true;
       },
 
-      async playMessages(messages = []) {
+      async playMessages(messages = [], token = this.activeRunToken) {
+        if (!Array.isArray(messages) || !messages.length) return;
+        if (!this.isRunTokenActive(token)) return;
+
         this.isPlayingMessages = true;
         try {
           for (const message of messages) {
+            if (!this.isRunTokenActive(token)) return;
+
+            const beforeDelay = Number(message?.delayBefore ?? 800);
+            const okBefore = await this.waitChapterSix(beforeDelay, token);
+            if (!okBefore) return;
+
+            if (!this.isRunTokenActive(token)) return;
+
             if (message?.type === "systemCard") {
               await this.showSystemCard(message.body || message.text || "", message.title || "系統提示");
+              if (!this.isRunTokenActive(token)) return;
               continue;
             }
 
             this.appendMessage(message);
             this.scrollChatToBottom();
-            await wait(CH6_MESSAGE_DELAY);
+
+            const textLength = String(message?.text || message?.body || "").length;
+            const afterDelay = Math.min(1800, 900 + textLength * 18);
+            const okAfter = await this.waitChapterSix(Number(message?.delayAfter ?? afterDelay), token);
+            if (!okAfter) return;
           }
         } finally {
-          this.isPlayingMessages = false;
+          if (this.isRunTokenActive(token)) {
+            this.isPlayingMessages = false;
+          }
         }
       },
 
@@ -18629,6 +19183,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       appendMessage(message) {
+        if (Storyline.state.currentChapter !== 6) return;
         if (!this.dom.chatBody || !message) return;
         const normalizedMessage = this.normalizeMessageActor(message);
         const side = this.getMessageSide(normalizedMessage);
@@ -18674,6 +19229,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showSystemCard(textOrCard, title = "系統提示", buttonLabel = "確認") {
+        if (Storyline.state.currentChapter !== 6) {
+          return Promise.resolve({ cancelled: true });
+        }
+
         const card = typeof textOrCard === "object" && textOrCard !== null ? textOrCard : null;
         const cardTitle = card ? (card.title || title) : title;
         const cardText = card ? (card.body || card.text || "") : textOrCard;
@@ -18689,7 +19248,8 @@ async function fetchChoicePercentage(choiceId) {
         });
       },
 
-      showResultCard(resultText) {
+      showResultCard(resultText, token = this.activeRunToken) {
+        if (!this.isRunTokenActive(token)) return Promise.resolve({ cancelled: true });
         return this.showSystemCard(resultText || "選擇完成。", "結果提示");
       },
 
@@ -18708,6 +19268,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showChoiceModal(round) {
+        if (Storyline.state.currentChapter !== 6 || !this.isRunTokenActive(this.activeRunToken)) return;
         this.dom.choiceQuestion.textContent = round.question || "你要怎麼回應？";
         this.dom.choiceOptions.innerHTML = (round.options || []).map((option) => `
           <button class="ch6-choice-option" type="button" data-choice-id="${option.id}">
@@ -18727,6 +19288,9 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       async handleChoice(choiceId) {
+        const token = this.activeRunToken;
+        if (!this.isRunTokenActive(token)) return;
+
         const currentCase = CH6_CASES[chapterSixState.currentCaseIndex];
         const round = currentCase?.rounds?.[chapterSixState.currentRoundIndex];
         const option = round?.options?.find((item) => item.id === choiceId);
@@ -18735,31 +19299,41 @@ async function fetchChoicePercentage(choiceId) {
         this.closeChoiceModal();
         this.isPlaying = true;
         try {
+          if (!this.isRunTokenActive(token)) return;
+
           this.applyChoiceEffects(option, currentCase, round);
 
           if (option.responseMessages?.length) {
-            await this.playMessages(option.responseMessages);
+            await this.playMessages(option.responseMessages, token);
+            if (!this.isRunTokenActive(token)) return;
           }
 
-          await this.showResultCard(option.resultCard);
+          await this.showResultCard(option.resultCard, token);
+          if (!this.isRunTokenActive(token)) return;
 
-          if (await this.checkFailure()) return;
+          if (await this.checkFailure(token)) return;
+          if (!this.isRunTokenActive(token)) return;
 
           if (round.commonSystemCard) {
             await this.showSystemCard(round.commonSystemCard);
+            if (!this.isRunTokenActive(token)) return;
           }
 
           if (round.commonMessages?.length) {
-            await this.playMessages(round.commonMessages);
+            await this.playMessages(round.commonMessages, token);
+            if (!this.isRunTokenActive(token)) return;
           }
 
           if (round.afterCommonSystemCard) {
             await this.showSystemCard(round.afterCommonSystemCard);
+            if (!this.isRunTokenActive(token)) return;
           }
 
-          await this.goToNextRound();
+          await this.goToNextRound(token);
         } finally {
-          this.isPlaying = false;
+          if (this.isRunTokenActive(token)) {
+            this.isPlaying = false;
+          }
         }
       },
 
@@ -18783,17 +19357,21 @@ async function fetchChoicePercentage(choiceId) {
         this.syncStateToStoryline();
       },
 
-      async checkFailure() {
+      async checkFailure(token = this.activeRunToken) {
+        if (!this.isRunTokenActive(token)) return false;
+
         const reasons = [];
         if (chapterSixState.currentAnger > 100) reasons.push("客人怒氣值超過 100");
         if (chapterSixState.pressure > 100) reasons.push("壓力值超過 100");
         if (!reasons.length) return false;
-        await this.showFailure(reasons.join("，"));
-        return true;
+        await this.showFailure(reasons.join("，"), token);
+        return this.isRunTokenActive(token);
       },
 
-      async showFailure(reason) {
+      async showFailure(reason, token = this.activeRunToken) {
+        if (!this.isRunTokenActive(token)) return;
         await this.showSystemCard(`交涉失敗。${reason}，這次溝通已經失控。請重新挑戰目前案件，調整回應策略。`, "通關失敗", "重新挑戰");
+        if (!this.isRunTokenActive(token)) return;
         this.retryCurrentCase();
       },
 
@@ -18807,22 +19385,25 @@ async function fetchChoicePercentage(choiceId) {
         this.startCase(chapterSixState.currentCaseIndex, { resetCase: true });
       },
 
-      async goToNextRound() {
+      async goToNextRound(token = this.activeRunToken) {
+        if (!this.isRunTokenActive(token)) return;
+
         const currentCase = CH6_CASES[chapterSixState.currentCaseIndex];
         if (!currentCase) return;
         const nextIndex = chapterSixState.currentRoundIndex + 1;
         const nextRound = this.getPlayableRound(currentCase, nextIndex);
         if (!nextRound) {
-          await this.goToNextCase();
+          await this.goToNextCase(token);
           return;
         }
         chapterSixState.currentRoundIndex = currentCase.rounds.indexOf(nextRound);
         chapterSixState.activeRoundIndex = chapterSixState.currentRoundIndex;
         this.syncStateToStoryline();
-        await this.playCurrentRound({ force: true });
+        await this.playCurrentRound({ force: true, token });
       },
 
-      async goToNextCase() {
+      async goToNextCase(token = this.activeRunToken) {
+        if (!this.isRunTokenActive(token)) return;
         this.markCurrentCaseCompleted();
         this.showCaseCompleteScreen();
       },
@@ -18851,6 +19432,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showCaseCompleteScreen() {
+        if (Storyline.state.currentChapter !== 6) return;
+
         const completedCount = chapterSixState.completedCaseIds.length;
         const allCompleted = completedCount >= CH6_CASES.length;
 
@@ -18879,6 +19462,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showDisputeGuideScreen() {
+        if (Storyline.state.currentChapter !== 6) return;
+        this.cancelActiveRun();
         this.showGuide();
       },
 
@@ -18942,6 +19527,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       showGuide() {
+        if (Storyline.state.currentChapter !== 6) return;
+
         chapterSixState.isGuideViewed = true;
         this.calculateSummary();
         chapterSixState.guideSide = chapterSixState.guideSide || "artist";
@@ -18987,6 +19574,8 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       completeChapter() {
+        if (Storyline.state.currentChapter !== 6) return;
+
         chapterSixState.completed = true;
         this.syncStateToStoryline();
         Storyline.completeChapter(6);
@@ -19090,6 +19679,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       start({ skipIntro = false, skipRule = false, allowSkipIntro = false } = {}) {
+        cancelChapterSixAsyncIfLeaving(7);
         Storyline.unlockChapter(7);
         Storyline.setCurrentChapter(7);
         this.allowSkipIntro = Boolean(allowSkipIntro);
@@ -19519,6 +20109,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       start({ skipIntro = false } = {}) {
+        cancelChapterSixAsyncIfLeaving(8);
         Storyline.unlockChapter(8);
         Storyline.setCurrentChapter(8);
         setFinalReportState(Storyline.state.finalReport || createDefaultFinalReportState());
@@ -19996,6 +20587,11 @@ async function fetchChoicePercentage(choiceId) {
       goToChapter(chapterNumber) {
         if (!this.isChapterUnlocked(chapterNumber)) return;
 
+        const leavingChapterSix = this.state.currentChapter === 6 && Number(chapterNumber) !== 6;
+        if (leavingChapterSix && typeof ChapterSix !== "undefined" && typeof ChapterSix.cancelActiveRun === "function") {
+          ChapterSix.cancelActiveRun();
+        }
+
         this.close();
         this.setCurrentChapter(chapterNumber);
 
@@ -20195,6 +20791,7 @@ async function fetchChoicePercentage(choiceId) {
 
 
     function goToChapterTwo() {
+      cancelChapterSixAsyncIfLeaving(2);
       console.log("前往第二章：美甲師之路");
 
       Storyline.state.chapterOne = {
@@ -20222,6 +20819,7 @@ async function fetchChoicePercentage(choiceId) {
 
 
     function goToChapterFour() {
+      cancelChapterSixAsyncIfLeaving(4);
       console.log("前往第四章：制定價目表");
 
       Storyline.completeChapter(3);
@@ -20246,6 +20844,7 @@ async function fetchChoicePercentage(choiceId) {
 
 
     function goToChapterFive() {
+      cancelChapterSixAsyncIfLeaving(5);
       console.log("前往第五章：第一次接客");
 
       window.dispatchEvent(
