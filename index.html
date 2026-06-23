@@ -12267,6 +12267,144 @@
       }
     }
 
+
+    /* ==================================================
+       第八章局部修正：第17幕兩難選擇、第20幕大型文字
+    ================================================== */
+
+    .ch8-scrolly-copy {
+      max-width: calc(100vw - clamp(96px, 12vw, 220px));
+    }
+
+    .ch8-scrolly-step {
+      overflow-wrap: break-word;
+    }
+
+    .ch8-scrolly-step.is-split {
+      width: 100%;
+      max-height: min(76vh, 620px);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(16px, 2.6vw, 36px);
+      overflow: visible;
+    }
+
+    .ch8-split-choice {
+      min-height: clamp(150px, 26vh, 260px);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: clamp(12px, 1.8vh, 20px);
+      padding: clamp(20px, 2.6vw, 34px);
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(24, 17, 14, 0.68), rgba(66, 43, 34, 0.38));
+      border: 1px solid rgba(255, 236, 220, 0.2);
+      box-shadow: 0 28px 72px rgba(0, 0, 0, 0.28);
+      text-align: left;
+    }
+
+    .ch8-split-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.7rem, 3vw, 3.15rem);
+      line-height: 1.18;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: rgba(255, 248, 238, 0.98);
+      text-shadow: 0 8px 34px rgba(0, 0, 0, 0.66);
+    }
+
+    .ch8-split-body {
+      margin: 0;
+      font-family: var(--font-main);
+      font-size: clamp(0.9rem, 1.18vw, 1.1rem);
+      line-height: 1.75;
+      letter-spacing: 0.05em;
+      font-weight: 750;
+      color: rgba(255, 242, 232, 0.88);
+      text-shadow: 0 3px 18px rgba(0, 0, 0, 0.45);
+    }
+
+    .ch8-split-full {
+      display: none !important;
+    }
+
+    .ch8-scrolly-step.is-large {
+      font-size: clamp(1.85rem, 4.1vw, 4.35rem);
+      line-height: 1.26;
+      max-height: 78vh;
+      overflow: hidden;
+    }
+
+    .ch8-scrolly-step.is-large.is-large-compact {
+      font-size: clamp(1.45rem, 3.35vw, 3.35rem);
+      line-height: 1.42;
+      letter-spacing: 0.055em;
+      max-width: min(58vw, 920px);
+    }
+
+    .ch8-scrolly-step.is-large.is-large-compact p + p {
+      margin-top: 0.72em;
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      .ch8-scrolly-step.is-split {
+        gap: 14px;
+      }
+
+      .ch8-split-choice {
+        min-height: 132px;
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .ch8-split-title {
+        font-size: clamp(1.35rem, 3.2vw, 2.25rem);
+      }
+
+      .ch8-split-body {
+        font-size: 0.76rem;
+        line-height: 1.6;
+      }
+
+      .ch8-scrolly-step.is-large {
+        font-size: clamp(1.45rem, 4.2vw, 3.2rem);
+      }
+
+      .ch8-scrolly-step.is-large.is-large-compact {
+        font-size: clamp(1.18rem, 3.5vw, 2.45rem);
+        max-width: min(62vw, 760px);
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch8-split-choice {
+        min-height: 104px;
+        padding: 14px;
+        gap: 8px;
+      }
+
+      .ch8-split-title {
+        font-size: 1.25rem;
+      }
+
+      .ch8-split-body {
+        font-size: 0.62rem;
+        line-height: 1.48;
+      }
+
+      .ch8-scrolly-step.is-large {
+        font-size: clamp(1.2rem, 3.7vw, 2.4rem);
+        line-height: 1.24;
+      }
+
+      .ch8-scrolly-step.is-large.is-large-compact {
+        font-size: clamp(0.96rem, 3.1vw, 1.9rem);
+        line-height: 1.35;
+        max-width: min(64vw, 680px);
+      }
+    }
+
   </style>
 </head>
 
@@ -13715,10 +13853,11 @@
         index: 19,
         imageKey: "ch8_16.jpg",
         type: "large",
+        compactLarge: true,
         layout: {
-          copyLeft: "clamp(72px, 10vw, 180px)",
+          copyLeft: "clamp(52px, 7vw, 120px)",
           copyTop: "50%",
-          copyWidth: "min(64vw, 980px)",
+          copyWidth: "min(58vw, 920px)",
           bgPosition: "center center",
           bgOpacity: "1",
           bgBrightness: "0.56",
@@ -21438,16 +21577,26 @@ async function fetchChoicePercentage(choiceId) {
       const newStep = document.createElement("article");
       newStep.className = baseClass;
 
+      if (step.type === "large" && step.compactLarge) {
+        newStep.classList.add("is-large-compact");
+      }
+
       if (step.type === "split") {
         const lines = step.text || [];
         const leftTitle = escapeChapter8Html(lines[0] || "如果退了");
         const leftBody = escapeChapter8Html(lines[1] || "自己立下的規則與尊嚴將徹底失效。");
         const rightTitle = escapeChapter8Html(lines[2] || "如果不退");
         const rightBody = escapeChapter8Html(lines[3] || "隨之而來的惡評可能會讓她徹底失去所有潛在客人。");
+
         newStep.innerHTML = `
-          <div class="ch8-split-choice">${leftTitle}</div>
-          <div class="ch8-split-choice">${rightTitle}</div>
-          <div class="ch8-split-full">${leftBody}<br>${rightBody}</div>
+          <div class="ch8-split-choice">
+            <div class="ch8-split-title">${leftTitle}</div>
+            <p class="ch8-split-body">${leftBody}</p>
+          </div>
+          <div class="ch8-split-choice">
+            <div class="ch8-split-title">${rightTitle}</div>
+            <p class="ch8-split-body">${rightBody}</p>
+          </div>
         `;
       } else {
         newStep.innerHTML = (step.text || [])
