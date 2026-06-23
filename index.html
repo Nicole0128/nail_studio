@@ -528,10 +528,8 @@
       letter-spacing: 0.14em;
     }
 
-
     /* ==================================================
-       第一章前導：影片＋文字卡視差敘事
-       只作用於第一章前導，不影響後續章節影片與選擇流程
+       第一章前導：只保留影片本身，不再建立字幕卡
     ================================================== */
     .ch1-scrolly-intro-screen {
       display: block;
@@ -540,159 +538,69 @@
       background: transparent;
     }
 
-    .ch1-scrolly-layer {
+    /* ==================================================
+       共用手動影片控制器 UI
+       第一章到第七章前導影片共用；第八章不使用
+    ================================================== */
+    .manual-video-ui {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 26;
+      pointer-events: none;
+    }
+
+    .manual-video-ui.is-hidden {
+      display: none !important;
+    }
+
+    .manual-video-progress {
+      position: absolute;
+      left: clamp(28px, 4vw, 64px);
+      right: clamp(28px, 4vw, 64px);
+      bottom: clamp(22px, 4vh, 42px);
+      height: 2px;
+      border-radius: 999px;
+      background: rgba(255, 248, 238, 0.22);
       overflow: hidden;
+    }
+
+    .manual-video-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: rgba(255, 248, 238, 0.82);
+      transition: width 0.16s linear;
+    }
+
+    .manual-video-hint {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(34px, 6vh, 58px);
+      transform: translateX(-50%);
+      color: rgba(255, 248, 238, 0.58);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+
+    .manual-video-skip-button {
+      position: absolute;
+      right: clamp(24px, 4vw, 60px);
+      top: clamp(22px, 4vh, 46px);
+      min-height: 34px;
+      padding: 0.5em 1em;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 248, 238, 0.36);
+      background: rgba(28, 20, 16, 0.36);
+      color: rgba(255, 248, 238, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      cursor: pointer;
       pointer-events: auto;
-    }
-
-    .ch1-scrolly-layer::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 52% 45%, rgba(20, 14, 11, 0.03), rgba(20, 14, 11, 0.16) 72%, rgba(20, 14, 11, 0.34) 100%),
-        linear-gradient(90deg, rgba(20, 14, 11, 0.5), rgba(20, 14, 11, 0.12) 42%, rgba(20, 14, 11, 0.34));
-    }
-
-    .ch1-scrolly-card-stage {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      transform: translate3d(
-        calc(var(--ch1-progress, 0) * 1.2%),
-        calc(var(--ch1-progress, 0) * -1.2%),
-        0
-      );
-      transition: transform 0.34s linear;
-      will-change: transform;
-    }
-
-    .ch1-scrolly-card {
-      position: absolute;
-      left: clamp(32px, 6vw, 82px);
-      bottom: clamp(62px, 12vh, 118px);
-      z-index: 2;
-      width: min(42%, 520px);
-      height: auto;
-      max-height: min(58vh, 360px);
-      overflow: auto;
-      padding: clamp(16px, 2.2vw, 26px);
-      border-radius: clamp(20px, 2.4vw, 30px);
-      color: rgba(255, 250, 242, 0.96);
-      background:
-        linear-gradient(135deg, rgba(39, 28, 23, 0.78), rgba(92, 60, 50, 0.52));
-      border: 1px solid rgba(255, 236, 220, 0.22);
-      box-shadow:
-        0 24px 58px rgba(12, 8, 6, 0.32),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translate3d(0, 46px, 0);
-      pointer-events: none;
-      transition:
-        opacity 0.72s cubic-bezier(.22, .61, .36, 1),
-        transform 0.72s cubic-bezier(.22, .61, .36, 1),
-        left 0.72s cubic-bezier(.22, .61, .36, 1),
-        right 0.72s cubic-bezier(.22, .61, .36, 1);
-      scrollbar-width: thin;
-      will-change: transform, opacity;
-    }
-
-  
-
-    .ch1-scrolly-card.is-active {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-      pointer-events: auto;
-    }
-
-    .ch1-scrolly-card.is-before {
-      opacity: 0;
-      transform: translate3d(0, -46px, 0);
-    }
-
-    .ch1-scrolly-card.is-after {
-      opacity: 0;
-      transform: translate3d(0, 46px, 0);
-    }
-
-    .ch1-scrolly-text {
-      margin: 0;
-      color: rgba(255, 248, 238, 0.9);
-      font-family: var(--font-main);
-      font-size: clamp(0.92rem, 1.22vw, 1.08rem);
-      line-height: 1.9;
-      letter-spacing: 0.04em;
-      font-weight: 500;
-      text-align: justify;
-    }
-
-    .game-frame[class*="ch1-scrolly-step"] .scene-video {
-      transition: opacity 0.45s ease;
-    }
-
-    .game-frame[class*="ch1-scrolly-step"] .scene-video.is-visible {
-      opacity: 1;
-      will-change: transform;
-      transform:
-        scale(calc(1.03 + var(--ch1-progress, 0) * 0.08))
-        translate3d(
-          var(--ch1-video-x, 0%),
-          var(--ch1-video-y, 0%),
-          0
-        );
-    }
-
-    .game-frame.ch1-scrolly-step-1 .ch1-scrolly-layer::before,
-    .game-frame.ch1-scrolly-step-3 .ch1-scrolly-layer::before {
-      background:
-        radial-gradient(circle at 48% 45%, rgba(20, 14, 11, 0.03), rgba(20, 14, 11, 0.16) 72%, rgba(20, 14, 11, 0.34) 100%),
-        linear-gradient(270deg, rgba(20, 14, 11, 0.48), rgba(20, 14, 11, 0.12) 42%, rgba(20, 14, 11, 0.32));
-    }
-
-    @media (max-width: 900px) and (orientation: landscape) {
-      .ch1-scrolly-card {
-        left: 24px;
-        bottom: 54px;
-        width: min(48%, 430px);
-        height: auto;
-        max-height: min(58vh, 260px);
-        padding: 14px 17px;
-        border-radius: 22px;
-      }
-
-      .ch1-scrolly-card[data-step="1"],
-      .ch1-scrolly-card[data-step="3"] {
-        right: 24px;
-      }
-
-      .ch1-scrolly-text {
-        font-size: 0.72rem;
-        line-height: 1.72;
-      }
-
-    }
-
-    @media (max-height: 460px) and (orientation: landscape) {
-      .ch1-scrolly-card {
-        bottom: 38px;
-        width: min(45%, 390px);
-        height: auto;
-        max-height: min(58vh, 190px);
-        padding: 10px 13px;
-        border-radius: 18px;
-      }
-
-      .ch1-scrolly-text {
-        font-size: 0.62rem;
-        line-height: 1.58;
-      }
-
     }
 
     /* ==================================================
@@ -11036,19 +10944,6 @@
       will-change: auto !important;
     }
 
-    .game-frame[class*="ch1-scrolly-step"] .scene-video.is-visible {
-      opacity: 1;
-      transform: none !important;
-      filter: none !important;
-      will-change: auto !important;
-    }
-
-    .ch1-scrolly-card-stage {
-      transform: none !important;
-      will-change: auto !important;
-      transition: none !important;
-    }
-
     .background-layer,
     .background-image,
     .dark-overlay {
@@ -11834,6 +11729,517 @@
       }
     }
 
+
+
+    /* ==================================================
+       第八章：真正的創業考驗｜沉浸式圖片幕次段落
+       局部新增，不使用影片、不使用 window scroll
+    ================================================== */
+
+    .ch8-scrolly-screen {
+      z-index: 24;
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      touch-action: none;
+      background:
+        radial-gradient(circle at 65% 46%, rgba(109, 74, 55, 0.28), transparent 36%),
+        linear-gradient(135deg, #110c0a 0%, #2a1b16 45%, #0d0908 100%);
+    }
+
+    .ch8-scrolly-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .ch8-scrolly-bg-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 45% 40%, rgba(233, 207, 194, 0.26), transparent 42%),
+        linear-gradient(135deg, #1b1110, #5c3a2f 48%, #120d0b);
+    }
+
+    .ch8-scrolly-bg-layer.is-fallback {
+      background:
+        radial-gradient(circle at 30% 36%, rgba(247, 239, 229, 0.24), transparent 36%),
+        radial-gradient(circle at 78% 70%, rgba(217, 174, 162, 0.24), transparent 34%),
+        linear-gradient(135deg, #130d0b 0%, #4c3028 50%, #0e0908 100%);
+    }
+
+    .ch8-scrolly-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: var(--ch8-bg-position, center center);
+      opacity: 0;
+      transform: scale(var(--ch8-bg-scale, 1.04));
+      transition:
+        opacity 760ms ease,
+        transform 5200ms ease,
+        filter 760ms ease;
+      filter: brightness(var(--ch8-bg-brightness, 0.82)) contrast(1.04) saturate(0.96);
+      will-change: opacity, transform;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    .ch8-scrolly-bg.is-active {
+      opacity: var(--ch8-bg-opacity, 1);
+      transform: scale(var(--ch8-bg-scale-active, 1.08));
+    }
+
+    .ch8-scrolly-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 72% 48%, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, var(--ch8-overlay-opacity, 0.58)) 88%),
+        linear-gradient(90deg, rgba(7, 5, 4, 0.66) 0%, rgba(7, 5, 4, 0.34) 35%, rgba(7, 5, 4, 0.1) 62%, rgba(7, 5, 4, 0.22) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.18), transparent 42%, rgba(0, 0, 0, 0.44));
+    }
+
+    .ch8-scrolly-copy {
+      position: absolute;
+      left: var(--ch8-copy-left, clamp(52px, 7vw, 128px));
+      top: var(--ch8-copy-top, 50%);
+      width: var(--ch8-copy-width, min(44vw, 620px));
+      transform: translateY(-50%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .ch8-scrolly-step {
+      position: relative;
+      width: 100%;
+      max-height: min(72vh, 620px);
+      overflow: auto;
+      color: rgba(255, 246, 235, 0.94);
+      background: linear-gradient(135deg, rgba(24, 17, 14, 0.66), rgba(66, 43, 34, 0.36));
+      border: 1px solid rgba(255, 236, 220, 0.18);
+      border-radius: 26px;
+      padding: clamp(18px, 2.4vw, 32px);
+      box-shadow: 0 28px 72px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      font-size: clamp(1rem, 1.46vw, 1.26rem);
+      line-height: 1.9;
+      letter-spacing: 0.06em;
+      font-weight: 650;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+      opacity: 0;
+      transform: translate3d(0, 34px, 0);
+      transition: opacity 620ms cubic-bezier(.22,.61,.36,1), transform 620ms cubic-bezier(.22,.61,.36,1);
+      scrollbar-width: thin;
+    }
+
+    .ch8-scrolly-step p {
+      margin: 0;
+    }
+
+    .ch8-scrolly-step p + p {
+      margin-top: 0.9em;
+    }
+
+    .ch8-scrolly-step.is-active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      pointer-events: auto;
+    }
+
+    .ch8-scrolly-step.is-exiting-forward {
+      opacity: 0;
+      transform: translate3d(0, -38px, 0);
+      pointer-events: none;
+    }
+
+    .ch8-scrolly-step.is-exiting-backward {
+      opacity: 0;
+      transform: translate3d(0, 38px, 0);
+      pointer-events: none;
+    }
+
+    .ch8-scrolly-step.is-large {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      font-family: var(--font-serif);
+      font-size: clamp(2.1rem, 5.2vw, 5.4rem);
+      line-height: 1.35;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-shadow: 0 8px 34px rgba(0, 0, 0, 0.72);
+      overflow: visible;
+    }
+
+    .ch8-scrolly-step.is-ending {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(18, 12, 10, 0.54), rgba(55, 35, 28, 0.34));
+      border-radius: 28px;
+      padding: clamp(22px, 3vw, 42px);
+      font-size: clamp(0.96rem, 1.42vw, 1.22rem);
+      line-height: 2.05;
+      letter-spacing: 0.055em;
+    }
+
+    .ch8-scrolly-step.is-ending p + p {
+      margin-top: 1.35em;
+    }
+
+    .ch8-scrolly-step.is-search {
+      font-family: "SFMono-Regular", Consolas, "Noto Sans Mono CJK TC", monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .ch8-scrolly-step.is-split {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(18px, 4vw, 64px);
+      overflow: visible;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .ch8-split-choice {
+      min-height: clamp(120px, 22vh, 220px);
+      display: grid;
+      place-items: center;
+      padding: clamp(18px, 2.2vw, 30px);
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(24, 17, 14, 0.66), rgba(66, 43, 34, 0.36));
+      border: 1px solid rgba(255, 236, 220, 0.18);
+      box-shadow: 0 28px 72px rgba(0, 0, 0, 0.28);
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3.3vw, 3.2rem);
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 0 8px 34px rgba(0, 0, 0, 0.66);
+    }
+
+    .ch8-split-full {
+      grid-column: 1 / -1;
+      margin-top: clamp(8px, 2vh, 20px);
+      padding: clamp(18px, 2.2vw, 30px);
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(24, 17, 14, 0.58), rgba(66, 43, 34, 0.3));
+      border: 1px solid rgba(255, 236, 220, 0.16);
+      font-size: clamp(0.98rem, 1.5vw, 1.3rem);
+      line-height: 1.9;
+      letter-spacing: 0.06em;
+    }
+
+
+    .ch8-progress {
+      position: absolute;
+      right: clamp(24px, 4vw, 64px);
+      bottom: clamp(26px, 5vh, 54px);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0.52;
+      color: rgba(255, 248, 238, 0.86);
+      font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
+    .ch8-progress-line {
+      width: clamp(92px, 13vw, 190px);
+      height: 3px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 248, 238, 0.22);
+    }
+
+    .ch8-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: rgba(255, 248, 238, 0.82);
+      transition: width 520ms ease;
+    }
+
+    .ch8-progress-count {
+      min-width: 54px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .ch8-control-hint {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(18px, 3vh, 30px);
+      z-index: 5;
+      transform: translateX(-50%);
+      color: rgba(255, 248, 238, 0.88);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      opacity: 0.42;
+      pointer-events: none;
+      transition: opacity 320ms ease;
+    }
+
+    .ch8-report-panel {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      padding: clamp(72px, 10vh, 108px) clamp(24px, 4vw, 58px) clamp(42px, 6vh, 72px);
+      opacity: 0;
+      transform: translateY(24px);
+      pointer-events: none;
+      transition: opacity 680ms ease, transform 680ms ease;
+    }
+
+    .ch8-report-panel.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .ch8-report-card {
+      width: min(88vw, 1120px);
+      max-height: min(82vh, 720px);
+      height: auto;
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      margin: 0;
+      padding: clamp(20px, 3vw, 34px);
+      border-radius: clamp(22px, 2.8vw, 34px);
+      background:
+        linear-gradient(135deg, rgba(255, 250, 242, 0.9), rgba(239, 211, 198, 0.72));
+      border: 1px solid rgba(255, 255, 255, 0.56);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 30px 82px rgba(8, 5, 4, 0.44);
+    }
+
+    .ch8-report-card .final-storyline-button {
+      display: none !important;
+    }
+
+    .ch8-report-card .final-report-title-row {
+      min-height: 0;
+      margin-bottom: clamp(10px, 1.6vh, 16px);
+    }
+
+    .ch8-report-card .final-report-body {
+      min-height: 0;
+      overflow: hidden;
+      padding-right: 0;
+    }
+
+    .ch8-report-card .final-report-stats,
+    .ch8-report-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(10px, 1.6vw, 18px);
+    }
+
+    .ch8-report-card .final-report-stat {
+      min-height: 0;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .ch8-report-card .final-report-stat.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .ch8-report-card .final-report-actions,
+    .ch8-report-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: max(10px, 0.8vw);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .ch8-report-card .final-report-actions.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .final-report-details,
+    .final-report-detail-box,
+    .final-report-rules,
+    .final-report-ending {
+      display: none !important;
+    }
+
+    @media (max-width: 980px) and (orientation: landscape) {
+      .ch8-scrolly-copy {
+        left: 28px;
+        width: min(48vw, 460px);
+      }
+
+      .ch8-scrolly-step {
+        padding: 15px 18px;
+        border-radius: 22px;
+        font-size: 0.78rem;
+        line-height: 1.74;
+      }
+
+      .ch8-scrolly-step.is-large {
+        width: min(76vw, 760px);
+        padding: 22px 28px;
+        font-size: clamp(1.45rem, 4.3vw, 3.6rem);
+      }
+
+      .ch8-scrolly-step.is-ending {
+        width: min(72vw, 760px);
+        font-size: 0.76rem;
+        line-height: 1.76;
+      }
+
+      .ch8-report-panel {
+        padding: 58px 18px 32px;
+      }
+
+      .ch8-report-card {
+        width: min(92vw, 860px);
+        max-height: 84vh;
+        padding: 16px 20px;
+        border-radius: 22px;
+      }
+
+      .ch8-report-card .final-report-title {
+        font-size: clamp(1.15rem, 2.8vw, 1.8rem);
+      }
+
+      .ch8-report-card .final-report-section-title {
+        font-size: 0.82rem;
+      }
+
+      .ch8-report-card .final-report-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .ch8-report-card .final-report-stat {
+        padding: 10px;
+        border-radius: 14px;
+      }
+
+      .ch8-report-card .final-report-stat-label,
+      .ch8-report-card .final-report-stat-desc,
+      .ch8-report-card .final-action-button {
+        font-size: 0.62rem;
+      }
+
+      .ch8-report-card .final-report-stat-value {
+        font-size: 1.12rem;
+      }
+
+      .ch8-report-card .final-report-actions {
+        gap: 10px;
+      }
+    }
+
+    @media (max-height: 460px) and (orientation: landscape) {
+      .ch8-scrolly-copy {
+        left: 22px;
+        width: min(46vw, 390px);
+      }
+
+      .ch8-scrolly-step {
+        padding: 11px 14px;
+        border-radius: 18px;
+        font-size: 0.64rem;
+        line-height: 1.58;
+      }
+
+      .ch8-scrolly-step.is-large {
+        padding: 18px 22px;
+        font-size: clamp(1.2rem, 4vw, 2.8rem);
+      }
+
+      .ch8-scrolly-step.is-ending {
+        width: min(76vw, 720px);
+        font-size: 0.58rem;
+        line-height: 1.58;
+      }
+
+      .ch8-progress {
+        right: 14px;
+        bottom: 12px;
+        gap: 8px;
+      }
+
+      .ch8-progress-line {
+        width: 88px;
+      }
+
+      .ch8-control-hint {
+        bottom: 10px;
+        font-size: 10px;
+      }
+
+      .ch8-report-panel {
+        padding: 48px 14px 20px;
+      }
+
+      .ch8-report-card {
+        max-height: 86vh;
+        padding: 12px 16px;
+        gap: 6px;
+      }
+
+      .ch8-report-card .final-report-title-row {
+        margin-bottom: 4px;
+      }
+
+      .ch8-report-card .final-report-title {
+        font-size: 1rem;
+      }
+
+      .ch8-report-card .final-report-section-title,
+      .ch8-report-card .final-report-stat-label,
+      .ch8-report-card .final-report-stat-desc,
+      .ch8-report-card .final-action-button {
+        font-size: 0.54rem;
+      }
+
+      .ch8-report-card .final-report-stat {
+        padding: 7px;
+      }
+
+      .ch8-report-card .final-report-stat-value {
+        font-size: 0.9rem;
+      }
+
+      .ch8-report-card .final-action-button {
+        min-height: 26px;
+        padding: 0.32em 0.72em;
+      }
+    }
+
   </style>
 </head>
 
@@ -11854,6 +12260,13 @@
       <button class="video-skip-button is-hidden" id="videoSkipButton" type="button" aria-label="跳過前導影片">
         跳過
       </button>
+      <div class="manual-video-ui is-hidden" id="manualVideoUi" aria-hidden="true">
+        <div class="manual-video-progress">
+          <div class="manual-video-progress-fill" id="manualVideoProgressFill"></div>
+        </div>
+        <div class="manual-video-hint" id="manualVideoHint">滑鼠滾輪／方向鍵控制影片進度</div>
+        <button class="manual-video-skip-button" id="manualVideoSkipButton" type="button">跳過</button>
+      </div>
       <div class="dark-overlay" id="darkOverlay"></div>
 
       <section class="screen ch1-scrolly-intro-screen" id="ch1ScrollyIntroScreen" aria-label="第一章前導滾動敘事"></section>
@@ -12520,12 +12933,24 @@
       </section>
 
 
-      <section class="screen final-intro-screen" id="finalIntroScreen" aria-label="最後結果報告前導影片">
-        <video class="final-intro-video" id="finalIntroVideo" playsinline preload="metadata"></video>
-      </section>
 
-      <section class="screen final-report-screen" id="finalReportScreen" aria-label="最後結果報告">
-        <article class="final-report-card">
+      <section class="screen ch8-scrolly-screen" id="chapter8ScrollyScreen" aria-label="第八章：真正的創業考驗">
+        <div class="ch8-scrolly-stage" id="chapter8ScrollyStage">
+          <div class="ch8-scrolly-bg-layer" id="chapter8BgLayer"></div>
+          <div class="ch8-scrolly-vignette"></div>
+          <div class="ch8-scrolly-copy" id="chapter8Copy"></div>
+
+          <div class="ch8-progress" id="chapter8Progress">
+            <div class="ch8-progress-line">
+              <div class="ch8-progress-fill" id="chapter8ProgressFill"></div>
+            </div>
+            <div class="ch8-progress-count" id="chapter8ProgressCount">01 / 22</div>
+          </div>
+
+          <div class="ch8-control-hint" id="chapter8ControlHint">滑鼠滾輪／方向鍵控制進度</div>
+
+          <section class="ch8-report-panel" id="chapter8FinalReportPanel" aria-label="第八章結果報告">
+        <article class="final-report-card ch8-report-card">
           <div class="final-report-title-row">
             <h1 class="final-report-title">結果報告</h1>
             <button class="final-storyline-button" type="button" data-storyline-open>故事線</button>
@@ -12561,7 +12986,15 @@
           </div>
           <div class="final-toast" id="finalToast" role="status" aria-live="polite">已複製連結</div>
         </article>
+          </section>
+        </div>
       </section>
+
+      <section class="screen final-intro-screen is-hidden" id="finalIntroScreen" aria-label="最後結果報告前導影片">
+        <video class="final-intro-video" id="finalIntroVideo" playsinline preload="metadata"></video>
+      </section>
+
+      <section class="screen final-report-screen is-hidden" id="finalReportScreen" aria-label="最後結果報告"></section>
 
       <section class="screen placeholder-screen" id="placeholderScreen" aria-label="第八章預告">
         <div class="placeholder-box">
@@ -12618,40 +13051,14 @@
       studioCover: "images/ch1-studio-empty.png",
       chapterVideo: "videos/ch1-enter-studio.mp4",
       chapterPoster: "images/ch1-enter-studio-poster.png",
+      introVideo: "videos/ch1-enter-studio.mp4",
+      introPoster: "images/ch1-enter-studio-poster.png",
       videoFinalFallback: "images/ch1-protagonist-final.png",
       ch1FramePath: "images/ch1-scrolly/ch1_",
       ch1FrameExt: "webp",
       ch1FrameCount: 416,
       ch1FramePad: 4
     };
-
-    const CH1_INTRO_STEPS = [
-      {
-        progress: 0,
-        title: "深夜的房間裡，林夏盯著電腦，房間透出微弱的光。",
-        body: "緊握著滑鼠，求職網站上的職缺一頁頁滑過，卻遲遲沒有停留。"
-      },
-      {
-        progress: 0.24,
-        title: "喪氣的林夏點開社群軟體，注意到了搜尋頁面上一雙雙精緻的指尖。",
-        body: "色膠在燈光下折射出細碎光澤，甲面上的立體雕花隨著鏡頭緩慢轉動。作品照之間，夾雜著工作室日常、客人回饋，以及一句句看似平凡的文字。"
-      },
-      {
-        progress: 0.48,
-        title: "近年來，這樣的畫面頻繁出現在社群平台之中。",
-        body: "搜尋「美甲」關鍵字，大量作品帳號與工作室頁面隨即湧現。有人單純分享作品照片，有人記錄創業日常，也有人展示從零開始到接案的成長軌跡。"
-      },
-      {
-        progress: 0.72,
-        title: "在社群媒體的描繪裡，美甲似乎成為一項門檻不高的創業選擇。",
-        body: "不需要大型店面，也不需要昂貴設備。只要一張桌子、一盞燈、基礎美甲工具，以及持續更新的作品集，便有機會在住宅的一隅展開自己的事業。"
-      },
-      {
-        progress: 0.94,
-        title: "然而，越來越多人踏入這個產業後，另一個問題也逐漸浮現：",
-        body: "成為一位美甲師，真的是那麼容易的一條路嗎？"
-      }
-    ];
 
 
     const CH2_ASSETS = {
@@ -12888,6 +13295,458 @@
     };
 
 
+
+
+    const CH8_IMAGE_PRIMARY_BASE = "./assets/ch8/";
+    const CH8_IMAGE_BACKUP_BASE = "./";
+
+    function getChapter8ImagePath(imageKey, backup = false) {
+      return `${backup ? CH8_IMAGE_BACKUP_BASE : CH8_IMAGE_PRIMARY_BASE}${imageKey}`;
+    }
+
+    const chapter8State = {
+      currentIndex: 0,
+      totalSteps: 22,
+      isTransitioning: false,
+      wheelAccumulator: 0,
+      touchStartY: 0,
+      touchLastY: 0,
+      cleanupFns: [],
+      transitionTimer: null,
+      activeDirection: 1,
+      activeBgIndex: 0
+    };
+    const CH8_STEPS = [
+      {
+        index: 0,
+        imageKey: "ch8_01.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(48px, 6vw, 110px)",
+          copyTop: "68%",
+          copyWidth: "min(38vw, 560px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.86",
+          bgScale: "1.03",
+          bgScaleActive: "1.07",
+          overlayOpacity: "0.48"
+        },
+        text: [
+          "深夜的工作室裡，林夏一邊整理著工具，一邊疲憊地回覆著訊息。"
+        ]
+      },
+      {
+        index: 1,
+        imageKey: "ch8_02.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(52px, 7vw, 128px)",
+          copyTop: "56%",
+          copyWidth: "min(39vw, 570px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.82",
+          bgScale: "1.035",
+          bgScaleActive: "1.075",
+          overlayOpacity: "0.56"
+        },
+        text: [
+          "「欸，之前怎麼沒看到這些預約須知？」舊客 Tina 傳來質疑。"
+        ]
+      },
+      {
+        index: 2,
+        imageKey: "ch8_03.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(48px, 6vw, 110px)",
+          copyTop: "60%",
+          copyWidth: "min(38vw, 540px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.84",
+          bgScale: "1.04",
+          bgScaleActive: "1.08",
+          overlayOpacity: "0.56"
+        },
+        text: [
+          "「這是新加的規則，再麻煩預約前看一下喔。」林夏耐著性子解釋。"
+        ]
+      },
+      {
+        index: 3,
+        imageKey: "ch8_04.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(56px, 8vw, 140px)",
+          copyTop: "50%",
+          copyWidth: "min(38vw, 560px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.8",
+          bgScale: "1.035",
+          bgScaleActive: "1.08",
+          overlayOpacity: "0.62"
+        },
+        text: [
+          "「可是我已經來妳這邊做很多次了欸，還要收定金？」"
+        ]
+      },
+      {
+        index: 4,
+        imageKey: "ch8_05.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(48px, 6vw, 110px)",
+          copyTop: "62%",
+          copyWidth: "min(37vw, 540px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.8",
+          bgScale: "1.04",
+          bgScaleActive: "1.065",
+          overlayOpacity: "0.62"
+        },
+        text: [
+          "林夏的手停在消毒棉片上，還來不及思考如何回覆，另一位客人的訊息又震動了起來。"
+        ]
+      },
+      {
+        index: 5,
+        imageKey: "ch8_06.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(52px, 7vw, 120px)",
+          copyTop: "42%",
+          copyWidth: "min(40vw, 580px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.84",
+          bgScale: "1.035",
+          bgScaleActive: "1.075",
+          overlayOpacity: "0.52"
+        },
+        text: [
+          "「不好意思，我家的貓又生病了，只能下次再來嗚嗚。」Amber 傳來訊息。"
+        ]
+      },
+      {
+        index: 6,
+        imageKey: "ch8_07.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(56px, 8vw, 150px)",
+          copyTop: "52%",
+          copyWidth: "min(36vw, 520px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.86",
+          bgScale: "1.035",
+          bgScaleActive: "1.07",
+          overlayOpacity: "0.5"
+        },
+        text: [
+          "「好的，那這邊就依預約須知，不退還訂金喔。」"
+        ]
+      },
+      {
+        index: 7,
+        imageKey: "ch8_08.jpg",
+        type: "large",
+        layout: {
+          copyLeft: "clamp(58px, 8vw, 150px)",
+          copyTop: "50%",
+          copyWidth: "min(46vw, 720px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.72",
+          bgScale: "1.04",
+          bgScaleActive: "1.09",
+          overlayOpacity: "0.68"
+        },
+        text: [
+          "「可是我根本沒有做指甲欸，這樣也要收錢？」"
+        ]
+      },
+      {
+        index: 8,
+        imageKey: "ch8_09.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(52px, 7vw, 128px)",
+          copyTop: "52%",
+          copyWidth: "min(40vw, 600px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.82",
+          bgScale: "1.035",
+          bgScaleActive: "1.075",
+          overlayOpacity: "0.56"
+        },
+        text: [
+          "她打開電腦，在搜尋框裡急促地敲擊鍵盤，尋找著答案。"
+        ]
+      },
+      {
+        index: 9,
+        imageKey: "ch8_10.jpg",
+        type: "search",
+        layout: {
+          copyLeft: "clamp(52px, 7vw, 126px)",
+          copyTop: "58%",
+          copyWidth: "min(39vw, 590px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.8",
+          bgScale: "1.035",
+          bgScaleActive: "1.07",
+          overlayOpacity: "0.58"
+        },
+        text: [
+          "「客人臨時取消 訂金 法律」",
+          "「美甲工作室 放鳥 法規」"
+        ]
+      },
+      {
+        index: 10,
+        imageKey: "ch8_11.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(52px, 7vw, 130px)",
+          copyTop: "50%",
+          copyWidth: "min(44vw, 660px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.76",
+          bgScale: "1.04",
+          bgScaleActive: "1.075",
+          overlayOpacity: "0.66"
+        },
+        text: [
+          "搜尋結果一頁頁滑過，多是密密麻麻的民法條文、消費糾紛討論，還有各個店家自行公告的範本。"
+        ]
+      },
+      {
+        index: 11,
+        imageKey: "ch8_11.jpg",
+        type: "large",
+        layout: {
+          copyLeft: "clamp(80px, 11vw, 180px)",
+          copyTop: "50%",
+          copyWidth: "min(62vw, 980px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.58",
+          bgScale: "1.045",
+          bgScaleActive: "1.085",
+          overlayOpacity: "0.74"
+        },
+        text: [
+          "在這個新興且散落的微型創業圈裡，並沒有一套專門保障個人美甲工作室的官方規範。"
+        ]
+      },
+      {
+        index: 12,
+        imageKey: "ch8_12.jpg",
+        type: "large",
+        layout: {
+          copyLeft: "clamp(66px, 9vw, 160px)",
+          copyTop: "50%",
+          copyWidth: "min(52vw, 820px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.62",
+          bgScale: "1.04",
+          bgScaleActive: "1.085",
+          overlayOpacity: "0.72"
+        },
+        text: [
+          "「我以為有了規則，就有人會站在我這邊。」"
+        ]
+      },
+      {
+        index: 13,
+        imageKey: "ch8_12.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(58px, 8vw, 150px)",
+          copyTop: "54%",
+          copyWidth: "min(48vw, 740px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.64",
+          bgScale: "1.045",
+          bgScaleActive: "1.075",
+          overlayOpacity: "0.72"
+        },
+        text: [
+          "規則要怎麼寫才合法？",
+          "能不能收？要怎麼證明損失？",
+          "全部都要由她一個人去面對。"
+        ]
+      },
+      {
+        index: 14,
+        imageKey: "ch8_13.jpg",
+        type: "large",
+        layout: {
+          copyLeft: "clamp(58px, 8vw, 150px)",
+          copyTop: "50%",
+          copyWidth: "min(50vw, 780px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.62",
+          bgScale: "1.04",
+          bgScaleActive: "1.09",
+          overlayOpacity: "0.76"
+        },
+        text: [
+          "Amber 傳來最後通牒：「如果妳不退，我就發文說妳亂收錢。」"
+        ]
+      },
+      {
+        index: 15,
+        imageKey: "ch8_14.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(52px, 7vw, 130px)",
+          copyTop: "66%",
+          copyWidth: "min(43vw, 660px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.76",
+          bgScale: "1.035",
+          bgScaleActive: "1.07",
+          overlayOpacity: "0.62"
+        },
+        text: [
+          "她回頭看向這個剛成立不久、好不容易才建立起來的工作室：乾淨的桌面、滿牆精心拍攝的作品照，以及那本還沒坐滿的行事曆。"
+        ]
+      },
+      {
+        index: 16,
+        imageKey: "ch8_15.jpg",
+        type: "split",
+        layout: {
+          copyLeft: "clamp(58px, 8vw, 150px)",
+          copyTop: "50%",
+          copyWidth: "min(56vw, 900px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.7",
+          bgScale: "1.035",
+          bgScaleActive: "1.075",
+          overlayOpacity: "0.7"
+        },
+        text: [
+          "如果退了",
+          "自己立下的規則與尊嚴將徹底失效。",
+          "如果不退",
+          "隨之而來的惡評可能會讓她徹底失去所有潛在客人。"
+        ]
+      },
+      {
+        index: 17,
+        imageKey: "ch8_15.jpg",
+        type: "normal",
+        layout: {
+          copyLeft: "clamp(58px, 8vw, 150px)",
+          copyTop: "52%",
+          copyWidth: "min(45vw, 700px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.76",
+          bgScale: "1.04",
+          bgScaleActive: "1.07",
+          overlayOpacity: "0.62"
+        },
+        text: [
+          "林夏的眼神裡不再只有剛創業時的害怕與無助，而是一種被迫在現實中做出抉擇的清醒。"
+        ]
+      },
+      {
+        index: 18,
+        imageKey: "ch8_16.jpg",
+        type: "large",
+        layout: {
+          copyLeft: "clamp(72px, 10vw, 180px)",
+          copyTop: "50%",
+          copyWidth: "min(62vw, 940px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.52",
+          bgScale: "1.04",
+          bgScaleActive: "1.09",
+          overlayOpacity: "0.8"
+        },
+        text: [
+          "「那我到底，要怎麼保護自己？」"
+        ]
+      },
+      {
+        index: 19,
+        imageKey: "ch8_16.jpg",
+        type: "large",
+        layout: {
+          copyLeft: "clamp(72px, 10vw, 180px)",
+          copyTop: "50%",
+          copyWidth: "min(64vw, 980px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.56",
+          bgScale: "1.075",
+          bgScaleActive: "1.035",
+          overlayOpacity: "0.78"
+        },
+        text: [
+          "手機通知聲再次響起，劃破了深夜的寂靜。",
+          "美甲工作室雖然開起來了，但真正的創業考驗，這才剛要開始。"
+        ]
+      },
+      {
+        index: 20,
+        imageKey: "ch8_16.jpg",
+        type: "ending",
+        layout: {
+          copyLeft: "clamp(72px, 9vw, 150px)",
+          copyTop: "50%",
+          copyWidth: "min(64vw, 1040px)",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.42",
+          bgScale: "1.04",
+          bgScaleActive: "1.06",
+          overlayOpacity: "0.84"
+        },
+        text: [
+          "外行看美甲師，總覺得這是一個坐在冷氣房裡、做做指甲就能月入數萬的光鮮行業。",
+          "但這群撐起五年內成長 1.2 倍產值、在社群創下 1.5 億則標籤的獨立創業者們，背後付出的卻是長年吸粉塵、脊椎側彎的身體代價，以及面對惡意放鳥、抄襲公審時的孤立無援。",
+          "今年台北市不到 10 件的消保案件紀錄，背後不是美甲師的日子變好過了，而是在繁瑣法規與時間成本的權衡下，只能默默吞下損失的滿腹無奈。在熱情被消磨殆盡前，他們急需一套能真正保護勞動與商譽的健全制度。"
+        ]
+      },
+      {
+        index: 21,
+        imageKey: "ch8_16.jpg",
+        type: "report",
+        layout: {
+          copyLeft: "0px",
+          copyTop: "50%",
+          copyWidth: "0px",
+          bgPosition: "center center",
+          bgOpacity: "1",
+          bgBrightness: "0.48",
+          bgScale: "1.04",
+          bgScaleActive: "1.04",
+          overlayOpacity: "0.78"
+        },
+        text: [
+          ""
+        ]
+      }
+    ];
+
+
     const GAME_VIDEO_VOLUME = 1;
     let isAudioUnlocked = false;
 
@@ -12972,6 +13831,299 @@
       }
 
       return playPromise;
+    }
+
+
+    const ManualVideoController = {
+      active: false,
+      video: null,
+      screen: null,
+      progressFill: null,
+      hint: null,
+      skipButton: null,
+      completeCallback: null,
+      failCallback: null,
+      cleanupFns: [],
+      wheelAccumulator: 0,
+      touchStartY: 0,
+      touchLastY: 0,
+      inputLock: false,
+      inputLockTimer: null,
+      durationReady: false
+    };
+
+    function startManualIntroVideo(config = {}) {
+      const {
+        src,
+        poster,
+        label = "前導影片",
+        screen,
+        onComplete,
+        onFail,
+        skippable = true
+      } = config;
+
+      cleanupManualVideoControls();
+      ChapterOne.cleanupIntroVideoSkip?.();
+      ChapterOne.stopActiveVideo?.();
+      ChapterOne.clearVideoLayer();
+      ChapterOne.setDarkOverlay(false);
+
+      const manualUi = document.getElementById("manualVideoUi");
+      const progressFill = document.getElementById("manualVideoProgressFill");
+      const hint = document.getElementById("manualVideoHint");
+      const skipButton = document.getElementById("manualVideoSkipButton");
+
+      if (!src || !screen || !ChapterOne?.dom?.videoLayer) {
+        if (typeof onFail === "function") onFail({ failed: true });
+        return null;
+      }
+
+      const video = ChapterOne.createVideo({ src, poster, label });
+      video.preload = "auto";
+      video.setAttribute("preload", "auto");
+      video.muted = false;
+      video.volume = 1;
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.controls = false;
+      video.autoplay = false;
+      video.removeAttribute("autoplay");
+      video.currentTime = 0;
+      video.classList.add("is-visible");
+
+      ChapterOne.dom.videoLayer.style.zIndex = "23";
+      ChapterOne.dom.videoLayer.style.pointerEvents = "none";
+      ChapterOne.dom.videoLayer.appendChild(video);
+      ChapterOne.activeVideo = video;
+
+      ManualVideoController.active = true;
+      ManualVideoController.video = video;
+      ManualVideoController.screen = screen;
+      ManualVideoController.progressFill = progressFill;
+      ManualVideoController.hint = hint;
+      ManualVideoController.skipButton = skipButton;
+      ManualVideoController.completeCallback = typeof onComplete === "function" ? onComplete : null;
+      ManualVideoController.failCallback = typeof onFail === "function" ? onFail : null;
+      ManualVideoController.cleanupFns = [];
+      ManualVideoController.wheelAccumulator = 0;
+      ManualVideoController.touchStartY = 0;
+      ManualVideoController.touchLastY = 0;
+      ManualVideoController.inputLock = false;
+      ManualVideoController.durationReady = false;
+
+      if (progressFill) progressFill.style.width = "0%";
+      if (hint) hint.textContent = "滑鼠滾輪／方向鍵控制影片進度";
+      manualUi?.classList.remove("is-hidden");
+      manualUi?.setAttribute("aria-hidden", "false");
+      skipButton?.classList.toggle("is-hidden", !skippable);
+
+      showScreen(screen);
+
+      const finishMetadata = () => {
+        if (ManualVideoController.video !== video) return;
+        ManualVideoController.durationReady = Number.isFinite(video.duration) && video.duration > 0;
+        try {
+          video.pause();
+          video.currentTime = 0;
+        } catch (error) {}
+        updateManualVideoProgressUI();
+      };
+
+      const fail = () => manualVideoFail();
+
+      video.addEventListener("loadedmetadata", finishMetadata, { once: true });
+      video.addEventListener("loadeddata", finishMetadata, { once: true });
+      video.addEventListener("error", fail, { once: true });
+      ManualVideoController.cleanupFns.push(() => video.removeEventListener("loadedmetadata", finishMetadata));
+      ManualVideoController.cleanupFns.push(() => video.removeEventListener("loadeddata", finishMetadata));
+      ManualVideoController.cleanupFns.push(() => video.removeEventListener("error", fail));
+
+      if (skippable && skipButton) {
+        const onSkip = () => manualVideoComplete({ skipped: true });
+        skipButton.addEventListener("click", onSkip);
+        ManualVideoController.cleanupFns.push(() => skipButton.removeEventListener("click", onSkip));
+      }
+
+      bindManualVideoControls();
+      updateManualVideoProgressUI();
+
+      try {
+        video.load();
+      } catch (error) {
+        manualVideoFail();
+      }
+
+      return video;
+    }
+
+    function bindManualVideoControls() {
+      const controller = ManualVideoController;
+      const screen = controller.screen;
+      if (!screen || !controller.active) return;
+
+      const onWheel = (event) => {
+        if (!controller.active) return;
+        event.preventDefault();
+        controller.wheelAccumulator += event.deltaY;
+        if (Math.abs(controller.wheelAccumulator) < 28) return;
+        const direction = controller.wheelAccumulator > 0 ? 1 : -1;
+        controller.wheelAccumulator = 0;
+        manualVideoStep(direction);
+      };
+
+      const onKeyDown = (event) => {
+        if (!controller.active) return;
+        const forwardKeys = ["ArrowRight", "ArrowDown", "PageDown", " ", "Spacebar", "Enter"];
+        const backwardKeys = ["ArrowLeft", "ArrowUp", "PageUp", "Backspace"];
+        if (![...forwardKeys, ...backwardKeys, "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        if (forwardKeys.includes(event.key)) manualVideoStep(1);
+        if (backwardKeys.includes(event.key)) manualVideoStep(-1);
+        if (event.key === "Home") manualVideoSetProgress(0);
+        if (event.key === "End") manualVideoSetProgress(0.98);
+      };
+
+      const onTouchStart = (event) => {
+        if (!controller.active) return;
+        const touch = event.touches?.[0];
+        if (!touch) return;
+        controller.touchStartY = touch.clientY;
+        controller.touchLastY = touch.clientY;
+      };
+
+      const onTouchMove = (event) => {
+        if (!controller.active) return;
+        event.preventDefault();
+        const touch = event.touches?.[0];
+        if (!touch) return;
+        const diff = controller.touchLastY - touch.clientY;
+        if (Math.abs(diff) < 42) return;
+        controller.touchLastY = touch.clientY;
+        manualVideoStep(diff > 0 ? 1 : -1);
+      };
+
+      const onTouchEnd = () => {
+        controller.touchStartY = 0;
+        controller.touchLastY = 0;
+      };
+
+      screen.addEventListener("wheel", onWheel, { passive: false });
+      document.addEventListener("keydown", onKeyDown);
+      screen.addEventListener("touchstart", onTouchStart, { passive: true });
+      screen.addEventListener("touchmove", onTouchMove, { passive: false });
+      screen.addEventListener("touchend", onTouchEnd, { passive: true });
+
+      controller.cleanupFns.push(() => screen.removeEventListener("wheel", onWheel));
+      controller.cleanupFns.push(() => document.removeEventListener("keydown", onKeyDown));
+      controller.cleanupFns.push(() => screen.removeEventListener("touchstart", onTouchStart));
+      controller.cleanupFns.push(() => screen.removeEventListener("touchmove", onTouchMove));
+      controller.cleanupFns.push(() => screen.removeEventListener("touchend", onTouchEnd));
+    }
+
+    function cleanupManualVideoControls() {
+      const controller = ManualVideoController;
+      controller.cleanupFns.forEach((cleanup) => {
+        try { cleanup(); } catch (error) {}
+      });
+      controller.cleanupFns = [];
+      window.clearTimeout(controller.inputLockTimer);
+      controller.inputLockTimer = null;
+      controller.inputLock = false;
+      controller.wheelAccumulator = 0;
+      controller.touchStartY = 0;
+      controller.touchLastY = 0;
+
+      const manualUi = document.getElementById("manualVideoUi");
+      manualUi?.classList.add("is-hidden");
+      manualUi?.setAttribute("aria-hidden", "true");
+      if (controller.progressFill) controller.progressFill.style.width = "0%";
+      if (ChapterOne?.dom?.videoLayer) {
+        ChapterOne.dom.videoLayer.style.zIndex = "2";
+        ChapterOne.dom.videoLayer.style.pointerEvents = "none";
+      }
+
+      controller.active = false;
+      controller.video = null;
+      controller.screen = null;
+      controller.progressFill = null;
+      controller.hint = null;
+      controller.skipButton = null;
+      controller.completeCallback = null;
+      controller.failCallback = null;
+      controller.durationReady = false;
+    }
+
+    function manualVideoStep(direction) {
+      const controller = ManualVideoController;
+      const video = controller.video;
+      if (!controller.active || !video || controller.inputLock) return;
+
+      const duration = Number(video.duration);
+      if (!Number.isFinite(duration) || duration <= 0) return;
+
+      controller.inputLock = true;
+      window.clearTimeout(controller.inputLockTimer);
+      controller.inputLockTimer = window.setTimeout(() => {
+        controller.inputLock = false;
+      }, 90);
+
+      const nextTime = Math.max(0, Math.min(duration * 0.98, (Number(video.currentTime) || 0) + (direction >= 0 ? 1.2 : -1.2)));
+      try {
+        video.pause();
+        video.currentTime = nextTime;
+      } catch (error) {}
+      updateManualVideoProgressUI();
+
+      const progress = video.duration > 0 ? video.currentTime / video.duration : 0;
+      if (progress >= 0.98) manualVideoComplete({ completed: true });
+    }
+
+    function manualVideoSetProgress(progress) {
+      const controller = ManualVideoController;
+      const video = controller.video;
+      if (!controller.active || !video) return;
+      const duration = Number(video.duration);
+      if (!Number.isFinite(duration) || duration <= 0) return;
+      const safeProgress = Math.max(0, Math.min(0.98, Number(progress) || 0));
+      try {
+        video.pause();
+        video.currentTime = duration * safeProgress;
+      } catch (error) {}
+      updateManualVideoProgressUI();
+      if (safeProgress >= 0.98) manualVideoComplete({ completed: true });
+    }
+
+    function manualVideoComplete(payload = {}) {
+      const controller = ManualVideoController;
+      if (!controller.active) return;
+      const completeCallback = controller.completeCallback;
+      const video = controller.video;
+      try { video?.pause(); } catch (error) {}
+      cleanupManualVideoControls();
+      if (typeof completeCallback === "function") completeCallback(payload);
+    }
+
+    function manualVideoFail() {
+      const controller = ManualVideoController;
+      if (!controller.active) return;
+      const failCallback = controller.failCallback;
+      const video = controller.video;
+      const poster = video?.getAttribute("poster") || "";
+      try { video?.pause(); } catch (error) {}
+      cleanupManualVideoControls();
+      if (poster && ChapterOne?.setBackground) {
+        ChapterOne.setBackground(poster, "manual-video-fallback");
+      }
+      if (typeof failCallback === "function") failCallback({ failed: true });
+    }
+
+    function updateManualVideoProgressUI() {
+      const controller = ManualVideoController;
+      const video = controller.video;
+      if (!video || !controller.progressFill) return;
+      const progress = video.duration > 0 ? video.currentTime / video.duration : 0;
+      controller.progressFill.style.width = `${Math.max(0, Math.min(100, progress * 100))}%`;
     }
 
 
@@ -15464,630 +16616,27 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playEnterVideo() {
-        this.showOnly(null);
         this.cleanupScrollyIntro();
-        this.setBackground(CH1_ASSETS.chapterPoster, "chapter-video-poster");
-        this.setDarkOverlay(true, "rgba(20, 16, 14, 0.22)");
-        this.clearVideoLayer();
-
-        const video = this.createVideo({
-          src: CH1_ASSETS.chapterVideo,
-          poster: CH1_ASSETS.chapterPoster,
-          label: "第一章前導影片"
+        startManualIntroVideo({
+          src: CH1_ASSETS.introVideo,
+          poster: CH1_ASSETS.introPoster,
+          label: "第一章前導影片",
+          screen: this.dom.ch1ScrollyIntroScreen,
+          onComplete: () => this.showChoiceScreen(),
+          onFail: () => this.showChoiceScreen(),
+          skippable: true
         });
-
-        video.autoplay = true;
-        video.setAttribute("autoplay", "");
-        video.playsInline = true;
-        video.setAttribute("playsinline", "");
-        video.preload = "auto";
-        video.setAttribute("preload", "auto");
-        video.classList.add("is-visible");
-        prepareVideoAudio(video);
-
-        this.dom.videoLayer.appendChild(video);
-        this.activeVideo = video;
-        this.startScrollyIntro(video);
-      },
-
-      // 第一章前導改為「影片自動播放 + 文字卡依照影片播放進度浮現」。
-      // 此段只讀取 video.currentTime / video.duration，不再以 wheel、touch、fastSeek 或 currentTime 寫入控制影片。
-      startScrollyIntro(video) {
-        this.cleanupScrollyIntro();
-
-        const screen = this.dom.ch1ScrollyIntroScreen;
-        if (!screen) {
-          this.showChoiceScreen();
-          return;
-        }
-
-        const state = {
-          video,
-          screen,
-          layer: null,
-          cards: [],
-          scrollProgress: 0,
-          activeStepIndex: 0,
-          isFinished: false,
-          isFallback: false,
-          isEndingReady: false,
-          endingReadyAt: 0,
-          rafId: null,
-          listeners: [],
-          fallbackTimer: null
-        };
-
-        const completeScrollyIntro = () => {
-          this.cleanupIntroVideoSkip?.();
-          if (this.scrollyState !== state || state.isFinished) return;
-
-          state.scrollProgress = 1;
-          this.syncScrollyIntroToVideoProgress(true);
-          state.isEndingReady = true;
-          state.endingReadyAt = performance.now();
-
-          if (state.rafId) {
-            window.cancelAnimationFrame(state.rafId);
-            state.rafId = null;
-          }
-
-          window.setTimeout(() => {
-            if (this.scrollyState === state && !state.isFinished) {
-              this.finishScrollyIntro();
-            }
-          }, 500);
-        };
-
-        this.scrollyState = state;
-        this.renderScrollyIntro(0, { immediate: true });
-        this.showOnly(screen);
-
-        if (video) {
-          video.classList.add("is-visible");
-
-          this.addScrollyListener(video, "loadedmetadata", () => {
-            this.syncScrollyIntroToVideoProgress(true);
-          }, { once: true });
-
-          this.addScrollyListener(video, "play", () => {
-            this.syncScrollyIntroToVideoProgress(true);
-          });
-
-          this.addScrollyListener(video, "timeupdate", () => {
-            this.syncScrollyIntroToVideoProgress();
-          });
-
-          this.addScrollyListener(video, "ended", completeScrollyIntro);
-        }
-
-        this.syncScrollyIntroToVideoProgress(true);
-
-        this.playVideoSafely(video, {
-          failAfter: 8000,
-          onStarted: () => {
-            this.syncScrollyIntroToVideoProgress(true);
-            this.setupIntroVideoSkip(video, completeScrollyIntro);
-          },
-          onEnded: completeScrollyIntro,
-          onFail: () => {
-            this.cleanupIntroVideoSkip?.();
-            if (this.scrollyState !== state || state.isFinished) return;
-            this.startScrollyFallbackIntro();
-          }
-        });
-      },
-
-      startScrollyFallbackIntro() {
-        this.cleanupScrollyIntro();
-
-        const screen = this.dom.ch1ScrollyIntroScreen;
-
-        this.clearVideoLayer();
-        this.setBackground(CH1_ASSETS.videoFinalFallback, "video-final-fallback");
-        this.setDarkOverlay(true, "rgba(20, 16, 14, 0.45)");
-
-        const state = {
-          video: null,
-          screen,
-          layer: null,
-          cards: [],
-          scrollProgress: 1,
-          activeStepIndex: CH1_INTRO_STEPS.length - 1,
-          isFinished: false,
-          isFallback: true,
-          isEndingReady: true,
-          endingReadyAt: performance.now(),
-          rafId: null,
-          listeners: [],
-          fallbackTimer: null
-        };
-
-        this.scrollyState = state;
-        this.renderScrollyIntro(CH1_INTRO_STEPS.length - 1, { immediate: true });
-        this.showOnly(screen);
-        this.updateScrollyCards(1);
-        this.updateScrollyCssVars(1, CH1_INTRO_STEPS.length - 1);
-        this.updateScrollyStepClass(CH1_INTRO_STEPS.length - 1);
-
-        state.fallbackTimer = window.setTimeout(() => {
-          if (this.scrollyState === state && !state.isFinished) {
-            this.finishScrollyIntro();
-          }
-        }, 1200);
-      },
-
-      bindScrollyIntroEvents() {
-        // 第一章前導新版不再綁定 wheel / touch 來控制影片進度。
-        // 保留空函式只為了相容既有呼叫點，避免影響其他章節。
-      },
-
-      addScrollyListener(target, type, handler, options) {
-        if (!target || !this.scrollyState) return;
-
-        target.addEventListener(type, handler, options);
-        this.scrollyState.listeners.push({ target, type, handler, options });
-      },
-
-      escapeScrollyText(value) {
-        const div = document.createElement("div");
-        div.textContent = String(value ?? "");
-        return div.innerHTML;
-      },
-
-      composeScrollyNarration(step) {
-        const title = String(step?.title ?? "").trim();
-        const body = String(step?.body ?? "").trim();
-        if (!title) return body;
-        if (!body) return title;
-
-        const needsStop = !/[。！？!?：；;，,、]$/.test(title);
-        return `${title}${needsStop ? "。" : ""}${body}`;
-      },
-
-      getCh1ScrollyFrameSrc(index) {
-        const count = CH1_ASSETS.ch1FrameCount || 1;
-        const safeIndex = Math.max(1, Math.min(count, Number(index) || 1));
-        const padded = String(safeIndex).padStart(CH1_ASSETS.ch1FramePad || 4, "0");
-        return `${CH1_ASSETS.ch1FramePath}${padded}.${CH1_ASSETS.ch1FrameExt || "webp"}`;
-      },
-
-      preloadCh1ScrollyFrames(centerIndex = 1, radius = 8) {
-        const state = this.scrollyState;
-        if (!state || !state.frameCache) return;
-
-        const count = CH1_ASSETS.ch1FrameCount || state.frameCount || 1;
-        const safeCenter = Math.max(1, Math.min(count, Number(centerIndex) || 1));
-        const safeRadius = Math.max(0, Number(radius) || 0);
-        const start = Math.max(1, safeCenter - safeRadius);
-        const end = Math.min(count, safeCenter + safeRadius);
-
-        for (let i = start; i <= end; i += 1) {
-          if (state.frameCache.has(i)) continue;
-
-          const img = new Image();
-          img.decoding = "async";
-          img.src = this.getCh1ScrollyFrameSrc(i);
-          state.frameCache.set(i, img);
-        }
-      },
-
-      clampScrollyProgress(value) {
-        const number = Number(value);
-        if (!Number.isFinite(number)) return 0;
-        return Math.max(0, Math.min(1, number));
-      },
-
-      getScrollyCardRanges() {
-        return [
-          { start: 8/ 34.7, end: 15/ 34.7 },
-          { start: 18/ 34.7, end: 21/ 34.7 },
-          { start:22/ 34.7, end: 25/ 34.7 },
-          { start: 26/ 34.7, end: 29/ 34.7 },
-          { start: 30/ 34.7, end: 1 }
-        ];
-      },
-
-      renderScrollyIntro(stepIndex = 0, options = {}) {
-        const screen = this.dom.ch1ScrollyIntroScreen;
-        const state = this.scrollyState;
-
-        if (!screen || !state) return;
-
-        if (!screen.querySelector(".ch1-scrolly-layer")) {
-          const cardHtml = CH1_INTRO_STEPS.map((step, index) => `
-            <article class="ch1-scrolly-card" data-step="${index}">
-              <p class="ch1-scrolly-text">${this.escapeScrollyText(this.composeScrollyNarration(step))}</p>
-            </article>
-          `).join("");
-
-          screen.innerHTML = `
-            <div class="ch1-scrolly-layer">
-              <div class="ch1-scrolly-card-stage">
-                ${cardHtml}
-              </div>
-            </div>
-          `;
-        }
-
-        state.layer = screen.querySelector(".ch1-scrolly-layer");
-        state.cards = Array.from(screen.querySelectorAll(".ch1-scrolly-card"));
-
-        if (options.immediate) {
-          const ranges = this.getScrollyCardRanges();
-          const range = ranges[stepIndex] || ranges[0];
-          state.scrollProgress = this.clampScrollyProgress(range?.start ?? 0);
-        }
-
-        const initialProgress = this.clampScrollyProgress(state.scrollProgress);
-        this.updateScrollyCards(initialProgress);
-        this.updateScrollyCssVars(initialProgress, this.getActiveScrollyStepIndex(initialProgress));
-        this.updateScrollyStepClass(this.getActiveScrollyStepIndex(initialProgress));
-
-      },
-
-      setScrollyTargetProgress(value) {
-        // 第一章前導新版不再由玩家滑動設定 targetProgress。
-        // 保留空殼避免舊呼叫點造成錯誤。
-      },
-
-      startScrollyAnimationLoop() {
-        // 第一章前導新版不再使用 targetProgress 動畫補間。
-        // 影片進度同步由 updateScrollyFrame() 每幀讀取 video.currentTime 完成。
-      },
-
-      syncScrollyIntroToVideoProgress(force = false) {
-        const state = this.scrollyState;
-        if (!state || !state.video || state.isFallback || state.isFinished) return;
-
-        const video = state.video;
-        const duration = Number.isFinite(video.duration) && video.duration > 0
-          ? video.duration
-          : 0;
-
-        const progress = duration > 0
-          ? this.clampScrollyProgress(video.currentTime / duration)
-          : 0;
-
-        const safeProgress = force && video.ended ? 1 : progress;
-        const activeStepIndex = this.getActiveScrollyStepIndex(safeProgress);
-
-        state.scrollProgress = safeProgress;
-
-        this.updateScrollyCards(safeProgress);
-        this.updateScrollyCssVars(safeProgress, activeStepIndex);
-
-        if (activeStepIndex !== state.activeStepIndex || force) {
-          state.activeStepIndex = activeStepIndex;
-          this.updateScrollyStepClass(activeStepIndex);
-        }
-
-      },
-
-      updateScrollyFrame() {
-        const state = this.scrollyState;
-        if (!state || state.isFinished || state.isFallback) return;
-
-        this.syncScrollyIntroToVideoProgress();
-
-        if (state.video?.ended) {
-          state.rafId = null;
-          return;
-        }
-
-        state.rafId = window.requestAnimationFrame(() => {
-          this.updateScrollyFrame();
-        });
-      },
-
-      updateScrollyCssVars(progress, activeStepIndex = this.getActiveScrollyStepIndex(progress)) {
-        const frame = this.dom.gameFrame;
-        if (!frame) return;
-
-        const ranges = this.getScrollyCardRanges();
-        const range = ranges[activeStepIndex] || ranges[0];
-        const segmentRange = Math.max((range.end ?? 1) - (range.start ?? 0), 0.001);
-        const cardProgress = this.clampScrollyProgress((progress - (range.start ?? 0)) / segmentRange);
-
-        frame.style.setProperty("--ch1-progress", progress.toFixed(4));
-        frame.style.setProperty("--ch1-card-progress", cardProgress.toFixed(4));
-        frame.style.setProperty("--ch1-video-x", `${(-2.4 * progress).toFixed(3)}%`);
-        frame.style.setProperty("--ch1-video-y", `${(-1.2 * progress).toFixed(3)}%`);
-      },
-
-      updateScrollyCards(progress) {
-        const state = this.scrollyState;
-        if (!state || !state.cards || !state.cards.length) return;
-
-        const ranges = this.getScrollyCardRanges();
-
-        state.cards.forEach((card, index) => {
-          const range = ranges[index] || { start: 0, end: 1 };
-          const start = range.start;
-          const end = range.end;
-          const local = (progress - start) / Math.max(end - start, 0.001);
-
-          let opacity = 0;
-          let translateY = 46;
-          let stateClass = "is-after";
-
-          if (local < 0) {
-            opacity = 0;
-            translateY = 46;
-            stateClass = "is-after";
-          } else if (local < 0.16) {
-            const t = local / 0.16;
-            opacity = t;
-            translateY = 46 * (1 - t);
-            stateClass = "is-active";
-          } else if (local <= 0.82) {
-            opacity = 1;
-            translateY = 0;
-            stateClass = "is-active";
-          } else if (local <= 1) {
-            const t = (local - 0.82) / 0.18;
-            opacity = 1 - t;
-            translateY = -46 * t;
-            stateClass = "is-active";
-          } else {
-            opacity = 0;
-            translateY = -46;
-            stateClass = "is-before";
-          }
-
-          card.classList.toggle("is-before", stateClass === "is-before");
-          card.classList.toggle("is-active", stateClass === "is-active");
-          card.classList.toggle("is-after", stateClass === "is-after");
-          card.style.opacity = String(Math.max(0, Math.min(1, opacity)));
-          card.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`;
-          card.style.zIndex = stateClass === "is-active" ? "3" : "2";
-        });
-      },
-
-      getActiveScrollyStepIndex(progress) {
-        const ranges = this.getScrollyCardRanges();
-        const safeProgress = this.clampScrollyProgress(progress);
-
-        for (let index = 0; index < ranges.length; index += 1) {
-          const range = ranges[index];
-          const isLast = index === ranges.length - 1;
-          if (safeProgress >= range.start && (safeProgress < range.end || isLast)) {
-            return index;
-          }
-        }
-
-        return 0;
-      },
-
-      updateScrollyStepClass(stepIndex) {
-        const frame = this.dom.gameFrame;
-        if (!frame) return;
-
-        Array.from(frame.classList).forEach((className) => {
-          if (className.startsWith("ch1-scrolly-step-")) {
-            frame.classList.remove(className);
-          }
-        });
-
-        frame.classList.add(`ch1-scrolly-step-${stepIndex}`);
-      },
-
-      syncScrollyFrameToProgress(progress, force = false) {
-        const state = this.scrollyState;
-        if (!state || !state.frameImage || state.isFallback || state.isFinished) return;
-
-        const frameCount = CH1_ASSETS.ch1FrameCount || state.frameCount || 1;
-        const safeProgress = this.clampScrollyProgress(progress);
-        const frameIndex = Math.max(
-          1,
-          Math.min(frameCount, Math.round(safeProgress * (frameCount - 1)) + 1)
-        );
-
-        if (!force && frameIndex === state.currentFrameIndex) return;
-
-        state.currentFrameIndex = frameIndex;
-        state.frameImage.src = this.getCh1ScrollyFrameSrc(frameIndex);
-        this.preloadCh1ScrollyFrames(frameIndex, 10);
-      },
-
-      syncScrollyVideoToProgress(progress, force = false) {
-        const state = this.scrollyState;
-        const video = state?.video;
-
-        if (!video || state?.isFallback) return;
-
-        const duration = Number(video.duration);
-        if (!Number.isFinite(duration) || duration <= 0) return;
-
-        const safeProgress = this.clampScrollyProgress(progress);
-        const targetTime = Math.min(
-          Math.max(duration * safeProgress, 0),
-          Math.max(duration - 0.08, 0)
-        );
-
-        this.queueScrollyVideoSeek(targetTime, force);
-      },
-
-      queueScrollyVideoSeek(targetTime, force = false) {
-        const state = this.scrollyState;
-        const video = state?.video;
-
-        if (!state || !video || state.isFallback || state.isFinished) return;
-
-        const safeTargetTime = Math.max(0, Number(targetTime) || 0);
-
-        // latest target wins：
-        // 不管前一次 seek 是否完成，都先記住最新目標。
-        state.pendingSeekTime = safeTargetTime;
-
-        const current = Number(video.currentTime) || 0;
-        const diff = Math.abs(safeTargetTime - current);
-
-        // 最新目標已經很接近目前影格，直接清掉 pending，避免微小抖動一直 seek。
-        if (diff < state.seekThreshold) {
-          state.pendingSeekTime = null;
-          state.lastAppliedVideoTime = current;
-          return;
-        }
-
-        // 如果影片正在 seek，不要丟掉新 target。
-        // 等 seeked 事件回來後，handleSeeked 會把 pendingSeekTime 再丟回 queue。
-        if (state.isSeeking && !force) {
-          return;
-        }
-
-        // 已經有 RAF 等待處理，就不要重複建立。
-        // pendingSeekTime 已經被更新，所以該 RAF 執行時會吃到最新 target。
-        if (state.seekRafId) return;
-
-        state.seekRafId = window.requestAnimationFrame(() => {
-          if (this.scrollyState !== state) return;
-
-          state.seekRafId = null;
-          this.applyScrollyVideoSeek(force);
-        });
-      },
-
-      applyScrollyVideoSeek(force = false) {
-        const state = this.scrollyState;
-        const video = state?.video;
-
-        if (!state || !video || state.isFallback || state.isFinished) return;
-        if (state.pendingSeekTime == null) return;
-
-        const targetTime = state.pendingSeekTime;
-        const current = Number(video.currentTime) || 0;
-        const diff = Math.abs(targetTime - current);
-
-        // 差距太小就不要 seek，避免 currentTime 被密集寫入。
-        if (diff < state.seekThreshold) {
-          state.pendingSeekTime = null;
-          state.lastAppliedVideoTime = current;
-          return;
-        }
-
-        // 如果上一個 seek 還沒完成，不要硬插新的 currentTime。
-        // 新 target 已經留在 pendingSeekTime，等 seeked 後補到最新位置。
-        if (state.isSeeking && !force) {
-          return;
-        }
-
-        const now = performance.now();
-        const isLargeJump = diff >= state.largeJumpThreshold;
-
-        // 節流：不是大跳躍、也不是 force，而且距離上次 seek 太短，就延到下一個 RAF。
-        // 注意：不是直接 return 掉，否則停下來時可能補不到正確位置。
-        if (!force && !isLargeJump && now - state.lastSeekAt < state.minSeekInterval) {
-          if (!state.seekRafId) {
-            state.seekRafId = window.requestAnimationFrame(() => {
-              if (this.scrollyState !== state) return;
-
-              state.seekRafId = null;
-              this.applyScrollyVideoSeek(false);
-            });
-          }
-          return;
-        }
-
-        // 若 fastSeek 反覆落在關鍵影格附近，第二次同 target 改用 currentTime 精準修正，
-        // 避免 fastSeek → seeked → fastSeek 的迴圈。
-        const isRepeatedTarget =
-          state.lastRequestedSeekTime != null &&
-          Math.abs(targetTime - state.lastRequestedSeekTime) < state.seekThreshold;
-
-        state.pendingSeekTime = null;
-        state.lastRequestedSeekTime = targetTime;
-        state.lastAppliedVideoTime = targetTime;
-        state.lastSeekAt = now;
-        state.isSeeking = true;
-
-        try {
-          if (!video.paused) {
-            video.pause();
-          }
-
-          if (isLargeJump && !isRepeatedTarget && typeof video.fastSeek === "function") {
-            video.fastSeek(targetTime);
-          } else {
-            video.currentTime = targetTime;
-          }
-
-          state.lastVideoTime = targetTime;
-        } catch (error) {
-          console.warn("第一章前導影片定位失敗，保留目前畫面。", error);
-          state.isSeeking = false;
-        }
-      },
-
-      finishScrollyIntro() {
-        this.cleanupIntroVideoSkip?.();
-        const state = this.scrollyState;
-        if (state?.isFinished) return;
-
-        if (state) {
-          state.isFinished = true;
-          state.scrollProgress = 1;
-
-          if (state.rafId) {
-            window.cancelAnimationFrame(state.rafId);
-            state.rafId = null;
-          }
-        }
-
-        this.cleanupScrollyIntro({ keepScreenContent: true, keepStepClass: true, keepCssVars: true });
-        this.setDarkOverlay(true, "rgba(20, 16, 14, 0.45)");
-        this.showChoiceScreen();
       },
 
       cleanupScrollyIntro(options = {}) {
         this.cleanupIntroVideoSkip?.();
-        const state = this.scrollyState;
-
-        if (state) {
-          if (state.video) {
-            try {
-              state.video.pause();
-            } catch (error) {
-              console.warn("第一章前導影片停止失敗，略過。", error);
-            }
-          }
-
-          (state.listeners || []).forEach(({ target, type, handler, options: listenerOptions }) => {
-            target.removeEventListener(type, handler, listenerOptions);
-          });
-          window.clearTimeout(state.fallbackTimer);
-          window.clearTimeout(state.pendingSeekTimeout);
-          if (state.rafId) {
-            window.cancelAnimationFrame(state.rafId);
-          }
-          if (state.seekRafId) {
-            window.cancelAnimationFrame(state.seekRafId);
-          }
-          if (state.frameRafId) {
-            window.cancelAnimationFrame(state.frameRafId);
-          }
-          state.rafId = null;
-          state.seekRafId = null;
-          state.frameRafId = null;
-          state.pendingSeekTime = null;
-          state.pendingSeekTimeout = null;
-          state.lastRequestedSeekTime = null;
-          state.isSeeking = false;
-          state.currentFrameIndex = -1;
-
-          if (state.frameCache) {
-            state.frameCache.clear();
-          }
-        }
-
         this.scrollyState = null;
 
         if (!options.keepStepClass) {
           const frame = this.dom.gameFrame;
           if (frame) {
             Array.from(frame.classList).forEach((className) => {
-              if (className.startsWith("ch1-scrolly-step-")) {
-                frame.classList.remove(className);
-              }
+              if (className.startsWith("ch1-scrolly-step-")) frame.classList.remove(className);
             });
           }
         }
@@ -16530,6 +17079,7 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       clearVideoLayer() {
+        cleanupManualVideoControls?.();
         this.cleanupIntroVideoSkip();
         this.cleanupScrollyIntro();
         this.stopActiveVideo?.();
@@ -16660,49 +17210,22 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playIntroVideo() {
-        showScreen(null);
-        ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH2_ASSETS.introPoster, "ch2-intro-poster");
-        ChapterOne.setDarkOverlay(false);
-
-        const video = ChapterOne.createVideo({
+        startManualIntroVideo({
           src: CH2_ASSETS.introVideo,
           poster: CH2_ASSETS.introPoster,
-          label: "第二章導入影片"
+          label: "第二章前導影片",
+          screen: document.getElementById("chapterTransitionScreen"),
+          onComplete: () => ChapterTwo.showRuleScreen(),
+          onFail: () => ChapterTwo.showRuleScreen(),
+          skippable: true
         });
+      },
 
-        ChapterOne.dom.videoLayer.appendChild(video);
-
-        let hasCompleted = false;
-        const completeIntroVideo = () => {
-          if (hasCompleted) return;
-          hasCompleted = true;
-          ChapterOne.cleanupIntroVideoSkip();
-          video.pause();
-          video.classList.add("is-visible");
-          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-          window.setTimeout(() => this.showRuleCard(), 420);
-        };
-
-        const failIntroVideo = () => {
-          if (hasCompleted) return;
-          hasCompleted = true;
-          ChapterOne.cleanupIntroVideoSkip();
-          ChapterOne.clearVideoLayer();
-          ChapterOne.setBackground(CH2_ASSETS.introFinalFallback, "ch2-intro-final-fallback");
-          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-          window.setTimeout(() => this.showRuleCard(), 260);
-        };
-
-        ChapterOne.playVideoSafely(video, {
-          failAfter: 7000,
-          onStarted: () => {
-            video.classList.add("is-visible");
-            ChapterOne.setupIntroVideoSkip(video, completeIntroVideo);
-          },
-          onEnded: completeIntroVideo,
-          onFail: failIntroVideo
-        });
+      showRuleScreen() {
+        ChapterOne.clearVideoLayer();
+        ChapterOne.setBackground(CH2_ASSETS.introFinalFallback, "ch2-intro-final-fallback");
+        ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
+        this.showRuleCard();
       },
 
       showRuleCard() {
@@ -17154,49 +17677,22 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playIntroVideo() {
-        showScreen(null);
-        ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH3_ASSETS.introPoster, "ch3-intro-poster");
-        ChapterOne.setDarkOverlay(false);
-
-        const video = ChapterOne.createVideo({
+        startManualIntroVideo({
           src: CH3_ASSETS.introVideo,
           poster: CH3_ASSETS.introPoster,
-          label: "第三章導入影片"
+          label: "第三章前導影片",
+          screen: document.getElementById("chapterTransitionScreen"),
+          onComplete: () => ChapterThree.showRuleScreen(),
+          onFail: () => ChapterThree.showRuleScreen(),
+          skippable: true
         });
+      },
 
-        ChapterOne.dom.videoLayer.appendChild(video);
-
-        let hasCompleted = false;
-        const completeIntroVideo = () => {
-          if (hasCompleted) return;
-          hasCompleted = true;
-          ChapterOne.cleanupIntroVideoSkip();
-          video.pause();
-          video.classList.add("is-visible");
-          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-          window.setTimeout(() => this.showRuleCard(), 420);
-        };
-
-        const failIntroVideo = () => {
-          if (hasCompleted) return;
-          hasCompleted = true;
-          ChapterOne.cleanupIntroVideoSkip();
-          ChapterOne.clearVideoLayer();
-          ChapterOne.setBackground(CH3_ASSETS.introFinalFallback, "ch3-intro-final-fallback");
-          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
-          window.setTimeout(() => this.showRuleCard(), 260);
-        };
-
-        ChapterOne.playVideoSafely(video, {
-          failAfter: 7000,
-          onStarted: () => {
-            video.classList.add("is-visible");
-            ChapterOne.setupIntroVideoSkip(video, completeIntroVideo);
-          },
-          onEnded: completeIntroVideo,
-          onFail: failIntroVideo
-        });
+      showRuleScreen() {
+        ChapterOne.clearVideoLayer();
+        ChapterOne.setBackground(CH3_ASSETS.introFinalFallback, "ch3-intro-final-fallback");
+        ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.58)");
+        this.showRuleCard();
       },
 
       showRuleCard() {
@@ -17565,12 +18061,13 @@ async function fetchChoicePercentage(choiceId) {
 
         this.syncStateToStoryline();
         this.closeToolDetail();
+        Storyline.setCurrentChapter(3);
         this.updateHud();
         this.showSummary();
       },
 
       showSummary() {
-        if (Storyline.state.currentChapter !== 6) return;
+        if (Storyline.state.currentChapter !== 3) return;
 
         ChapterOne.clearVideoLayer();
         ChapterOne.clearBackgroundForSolidScreen?.("ch3-summary");
@@ -17776,49 +18273,22 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       playIntroVideo() {
-        showScreen(null);
-        ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH4_ASSETS.introPoster, "ch4-intro-poster");
-        ChapterOne.setDarkOverlay(false);
-
-        const video = ChapterOne.createVideo({
+        startManualIntroVideo({
           src: CH4_ASSETS.introVideo,
           poster: CH4_ASSETS.introPoster,
-          label: "第四章導入影片"
+          label: "第四章前導影片",
+          screen: document.getElementById("chapterTransitionScreen"),
+          onComplete: () => ChapterFour.showRuleScreen(),
+          onFail: () => ChapterFour.showRuleScreen(),
+          skippable: true
         });
+      },
 
-        ChapterOne.dom.videoLayer.appendChild(video);
-
-        let hasCompleted = false;
-        const completeIntroVideo = () => {
-          if (hasCompleted) return;
-          hasCompleted = true;
-          ChapterOne.cleanupIntroVideoSkip();
-          video.pause();
-          video.classList.add("is-visible");
-          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
-          window.setTimeout(() => this.showRuleCard(), 420);
-        };
-
-        const failIntroVideo = () => {
-          if (hasCompleted) return;
-          hasCompleted = true;
-          ChapterOne.cleanupIntroVideoSkip();
-          ChapterOne.clearVideoLayer();
-          ChapterOne.setBackground(CH4_ASSETS.introFinalFallback, "ch4-intro-final-fallback");
-          ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
-          window.setTimeout(() => this.showRuleCard(), 260);
-        };
-
-        ChapterOne.playVideoSafely(video, {
-          failAfter: 7000,
-          onStarted: () => {
-            video.classList.add("is-visible");
-            ChapterOne.setupIntroVideoSkip(video, completeIntroVideo);
-          },
-          onEnded: completeIntroVideo,
-          onFail: failIntroVideo
-        });
+      showRuleScreen() {
+        ChapterOne.clearVideoLayer();
+        ChapterOne.setBackground(CH4_ASSETS.introFinalFallback, "ch4-intro-final-fallback");
+        ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.54)");
+        this.showRuleCard();
       },
 
       showRuleCard() {
@@ -18202,6 +18672,7 @@ async function fetchChoicePercentage(choiceId) {
 
       bindEvents() {
         this.boundHandleWheel = (event) => this.handleWheel(event);
+        this.boundHandleKeyDown = (event) => this.handleKeyDown(event);
         this.boundHandleTouchStart = (event) => this.handleTouchStart(event);
         this.boundHandleTouchMove = (event) => this.handleTouchMove(event);
         this.boundHandleTouchEnd = (event) => this.handleTouchEnd(event);
@@ -18333,6 +18804,7 @@ async function fetchChoicePercentage(choiceId) {
       setupScrollControlledVideo() {
         this.removeVideoControlListeners();
         this.dom.videoScreen.addEventListener("wheel", this.boundHandleWheel, { passive: false });
+        document.addEventListener("keydown", this.boundHandleKeyDown);
         this.dom.videoScreen.addEventListener("touchstart", this.boundHandleTouchStart, { passive: false });
         this.dom.videoScreen.addEventListener("touchmove", this.boundHandleTouchMove, { passive: false });
         this.dom.videoScreen.addEventListener("touchend", this.boundHandleTouchEnd, { passive: false });
@@ -18341,6 +18813,7 @@ async function fetchChoicePercentage(choiceId) {
       removeVideoControlListeners() {
         if (!this.dom.videoScreen || !this.boundHandleWheel) return;
         this.dom.videoScreen.removeEventListener("wheel", this.boundHandleWheel);
+        document.removeEventListener("keydown", this.boundHandleKeyDown);
         this.dom.videoScreen.removeEventListener("touchstart", this.boundHandleTouchStart);
         this.dom.videoScreen.removeEventListener("touchmove", this.boundHandleTouchMove);
         this.dom.videoScreen.removeEventListener("touchend", this.boundHandleTouchEnd);
@@ -18349,8 +18822,24 @@ async function fetchChoicePercentage(choiceId) {
       handleWheel(event) {
         if (!this.dom.videoScreen.classList.contains("is-active")) return;
         event.preventDefault();
-        const deltaSeconds = event.deltaY * CH5_WHEEL_SENSITIVITY;
-        this.scrubVideo(deltaSeconds);
+        if (Math.abs(event.deltaY) < 28) return;
+        this.scrubVideo(event.deltaY > 0 ? 1.2 : -1.2);
+      },
+
+      handleKeyDown(event) {
+        if (!this.dom.videoScreen.classList.contains("is-active")) return;
+        const forwardKeys = ["ArrowRight", "ArrowDown", "PageDown", " ", "Spacebar", "Enter"];
+        const backwardKeys = ["ArrowLeft", "ArrowUp", "PageUp", "Backspace"];
+        if (![...forwardKeys, ...backwardKeys, "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        if (forwardKeys.includes(event.key)) this.scrubVideo(1.2);
+        if (backwardKeys.includes(event.key)) this.scrubVideo(-1.2);
+        if (event.key === "Home") {
+          this.pendingProgress = 0;
+          this.serviceProgress = 0;
+          this.updateProgress(0);
+        }
+        if (event.key === "End") this.scrubVideo(999);
       },
 
       handleTouchStart(event) {
@@ -18371,8 +18860,8 @@ async function fetchChoicePercentage(choiceId) {
         const deltaY = this.touchStartY - touch.clientY;
         const primaryDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
 
-        if (Math.abs(primaryDelta) > 0) {
-          this.scrubVideo(primaryDelta * CH5_TOUCH_SENSITIVITY);
+        if (Math.abs(primaryDelta) >= 42) {
+          this.scrubVideo(primaryDelta > 0 ? 1.2 : -1.2);
           this.touchStartX = touch.clientX;
           this.touchStartY = touch.clientY;
         }
@@ -18414,7 +18903,7 @@ async function fetchChoicePercentage(choiceId) {
             }
           }
 
-          if (this.serviceProgress >= 0.985) {
+          if (this.serviceProgress >= 0.98) {
             this.completeVideo();
           }
         });
@@ -18782,77 +19271,32 @@ async function fetchChoicePercentage(choiceId) {
       playIntroVideo() {
         this.introCompleted = false;
         window.clearTimeout(this.introFallbackTimer);
-        ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH6_ASSETS.introPoster, "ch6-intro-poster");
-        ChapterOne.setDarkOverlay(false);
         this.updateHud({ includeChapterSix: false });
-        this.toggleIntroSkipButton(this.allowSkipIntro);
-        showScreen(this.dom.videoScreen);
-
-        const video = this.dom.introVideo;
-        if (!video) {
-          this.handleIntroFallback();
-          return;
-        }
-
-        video.classList.remove("is-visible");
-        video.innerHTML = "";
-        video.pause();
-        video.removeAttribute("src");
-        video.setAttribute("src", CH6_ASSETS.introVideo);
-        video.setAttribute("poster", CH6_ASSETS.introPoster);
-        video.preload = "metadata";
-        prepareVideoAudio(video);
-
-        const source = document.createElement("source");
-        source.src = CH6_ASSETS.introVideo;
-        source.type = "video/mp4";
-        video.appendChild(source);
-
-        let metadataLoaded = false;
-        video.onloadeddata = () => {
-          metadataLoaded = true;
-          window.clearTimeout(this.introFallbackTimer);
-          video.classList.add("is-visible");
-          ChapterOne.setupIntroVideoSkip(video, () => this.completeIntroVideo({ skipped: true }));
-          playPreparedVideo(video, () => this.handleIntroFallback());
-        };
-        video.onended = () => this.completeIntroVideo();
-        video.onerror = () => this.handleIntroFallback();
-        video.load();
-
-        this.introFallbackTimer = window.setTimeout(() => {
-          if (!metadataLoaded) this.handleIntroFallback();
-        }, 4500);
+        startManualIntroVideo({
+          src: CH6_ASSETS.introVideo,
+          poster: CH6_ASSETS.introPoster,
+          label: "第六章前導影片",
+          screen: document.getElementById("chapterTransitionScreen"),
+          onComplete: () => ChapterSix.showCaseMenu(),
+          onFail: () => ChapterSix.showCaseMenu(),
+          skippable: true
+        });
       },
 
       handleIntroFallback() {
-        if (this.introCompleted) return;
-        ChapterOne.cleanupIntroVideoSkip();
-        window.clearTimeout(this.introFallbackTimer);
-        this.toggleIntroSkipButton(false);
-        const video = this.dom.introVideo;
-        if (video) {
-          video.pause();
-          video.classList.remove("is-visible");
-        }
-        ChapterOne.setBackground(CH6_ASSETS.introFinalFallback, "ch6-intro-fallback");
-        this.introFallbackTimer = window.setTimeout(() => this.completeIntroVideo(), 700);
+        this.showCaseMenu();
       },
 
       completeIntroVideo() {
-        if (this.introCompleted) return;
+        this.showCaseMenu();
+      },
+
+      showCaseMenu() {
         this.introCompleted = true;
-        ChapterOne.cleanupIntroVideoSkip();
-        window.clearTimeout(this.introFallbackTimer);
-        this.toggleIntroSkipButton(false);
-        const video = this.dom.introVideo;
-        if (video) {
-          video.pause();
-          video.classList.remove("is-visible");
-        }
-        ChapterOne.setBackground(CH6_ASSETS.introFinalFallback, "ch6-intro-final");
-        window.setTimeout(() => this.showRuleCard(), 260);
+        ChapterOne.clearVideoLayer();
+        ChapterOne.setBackground(CH6_ASSETS.introFinalFallback, "ch6-case-select-bg");
+        ChapterOne.setDarkOverlay(false);
+        this.showCaseSelectScreen();
       },
 
       showRuleCard() {
@@ -19717,113 +20161,35 @@ async function fetchChoicePercentage(choiceId) {
       playIntroVideo() {
         this.introCompleted = false;
         window.clearTimeout(this.introFallbackTimer);
-        this.introFinalStillUrl = "";
+        this.introFinalStillUrl = CH7_ASSETS.introFinalFallback;
         this.introUsedFallback = false;
-        ChapterOne.clearVideoLayer();
-        ChapterOne.setBackground(CH7_ASSETS.introPoster, "ch7-intro-poster");
-        ChapterOne.setDarkOverlay(false);
         this.updateHud();
-        this.toggleIntroSkipButton(this.allowSkipIntro);
-        showScreen(this.dom.introScreen);
-
-        const video = this.dom.introVideo;
-        if (!video) {
-          this.handleIntroFallback();
-          return;
-        }
-
-        video.classList.remove("is-visible");
-        video.innerHTML = "";
-        video.pause();
-        video.removeAttribute("src");
-        video.setAttribute("src", CH7_ASSETS.introVideo);
-        video.setAttribute("poster", CH7_ASSETS.introPoster);
-        video.preload = "metadata";
-        prepareVideoAudio(video);
-
-        const source = document.createElement("source");
-        source.src = CH7_ASSETS.introVideo;
-        source.type = "video/mp4";
-        video.appendChild(source);
-
-        let metadataLoaded = false;
-        video.onloadeddata = () => {
-          metadataLoaded = true;
-          window.clearTimeout(this.introFallbackTimer);
-          video.classList.add("is-visible");
-          ChapterOne.setupIntroVideoSkip(video, () => this.completeIntroVideo({ skipped: true }));
-          playPreparedVideo(video, () => this.handleIntroFallback());
-        };
-        video.onended = () => this.completeIntroVideo();
-        video.onerror = () => this.handleIntroFallback();
-        video.load();
-
-        this.introFallbackTimer = window.setTimeout(() => {
-          if (!metadataLoaded) this.handleIntroFallback();
-        }, 4500);
+        startManualIntroVideo({
+          src: CH7_ASSETS.introVideo,
+          poster: CH7_ASSETS.introPoster,
+          label: "第七章前導影片",
+          screen: document.getElementById("chapterTransitionScreen"),
+          onComplete: () => ChapterSeven.showRuleScreen(),
+          onFail: () => ChapterSeven.showRuleScreen(),
+          skippable: true
+        });
       },
 
       handleIntroFallback() {
-        if (this.introCompleted) return;
-        ChapterOne.cleanupIntroVideoSkip();
-        window.clearTimeout(this.introFallbackTimer);
-        this.toggleIntroSkipButton(false);
-        this.introUsedFallback = true;
-        this.introFinalStillUrl = CH7_ASSETS.introFinalFallback;
-        const video = this.dom.introVideo;
-        if (video) {
-          video.pause();
-          video.classList.remove("is-visible");
-        }
-        ChapterOne.setBackground(CH7_ASSETS.introFinalFallback, "ch7-intro-fallback");
-        this.introFallbackTimer = window.setTimeout(() => this.completeIntroVideo({ useFallback: true }), 700);
+        this.showRuleScreen();
       },
 
-      captureIntroFrame(video) {
-        try {
-          if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return "";
-          const maxWidth = 1280;
-          const scale = Math.min(1, maxWidth / video.videoWidth);
-          const canvas = document.createElement("canvas");
-          canvas.width = Math.round(video.videoWidth * scale);
-          canvas.height = Math.round(video.videoHeight * scale);
-          const context = canvas.getContext("2d");
-          if (!context) return "";
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-          return canvas.toDataURL("image/png");
-        } catch (error) {
-          console.warn("第七章影片最後影格擷取失敗，改用 fallback 圖片：", error);
-          return "";
-        }
+      completeIntroVideo() {
+        this.showRuleScreen();
       },
 
-      completeIntroVideo({ useFallback = false } = {}) {
-        if (this.introCompleted) return;
+      showRuleScreen() {
         this.introCompleted = true;
-        ChapterOne.cleanupIntroVideoSkip();
-        window.clearTimeout(this.introFallbackTimer);
-        this.toggleIntroSkipButton(false);
-        const video = this.dom.introVideo;
-        let finalBackground = this.introFinalStillUrl || "";
-
-        if (!useFallback && !this.introUsedFallback && video) {
-          finalBackground = this.captureIntroFrame(video) || finalBackground;
-        }
-
-        if (!finalBackground) {
-          finalBackground = CH7_ASSETS.introFinalFallback;
-        }
-
-        this.introFinalStillUrl = finalBackground;
-
-        if (video) {
-          video.pause();
-          video.classList.remove("is-visible");
-        }
-
-        ChapterOne.setBackground(finalBackground, "ch7-intro-final");
+        ChapterOne.clearVideoLayer();
+        this.introFinalStillUrl = CH7_ASSETS.introFinalFallback;
+        ChapterOne.setBackground(CH7_ASSETS.introFinalFallback, "ch7-intro-final");
         ChapterOne.setDarkOverlay(true, "rgba(18, 14, 12, 0.56)");
-        window.setTimeout(() => this.showRuleCard(), 260);
+        this.showRuleCard();
       },
 
       showRuleCard() {
@@ -19959,14 +20325,14 @@ async function fetchChoicePercentage(choiceId) {
         chapterSevenState.published = true;
         chapterSevenState.completed = true;
         this.syncStateToStoryline();
-        Storyline.completeChapter(7);
+        Storyline.markChapterCompleted(7);
         Storyline.unlockChapter(8);
         Storyline.setCurrentChapter(8);
-        FinalReport.start({ skipIntro: false });
+        showChapter8Scrolly();
       },
 
       goToChapterEight() {
-        FinalReport.start({ skipIntro: false });
+        showChapter8Scrolly();
       },
 
       updateHud() {
@@ -20332,6 +20698,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       restartGame() {
+        cleanupManualVideoControls?.();
+        cleanupChapter8Scrolly();
+        chapter8State.currentIndex = 0;
+        document.getElementById("chapter8FinalReportPanel")?.classList.remove("is-visible");
         window.clearTimeout(this.introFallbackTimer);
         window.clearTimeout(this.toastTimer);
         localStorage.removeItem(STORAGE_KEY);
@@ -20380,6 +20750,359 @@ async function fetchChoicePercentage(choiceId) {
         Storyline.render();
       }
     };
+
+
+    function isChapter8Active() {
+      const screen = document.getElementById("chapter8ScrollyScreen");
+      return Boolean(screen && screen.classList.contains("is-active") && !screen.classList.contains("is-hidden"));
+    }
+
+    function padChapter8Count(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function clampChapter8Index(index) {
+      return Math.max(0, Math.min(chapter8State.totalSteps - 1, Number(index) || 0));
+    }
+
+    function escapeChapter8Html(value = "") {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function preloadChapter8NearbyImages(index) {
+      [index - 1, index, index + 1].forEach((targetIndex) => {
+        const step = CH8_STEPS[targetIndex];
+        if (!step || !step.imageKey) return;
+        const img = new Image();
+        img.onerror = () => {
+          const backupImg = new Image();
+          backupImg.src = getChapter8ImagePath(step.imageKey, true);
+        };
+        img.src = getChapter8ImagePath(step.imageKey, false);
+      });
+    }
+
+    function showChapter8Scrolly() {
+      ChapterSix.cancelActiveRun?.();
+      cleanupManualVideoControls?.();
+      cleanupChapter8Scrolly();
+      ChapterOne.cleanupIntroVideoSkip?.();
+      ChapterOne.clearVideoLayer();
+      ChapterOne.clearBackgroundForSolidScreen?.("ch8-scrolly");
+      ChapterOne.setDarkOverlay(false);
+      Storyline.unlockChapter(8);
+      Storyline.setCurrentChapter(8);
+      const chapter8Screen = document.getElementById("chapter8ScrollyScreen");
+      showScreen(chapter8Screen);
+      chapter8Screen?.classList.add("is-active");
+      initChapter8Scrolly();
+      setChapter8Step(0, { immediate: true });
+    }
+
+    function initChapter8Scrolly() {
+      cleanupChapter8Scrolly();
+
+      const stage = document.getElementById("chapter8ScrollyStage");
+      const bgLayer = document.getElementById("chapter8BgLayer");
+      const copy = document.getElementById("chapter8Copy");
+      const progressFill = document.getElementById("chapter8ProgressFill");
+      const progressCount = document.getElementById("chapter8ProgressCount");
+      const controlHint = document.getElementById("chapter8ControlHint");
+      const reportPanel = document.getElementById("chapter8FinalReportPanel");
+
+      if (!stage || !bgLayer || !copy || !progressFill || !progressCount || !controlHint || !reportPanel) {
+        console.warn("第八章 DOM 尚未完整建立，無法初始化 scrolly。 ");
+        return;
+      }
+
+      bgLayer.innerHTML = `
+        <img class="ch8-scrolly-bg" alt="" aria-hidden="true" />
+        <img class="ch8-scrolly-bg" alt="" aria-hidden="true" />
+      `;
+      copy.innerHTML = "";
+      reportPanel.classList.remove("is-visible");
+      copy.classList.remove("is-hidden");
+      controlHint.classList.remove("is-hidden");
+      progressFill.style.width = "0%";
+      progressCount.textContent = "01 / 22";
+      chapter8State.activeBgIndex = 0;
+
+      const onWheel = (event) => {
+        if (!isChapter8Active()) return;
+        event.preventDefault();
+        if (chapter8State.isTransitioning) return;
+        chapter8State.wheelAccumulator += event.deltaY;
+        if (Math.abs(chapter8State.wheelAccumulator) < 38) return;
+        const direction = chapter8State.wheelAccumulator > 0 ? 1 : -1;
+        chapter8State.wheelAccumulator = 0;
+        goChapter8Step(direction);
+      };
+
+      const onKeyDown = (event) => {
+        if (!isChapter8Active()) return;
+        const forwardKeys = ["ArrowRight", "ArrowDown", "PageDown", " ", "Spacebar", "Enter"];
+        const backwardKeys = ["ArrowLeft", "ArrowUp", "PageUp", "Backspace"];
+        if (![...forwardKeys, ...backwardKeys, "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        if (chapter8State.isTransitioning) return;
+        if (forwardKeys.includes(event.key)) goChapter8Step(1);
+        if (backwardKeys.includes(event.key)) goChapter8Step(-1);
+        if (event.key === "Home") setChapter8Step(0, { direction: -1 });
+        if (event.key === "End") setChapter8Step(21, { direction: 1 });
+      };
+
+      const onTouchStart = (event) => {
+        if (!isChapter8Active()) return;
+        const touch = event.touches?.[0];
+        if (!touch) return;
+        chapter8State.touchStartY = touch.clientY;
+        chapter8State.touchLastY = touch.clientY;
+      };
+
+      const onTouchMove = (event) => {
+        if (!isChapter8Active()) return;
+        event.preventDefault();
+        if (chapter8State.isTransitioning) return;
+        const touch = event.touches?.[0];
+        if (!touch) return;
+        const diff = chapter8State.touchLastY - touch.clientY;
+        if (Math.abs(diff) < 46) {
+          chapter8State.touchLastY = touch.clientY;
+          return;
+        }
+        goChapter8Step(diff > 0 ? 1 : -1);
+        chapter8State.touchStartY = 0;
+        chapter8State.touchLastY = 0;
+      };
+
+      const onTouchEnd = () => {
+        chapter8State.touchStartY = 0;
+        chapter8State.touchLastY = 0;
+      };
+
+      stage.addEventListener("wheel", onWheel, { passive: false });
+      document.addEventListener("keydown", onKeyDown);
+      stage.addEventListener("touchstart", onTouchStart, { passive: true });
+      stage.addEventListener("touchmove", onTouchMove, { passive: false });
+      stage.addEventListener("touchend", onTouchEnd, { passive: true });
+
+      chapter8State.cleanupFns.push(() => stage.removeEventListener("wheel", onWheel));
+      chapter8State.cleanupFns.push(() => document.removeEventListener("keydown", onKeyDown));
+      chapter8State.cleanupFns.push(() => stage.removeEventListener("touchstart", onTouchStart));
+      chapter8State.cleanupFns.push(() => stage.removeEventListener("touchmove", onTouchMove));
+      chapter8State.cleanupFns.push(() => stage.removeEventListener("touchend", onTouchEnd));
+
+      preloadChapter8NearbyImages(chapter8State.currentIndex);
+    }
+
+    function goChapter8Step(direction) {
+      if (chapter8State.isTransitioning) return;
+      const nextIndex = clampChapter8Index(chapter8State.currentIndex + Number(direction || 0));
+      if (nextIndex === chapter8State.currentIndex) return;
+      setChapter8Step(nextIndex, { direction });
+    }
+
+    function setChapter8Step(index, options = {}) {
+      const nextIndex = clampChapter8Index(index);
+      const direction = options.direction || (nextIndex >= chapter8State.currentIndex ? 1 : -1);
+      window.clearTimeout(chapter8State.transitionTimer);
+
+      chapter8State.currentIndex = nextIndex;
+      chapter8State.isTransitioning = true;
+      chapter8State.activeDirection = direction >= 0 ? 1 : -1;
+      chapter8State.wheelAccumulator = 0;
+
+      renderChapter8Step(nextIndex);
+
+      const progressFill = document.getElementById("chapter8ProgressFill");
+      const progressCount = document.getElementById("chapter8ProgressCount");
+      const reportPanel = document.getElementById("chapter8FinalReportPanel");
+      const copy = document.getElementById("chapter8Copy");
+      const controlHint = document.getElementById("chapter8ControlHint");
+      const progressValue = ((nextIndex + 1) / chapter8State.totalSteps) * 100;
+
+      if (progressFill) progressFill.style.width = `${progressValue}%`;
+      if (progressCount) progressCount.textContent = `${padChapter8Count(nextIndex + 1)} / ${chapter8State.totalSteps}`;
+
+      if (nextIndex === chapter8State.totalSteps - 1) {
+        showChapter8FinalReport();
+      } else {
+        reportPanel?.classList.remove("is-visible");
+        copy?.classList.remove("is-hidden");
+        controlHint?.classList.remove("is-hidden");
+      }
+
+      preloadChapter8NearbyImages(nextIndex);
+      chapter8State.transitionTimer = window.setTimeout(() => {
+        chapter8State.isTransitioning = false;
+      }, 800);
+    }
+
+    function renderChapter8Step(index) {
+      const step = CH8_STEPS[index];
+      const stage = document.getElementById("chapter8ScrollyStage");
+      const bgLayer = document.getElementById("chapter8BgLayer");
+      const copy = document.getElementById("chapter8Copy");
+      if (!step || !stage || !bgLayer || !copy) return;
+
+      const layout = step.layout || {};
+      stage.style.setProperty("--ch8-copy-left", layout.copyLeft || "clamp(52px, 7vw, 128px)");
+      stage.style.setProperty("--ch8-copy-top", layout.copyTop || "50%");
+      stage.style.setProperty("--ch8-copy-width", layout.copyWidth || "min(44vw, 620px)");
+      stage.style.setProperty("--ch8-bg-position", layout.bgPosition || "center center");
+      stage.style.setProperty("--ch8-bg-opacity", layout.bgOpacity || "1");
+      stage.style.setProperty("--ch8-bg-brightness", layout.bgBrightness || "0.82");
+      stage.style.setProperty("--ch8-bg-scale", layout.bgScale || "1.04");
+      stage.style.setProperty("--ch8-bg-scale-active", layout.bgScaleActive || "1.08");
+      stage.style.setProperty("--ch8-overlay-opacity", layout.overlayOpacity || "0.58");
+
+      const bgImages = Array.from(bgLayer.querySelectorAll(".ch8-scrolly-bg"));
+      if (bgImages.length >= 2) {
+        const nextBgIndex = chapter8State.activeBgIndex === 0 ? 1 : 0;
+        const nextBg = bgImages[nextBgIndex];
+        const previousBg = bgImages[chapter8State.activeBgIndex];
+        const primaryPath = getChapter8ImagePath(step.imageKey, false);
+        const backupPath = getChapter8ImagePath(step.imageKey, true);
+        let triedBackup = false;
+
+        const activateBg = () => {
+          nextBg.classList.add("is-active");
+          previousBg?.classList.remove("is-active");
+          chapter8State.activeBgIndex = nextBgIndex;
+          bgLayer.classList.remove("is-fallback");
+        };
+
+        nextBg.onload = activateBg;
+        nextBg.onerror = () => {
+          if (!triedBackup) {
+            triedBackup = true;
+            nextBg.setAttribute("src", backupPath);
+            return;
+          }
+          nextBg.classList.remove("is-active");
+          previousBg?.classList.add("is-active");
+          bgLayer.classList.add("is-fallback");
+          console.warn("第八章背景圖片載入失敗，已使用漸層 fallback：", step.imageKey);
+        };
+
+        if (nextBg.getAttribute("src") !== primaryPath) {
+          nextBg.setAttribute("src", primaryPath);
+        } else if (nextBg.complete && nextBg.naturalWidth > 0) {
+          activateBg();
+        } else {
+          nextBg.setAttribute("src", primaryPath);
+        }
+      } else {
+        bgLayer.classList.add("is-fallback");
+      }
+
+      const oldStep = copy.querySelector(".ch8-scrolly-step.is-active") || copy.querySelector(".ch8-scrolly-step");
+      if (oldStep) {
+        oldStep.classList.remove("is-active");
+        oldStep.classList.add(chapter8State.activeDirection >= 0 ? "is-exiting-forward" : "is-exiting-backward");
+      }
+
+      if (step.type === "report") {
+        window.requestAnimationFrame(() => {
+          copy.innerHTML = "";
+          copy.classList.add("is-hidden");
+        });
+        return;
+      }
+
+      const typeClassMap = {
+        normal: "ch8-scrolly-step",
+        large: "ch8-scrolly-step is-large",
+        ending: "ch8-scrolly-step is-ending",
+        search: "ch8-scrolly-step is-search",
+        split: "ch8-scrolly-step is-split"
+      };
+      const baseClass = typeClassMap[step.type] || typeClassMap.normal;
+      const newStep = document.createElement("article");
+      newStep.className = baseClass;
+
+      if (step.type === "split") {
+        const lines = step.text || [];
+        const leftTitle = escapeChapter8Html(lines[0] || "如果退了");
+        const leftBody = escapeChapter8Html(lines[1] || "自己立下的規則與尊嚴將徹底失效。");
+        const rightTitle = escapeChapter8Html(lines[2] || "如果不退");
+        const rightBody = escapeChapter8Html(lines[3] || "隨之而來的惡評可能會讓她徹底失去所有潛在客人。");
+        newStep.innerHTML = `
+          <div class="ch8-split-choice">${leftTitle}</div>
+          <div class="ch8-split-choice">${rightTitle}</div>
+          <div class="ch8-split-full">${leftBody}<br>${rightBody}</div>
+        `;
+      } else {
+        newStep.innerHTML = (step.text || [])
+          .filter((line) => String(line || "").trim() !== "")
+          .map((line) => `<p>${escapeChapter8Html(line)}</p>`)
+          .join("");
+      }
+
+      window.requestAnimationFrame(() => {
+        copy.classList.remove("is-hidden");
+        copy.appendChild(newStep);
+        window.requestAnimationFrame(() => {
+          newStep.classList.add("is-active");
+          copy.querySelectorAll(".ch8-scrolly-step.is-exiting-forward, .ch8-scrolly-step.is-exiting-backward").forEach((node) => {
+            window.setTimeout(() => node.remove(), 680);
+          });
+        });
+      });
+    }
+
+    function showChapter8FinalReport() {
+      const copy = document.getElementById("chapter8Copy");
+      const controlHint = document.getElementById("chapter8ControlHint");
+      const reportPanel = document.getElementById("chapter8FinalReportPanel");
+      copy?.classList.add("is-hidden");
+      controlHint?.classList.add("is-hidden");
+      reportPanel?.classList.add("is-visible");
+
+      FinalReport.renderFinalReport();
+      finalReportState.completed = true;
+      finalReportState.viewedAt = new Date().toISOString();
+      Storyline.markChapterCompleted(8);
+      FinalReport.syncStateToStoryline();
+
+      const statCards = Array.from(document.querySelectorAll("#chapter8FinalReportPanel .final-report-stat"));
+      statCards.forEach((card, cardIndex) => {
+        card.classList.remove("is-visible");
+        card.style.transitionDelay = `${[80, 180, 280][cardIndex] || 280}ms`;
+        window.requestAnimationFrame(() => card.classList.add("is-visible"));
+      });
+
+      const actions = document.querySelector("#chapter8FinalReportPanel .final-report-actions");
+      if (actions) {
+        actions.classList.remove("is-visible");
+        actions.style.transitionDelay = "420ms";
+        window.requestAnimationFrame(() => actions.classList.add("is-visible"));
+      }
+    }
+
+    function cleanupChapter8Scrolly() {
+      chapter8State.cleanupFns.forEach((cleanup) => {
+        try {
+          cleanup();
+        } catch (error) {
+          console.warn("第八章事件清理失敗：", error);
+        }
+      });
+      chapter8State.cleanupFns = [];
+      window.clearTimeout(chapter8State.transitionTimer);
+      chapter8State.transitionTimer = null;
+      chapter8State.isTransitioning = false;
+      chapter8State.wheelAccumulator = 0;
+      chapter8State.touchStartY = 0;
+      chapter8State.touchLastY = 0;
+      const reportPanel = document.getElementById("chapter8FinalReportPanel");
+      reportPanel?.classList.remove("is-visible");
+    }
 
 
     const Storyline = {
@@ -20449,7 +21172,7 @@ async function fetchChoicePercentage(choiceId) {
           { number: 5, title: "第五章：第一次接客" },
           { number: 6, title: "第六章：糾紛處理" },
           { number: 7, title: "第七章：制定新規則" },
-          { number: 8, title: "結果報告" }
+          { number: 8, title: "第八章：真正的創業考驗" }
         ];
 
         this.dom.list.innerHTML = nodes.map((node) => {
@@ -20576,9 +21299,9 @@ async function fetchChoicePercentage(choiceId) {
           if (finalReport.completed) {
             const summary = finalReport.summary || {};
             const revenueText = summary.revenue !== undefined ? `｜收益 ${formatMoney(summary.revenue)}` : "";
-            return `已產出結果報告${revenueText}`;
+            return `已完成真正的創業考驗${revenueText}`;
           }
-          return this.state.unlockedChapters.includes(8) ? "等待查看最後結果報告" : "尚未開放";
+          return this.state.unlockedChapters.includes(8) ? "等待進入真正的創業考驗" : "尚未開放";
         }
 
         return "尚未開放";
@@ -20586,10 +21309,16 @@ async function fetchChoicePercentage(choiceId) {
 
       goToChapter(chapterNumber) {
         if (!this.isChapterUnlocked(chapterNumber)) return;
+        cleanupManualVideoControls?.();
 
         const leavingChapterSix = this.state.currentChapter === 6 && Number(chapterNumber) !== 6;
         if (leavingChapterSix && typeof ChapterSix !== "undefined" && typeof ChapterSix.cancelActiveRun === "function") {
           ChapterSix.cancelActiveRun();
+        }
+
+        const leavingChapterEight = this.state.currentChapter === 8 && Number(chapterNumber) !== 8;
+        if (leavingChapterEight && typeof cleanupChapter8Scrolly === "function") {
+          cleanupChapter8Scrolly();
         }
 
         this.close();
@@ -20660,8 +21389,9 @@ async function fetchChoicePercentage(choiceId) {
         }
 
         if (chapterNumber === 8) {
-          FinalReport.start({ skipIntro: true });
+          showChapter8Scrolly();
           this.saveState();
+          return;
         }
       },
 
@@ -20760,6 +21490,17 @@ async function fetchChoicePercentage(choiceId) {
           this.state.highestUnlockedChapter || 1,
           chapterNumber
         );
+
+        storyProgress = this.state;
+        this.saveState();
+        this.render();
+      },
+
+      markChapterCompleted(chapterNumber) {
+        if (!this.state.completedChapters.includes(chapterNumber)) {
+          this.state.completedChapters.push(chapterNumber);
+          this.state.completedChapters.sort((a, b) => a - b);
+        }
 
         storyProgress = this.state;
         this.saveState();
