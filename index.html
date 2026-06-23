@@ -557,25 +557,31 @@
       position: absolute;
       left: clamp(28px, 4vw, 64px);
       right: clamp(28px, 4vw, 64px);
-      bottom: clamp(22px, 4vh, 42px);
-      height: 2px;
+      top: clamp(18px, 3vh, 34px);
+      bottom: auto;
+      height: 4px;
       border-radius: 999px;
-      background: rgba(255, 248, 238, 0.22);
+      background: rgba(255, 248, 238, 0.24);
       overflow: hidden;
+      z-index: 27;
     }
 
     .manual-video-progress-fill {
-      width: 0%;
+      width: 100%;
       height: 100%;
       border-radius: inherit;
-      background: rgba(255, 248, 238, 0.82);
-      transition: width 0.16s linear;
+      background: rgba(255, 248, 238, 0.86);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.08s linear;
+      will-change: transform;
     }
 
     .manual-video-hint {
       position: absolute;
       left: 50%;
-      bottom: clamp(34px, 6vh, 58px);
+      top: clamp(30px, 5.4vh, 56px);
+      bottom: auto;
       transform: translateX(-50%);
       color: rgba(255, 248, 238, 0.58);
       font-size: 12px;
@@ -587,7 +593,7 @@
     .manual-video-skip-button {
       position: absolute;
       right: clamp(24px, 4vw, 60px);
-      top: clamp(22px, 4vh, 46px);
+      top: clamp(38px, 6vh, 66px);
       min-height: 34px;
       padding: 0.5em 1em;
       border-radius: 999px;
@@ -6498,9 +6504,10 @@
 
     .ch5-video-screen {
       display: block;
+      overflow: hidden;
       background:
-        radial-gradient(circle at 50% 45%, rgba(255, 250, 242, 0.12), transparent 46%),
-        linear-gradient(135deg, #2a1d19 0%, #76574d 50%, #2c1d19 100%);
+        radial-gradient(circle at 48% 42%, rgba(255, 250, 242, 0.18), transparent 44%),
+        linear-gradient(135deg, #201512 0%, #6d5148 48%, #211512 100%);
       touch-action: none;
     }
 
@@ -6508,36 +6515,41 @@
       content: "";
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 50%, transparent 54%, rgba(18, 12, 10, 0.22) 100%),
-        linear-gradient(to bottom, rgba(18, 12, 10, 0.08), transparent 30%, rgba(18, 12, 10, 0.2));
+        radial-gradient(circle at 50% 48%, transparent 52%, rgba(19, 12, 10, 0.18) 100%),
+        linear-gradient(to bottom, rgba(18, 12, 10, 0.06), transparent 34%, rgba(18, 12, 10, 0.12));
     }
 
-    .ch5-video {
+    .ch5-video,
+    .ch5-service-video,
+    #ch5ServiceVideo {
       position: absolute;
       inset: 0;
-      z-index: 0;
+      z-index: 1;
       width: 100%;
       height: 100%;
       display: block;
       object-fit: cover;
       object-position: center;
       opacity: 0;
-      transition: opacity 0.32s ease;
-      background: transparent;
+      background: #1c120f;
+      transition: opacity 0.35s ease;
     }
 
-    .ch5-video.is-visible {
+    .ch5-video.is-visible,
+    .ch5-service-video.is-visible,
+    #ch5ServiceVideo.is-visible {
       opacity: 1;
     }
 
     .ch5-video-hint {
       position: absolute;
       left: 50%;
-      bottom: clamp(26px, 4.2vh, 46px);
-      z-index: 6;
+      top: clamp(34px, 5.8vh, 62px);
+      bottom: auto;
+      z-index: 8;
       transform: translateX(-50%);
       padding: 0.58em 1.05em;
       border-radius: 999px;
@@ -6557,8 +6569,9 @@
       position: absolute;
       left: clamp(28px, 4vw, 60px);
       right: clamp(28px, 4vw, 60px);
-      bottom: clamp(14px, 2.3vh, 26px);
-      z-index: 6;
+      top: clamp(18px, 3vh, 34px);
+      bottom: auto;
+      z-index: 8;
       height: 6px;
       overflow: hidden;
       border-radius: 999px;
@@ -6569,18 +6582,22 @@
 
     .ch5-progress-fill {
       display: block;
-      width: 0%;
+      width: 100%;
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, rgba(255, 250, 242, 0.9), rgba(217, 174, 162, 0.95));
-      transition: width 0.12s linear;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.08s linear;
+      will-change: transform;
     }
 
     .ch5-skip-video-button {
       position: absolute;
       right: clamp(28px, 4vw, 60px);
-      bottom: clamp(36px, 6.2vh, 68px);
-      z-index: 8;
+      top: clamp(46px, 7vh, 76px);
+      bottom: auto;
+      z-index: 9;
       display: none;
       min-height: 38px;
       padding: 0.58em 1.4em;
@@ -6591,6 +6608,16 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .ch5-progress-bar,
+    .ch5-video-hint,
+    .ch5-skip-video-button {
+      z-index: 8;
+    }
+
+    .ch5-skip-video-button {
+      z-index: 9;
     }
 
     .ch5-result-screen {
@@ -13266,7 +13293,7 @@
       resultNailImage: "images/ch5-first-order-result.jpg"
     };
 
-    const CH5_USE_STATIC_PROGRESS_MODE = true;
+    const CH5_USE_STATIC_PROGRESS_MODE = false;
 
 
     const CH6_ASSETS = {
@@ -13849,7 +13876,17 @@
       touchLastY: 0,
       inputLock: false,
       inputLockTimer: null,
-      durationReady: false
+      durationReady: false,
+      targetProgress: 0,
+      pendingSeekTime: null,
+      seekRafId: null,
+      isSeeking: false,
+      lastSeekAt: 0,
+      seekThreshold: 0.18,
+      minSeekInterval: 140,
+      largeJumpThreshold: 1.6,
+      inputEndTimer: null,
+      isCompleting: false
     };
 
     function startManualIntroVideo(config = {}) {
@@ -13889,7 +13926,7 @@
       video.controls = false;
       video.autoplay = false;
       video.removeAttribute("autoplay");
-      video.currentTime = 0;
+      try { video.currentTime = 0; } catch (error) {}
       video.classList.add("is-visible");
 
       ChapterOne.dom.videoLayer.style.zIndex = "23";
@@ -13911,8 +13948,17 @@
       ManualVideoController.touchLastY = 0;
       ManualVideoController.inputLock = false;
       ManualVideoController.durationReady = false;
+      ManualVideoController.targetProgress = 0;
+      ManualVideoController.pendingSeekTime = null;
+      ManualVideoController.seekRafId = null;
+      ManualVideoController.isSeeking = false;
+      ManualVideoController.lastSeekAt = 0;
+      ManualVideoController.isCompleting = false;
 
-      if (progressFill) progressFill.style.width = "0%";
+      if (progressFill) {
+        progressFill.style.width = "100%";
+        progressFill.style.transform = "scaleX(0)";
+      }
       if (hint) hint.textContent = "滑鼠滾輪／方向鍵控制影片進度";
       manualUi?.classList.remove("is-hidden");
       manualUi?.setAttribute("aria-hidden", "false");
@@ -13921,22 +13967,41 @@
       showScreen(screen);
 
       const finishMetadata = () => {
-        if (ManualVideoController.video !== video) return;
+        if (ManualVideoController.video !== video || ManualVideoController.isCompleting) return;
         ManualVideoController.durationReady = Number.isFinite(video.duration) && video.duration > 0;
+        ManualVideoController.targetProgress = 0;
         try {
           video.pause();
           video.currentTime = 0;
         } catch (error) {}
-        updateManualVideoProgressUI();
+        updateManualVideoProgressUI(0);
+      };
+
+      const onSeeking = () => {
+        if (ManualVideoController.video !== video) return;
+        ManualVideoController.isSeeking = true;
+      };
+
+      const onSeeked = () => {
+        if (ManualVideoController.video !== video) return;
+        ManualVideoController.isSeeking = false;
+
+        if (ManualVideoController.pendingSeekTime != null) {
+          requestManualVideoSeek(ManualVideoController.pendingSeekTime, false);
+        }
       };
 
       const fail = () => manualVideoFail();
 
       video.addEventListener("loadedmetadata", finishMetadata, { once: true });
       video.addEventListener("loadeddata", finishMetadata, { once: true });
+      video.addEventListener("seeking", onSeeking);
+      video.addEventListener("seeked", onSeeked);
       video.addEventListener("error", fail, { once: true });
       ManualVideoController.cleanupFns.push(() => video.removeEventListener("loadedmetadata", finishMetadata));
       ManualVideoController.cleanupFns.push(() => video.removeEventListener("loadeddata", finishMetadata));
+      ManualVideoController.cleanupFns.push(() => video.removeEventListener("seeking", onSeeking));
+      ManualVideoController.cleanupFns.push(() => video.removeEventListener("seeked", onSeeked));
       ManualVideoController.cleanupFns.push(() => video.removeEventListener("error", fail));
 
       if (skippable && skipButton) {
@@ -13946,7 +14011,7 @@
       }
 
       bindManualVideoControls();
-      updateManualVideoProgressUI();
+      updateManualVideoProgressUI(0);
 
       try {
         video.load();
@@ -13963,17 +14028,17 @@
       if (!screen || !controller.active) return;
 
       const onWheel = (event) => {
-        if (!controller.active) return;
+        if (!controller.active || controller.isCompleting) return;
         event.preventDefault();
         controller.wheelAccumulator += event.deltaY;
-        if (Math.abs(controller.wheelAccumulator) < 28) return;
+        if (Math.abs(controller.wheelAccumulator) < 64) return;
         const direction = controller.wheelAccumulator > 0 ? 1 : -1;
         controller.wheelAccumulator = 0;
         manualVideoStep(direction);
       };
 
       const onKeyDown = (event) => {
-        if (!controller.active) return;
+        if (!controller.active || controller.isCompleting) return;
         const forwardKeys = ["ArrowRight", "ArrowDown", "PageDown", " ", "Spacebar", "Enter"];
         const backwardKeys = ["ArrowLeft", "ArrowUp", "PageUp", "Backspace"];
         if (![...forwardKeys, ...backwardKeys, "Home", "End"].includes(event.key)) return;
@@ -13981,11 +14046,11 @@
         if (forwardKeys.includes(event.key)) manualVideoStep(1);
         if (backwardKeys.includes(event.key)) manualVideoStep(-1);
         if (event.key === "Home") manualVideoSetProgress(0);
-        if (event.key === "End") manualVideoSetProgress(0.98);
+        if (event.key === "End") manualVideoComplete({ completed: true });
       };
 
       const onTouchStart = (event) => {
-        if (!controller.active) return;
+        if (!controller.active || controller.isCompleting) return;
         const touch = event.touches?.[0];
         if (!touch) return;
         controller.touchStartY = touch.clientY;
@@ -13993,17 +14058,18 @@
       };
 
       const onTouchMove = (event) => {
-        if (!controller.active) return;
+        if (!controller.active || controller.isCompleting) return;
         event.preventDefault();
         const touch = event.touches?.[0];
         if (!touch) return;
         const diff = controller.touchLastY - touch.clientY;
-        if (Math.abs(diff) < 42) return;
+        if (Math.abs(diff) < 58) return;
         controller.touchLastY = touch.clientY;
         manualVideoStep(diff > 0 ? 1 : -1);
       };
 
       const onTouchEnd = () => {
+        finalizeManualVideoSeekAfterInput();
         controller.touchStartY = 0;
         controller.touchLastY = 0;
       };
@@ -14028,16 +14094,32 @@
       });
       controller.cleanupFns = [];
       window.clearTimeout(controller.inputLockTimer);
+      window.clearTimeout(controller.inputEndTimer);
+
+      if (controller.seekRafId) {
+        window.cancelAnimationFrame(controller.seekRafId);
+        controller.seekRafId = null;
+      }
+
       controller.inputLockTimer = null;
+      controller.inputEndTimer = null;
       controller.inputLock = false;
       controller.wheelAccumulator = 0;
       controller.touchStartY = 0;
       controller.touchLastY = 0;
+      controller.targetProgress = 0;
+      controller.pendingSeekTime = null;
+      controller.isSeeking = false;
+      controller.lastSeekAt = 0;
+      controller.isCompleting = false;
 
       const manualUi = document.getElementById("manualVideoUi");
       manualUi?.classList.add("is-hidden");
       manualUi?.setAttribute("aria-hidden", "true");
-      if (controller.progressFill) controller.progressFill.style.width = "0%";
+      if (controller.progressFill) {
+        controller.progressFill.style.width = "100%";
+        controller.progressFill.style.transform = "scaleX(0)";
+      }
       if (ChapterOne?.dom?.videoLayer) {
         ChapterOne.dom.videoLayer.style.zIndex = "2";
         ChapterOne.dom.videoLayer.style.pointerEvents = "none";
@@ -14057,56 +14139,172 @@
     function manualVideoStep(direction) {
       const controller = ManualVideoController;
       const video = controller.video;
-      if (!controller.active || !video || controller.inputLock) return;
+
+      if (!controller.active || !video || controller.isCompleting) return;
 
       const duration = Number(video.duration);
       if (!Number.isFinite(duration) || duration <= 0) return;
 
-      controller.inputLock = true;
-      window.clearTimeout(controller.inputLockTimer);
-      controller.inputLockTimer = window.setTimeout(() => {
-        controller.inputLock = false;
-      }, 90);
+      const currentProgress = Number.isFinite(controller.targetProgress)
+        ? controller.targetProgress
+        : ((Number(video.currentTime) || 0) / duration);
 
-      const nextTime = Math.max(0, Math.min(duration * 0.98, (Number(video.currentTime) || 0) + (direction >= 0 ? 1.2 : -1.2)));
-      try {
-        video.pause();
-        video.currentTime = nextTime;
-      } catch (error) {}
-      updateManualVideoProgressUI();
+      const stepSeconds = 1.2;
+      const deltaProgress = stepSeconds / duration;
+      const nextProgress = Math.max(
+        0,
+        Math.min(0.985, currentProgress + (direction >= 0 ? deltaProgress : -deltaProgress))
+      );
 
-      const progress = video.duration > 0 ? video.currentTime / video.duration : 0;
-      if (progress >= 0.98) manualVideoComplete({ completed: true });
+      controller.targetProgress = nextProgress;
+      updateManualVideoProgressUI(nextProgress);
+
+      if (nextProgress >= 0.985) {
+        manualVideoComplete({ completed: true });
+        return;
+      }
+
+      requestManualVideoSeek(duration * nextProgress, false);
+      finalizeManualVideoSeekAfterInput();
     }
 
     function manualVideoSetProgress(progress) {
       const controller = ManualVideoController;
       const video = controller.video;
-      if (!controller.active || !video) return;
+
+      if (!controller.active || !video || controller.isCompleting) return;
+
       const duration = Number(video.duration);
       if (!Number.isFinite(duration) || duration <= 0) return;
-      const safeProgress = Math.max(0, Math.min(0.98, Number(progress) || 0));
+
+      const safeProgress = Math.max(0, Math.min(0.985, Number(progress) || 0));
+
+      controller.targetProgress = safeProgress;
+      updateManualVideoProgressUI(safeProgress);
+
+      if (safeProgress >= 0.985) {
+        manualVideoComplete({ completed: true });
+        return;
+      }
+
+      requestManualVideoSeek(duration * safeProgress, true);
+    }
+
+    function requestManualVideoSeek(targetTime, force = false) {
+      const controller = ManualVideoController;
+      const video = controller.video;
+
+      if (!controller.active || !video || controller.isCompleting) return;
+
+      const duration = Number(video.duration);
+      if (!Number.isFinite(duration) || duration <= 0) return;
+
+      const safeTargetTime = Math.max(0, Math.min(duration * 0.985, Number(targetTime) || 0));
+      controller.pendingSeekTime = safeTargetTime;
+
+      const current = Number(video.currentTime) || 0;
+      const diff = Math.abs(safeTargetTime - current);
+
+      if (diff < controller.seekThreshold) {
+        controller.pendingSeekTime = null;
+        return;
+      }
+
+      if (controller.isSeeking && !force) return;
+      if (controller.seekRafId) return;
+
+      controller.seekRafId = window.requestAnimationFrame(() => {
+        controller.seekRafId = null;
+        applyManualVideoSeek(force);
+      });
+    }
+
+    function applyManualVideoSeek(force = false) {
+      const controller = ManualVideoController;
+      const video = controller.video;
+
+      if (!controller.active || !video || controller.isCompleting) return;
+      if (controller.pendingSeekTime == null) return;
+
+      const targetTime = controller.pendingSeekTime;
+      const current = Number(video.currentTime) || 0;
+      const diff = Math.abs(targetTime - current);
+
+      if (diff < controller.seekThreshold) {
+        controller.pendingSeekTime = null;
+        return;
+      }
+
+      if (controller.isSeeking && !force) return;
+
+      const now = performance.now();
+      const isLargeJump = diff >= controller.largeJumpThreshold;
+
+      if (!force && !isLargeJump && now - controller.lastSeekAt < controller.minSeekInterval) {
+        if (!controller.seekRafId) {
+          controller.seekRafId = window.requestAnimationFrame(() => {
+            controller.seekRafId = null;
+            applyManualVideoSeek(false);
+          });
+        }
+        return;
+      }
+
+      controller.pendingSeekTime = null;
+      controller.lastSeekAt = now;
+      controller.isSeeking = true;
+
       try {
-        video.pause();
-        video.currentTime = duration * safeProgress;
-      } catch (error) {}
-      updateManualVideoProgressUI();
-      if (safeProgress >= 0.98) manualVideoComplete({ completed: true });
+        if (!video.paused) video.pause();
+
+        if (isLargeJump && typeof video.fastSeek === "function") {
+          video.fastSeek(targetTime);
+        } else {
+          video.currentTime = targetTime;
+        }
+      } catch (error) {
+        console.warn("手動影片定位失敗，保留目前畫面。", error);
+        controller.isSeeking = false;
+      }
+    }
+
+    function finalizeManualVideoSeekAfterInput() {
+      const controller = ManualVideoController;
+      window.clearTimeout(controller.inputEndTimer);
+
+      controller.inputEndTimer = window.setTimeout(() => {
+        const video = controller.video;
+        if (!controller.active || !video || controller.isCompleting) return;
+
+        const duration = Number(video.duration);
+        if (!Number.isFinite(duration) || duration <= 0) return;
+
+        const progress = Math.max(0, Math.min(0.985, controller.targetProgress || 0));
+        requestManualVideoSeek(duration * progress, true);
+      }, 180);
     }
 
     function manualVideoComplete(payload = {}) {
       const controller = ManualVideoController;
-      if (!controller.active) return;
+      if (!controller.active || controller.isCompleting) return;
+
+      controller.isCompleting = true;
+
       const completeCallback = controller.completeCallback;
       const video = controller.video;
+
       try { video?.pause(); } catch (error) {}
+
       cleanupManualVideoControls();
-      if (typeof completeCallback === "function") completeCallback(payload);
+
+      if (typeof completeCallback === "function") {
+        window.setTimeout(() => completeCallback(payload), 0);
+      }
     }
 
     function manualVideoFail() {
       const controller = ManualVideoController;
-      if (!controller.active) return;
+      if (!controller.active || controller.isCompleting) return;
       const failCallback = controller.failCallback;
       const video = controller.video;
       const poster = video?.getAttribute("poster") || "";
@@ -14115,15 +14313,27 @@
       if (poster && ChapterOne?.setBackground) {
         ChapterOne.setBackground(poster, "manual-video-fallback");
       }
-      if (typeof failCallback === "function") failCallback({ failed: true });
+      if (typeof failCallback === "function") {
+        window.setTimeout(() => failCallback({ failed: true }), 0);
+      }
     }
 
-    function updateManualVideoProgressUI() {
+    function updateManualVideoProgressUI(progressOverride = null) {
       const controller = ManualVideoController;
       const video = controller.video;
-      if (!video || !controller.progressFill) return;
-      const progress = video.duration > 0 ? video.currentTime / video.duration : 0;
-      controller.progressFill.style.width = `${Math.max(0, Math.min(100, progress * 100))}%`;
+      if (!controller.progressFill) return;
+
+      let progress = Number(progressOverride);
+
+      if (!Number.isFinite(progress)) {
+        progress = video && video.duration > 0
+          ? (Number(video.currentTime) || 0) / video.duration
+          : 0;
+      }
+
+      const safeProgress = Math.max(0, Math.min(1, progress));
+      controller.progressFill.style.width = "100%";
+      controller.progressFill.style.transform = `scaleX(${safeProgress})`;
     }
 
 
@@ -16622,8 +16832,8 @@ async function fetchChoicePercentage(choiceId) {
           poster: CH1_ASSETS.introPoster,
           label: "第一章前導影片",
           screen: this.dom.ch1ScrollyIntroScreen,
-          onComplete: () => this.showChoiceScreen(),
-          onFail: () => this.showChoiceScreen(),
+          onComplete: () => ChapterOne.showChoiceScreen(),
+          onFail: () => ChapterOne.showChoiceScreen(),
           skippable: true
         });
       },
@@ -17215,8 +17425,14 @@ async function fetchChoicePercentage(choiceId) {
           poster: CH2_ASSETS.introPoster,
           label: "第二章前導影片",
           screen: document.getElementById("chapterTransitionScreen"),
-          onComplete: () => ChapterTwo.showRuleScreen(),
-          onFail: () => ChapterTwo.showRuleScreen(),
+          onComplete: () => {
+            if (ChapterTwo.showRuleScreen) ChapterTwo.showRuleScreen();
+            else ChapterTwo.showRuleCard();
+          },
+          onFail: () => {
+            if (ChapterTwo.showRuleScreen) ChapterTwo.showRuleScreen();
+            else ChapterTwo.showRuleCard();
+          },
           skippable: true
         });
       },
@@ -17682,8 +17898,14 @@ async function fetchChoicePercentage(choiceId) {
           poster: CH3_ASSETS.introPoster,
           label: "第三章前導影片",
           screen: document.getElementById("chapterTransitionScreen"),
-          onComplete: () => ChapterThree.showRuleScreen(),
-          onFail: () => ChapterThree.showRuleScreen(),
+          onComplete: () => {
+            if (ChapterThree.showRuleScreen) ChapterThree.showRuleScreen();
+            else ChapterThree.showRuleCard();
+          },
+          onFail: () => {
+            if (ChapterThree.showRuleScreen) ChapterThree.showRuleScreen();
+            else ChapterThree.showRuleCard();
+          },
           skippable: true
         });
       },
@@ -18278,8 +18500,14 @@ async function fetchChoicePercentage(choiceId) {
           poster: CH4_ASSETS.introPoster,
           label: "第四章前導影片",
           screen: document.getElementById("chapterTransitionScreen"),
-          onComplete: () => ChapterFour.showRuleScreen(),
-          onFail: () => ChapterFour.showRuleScreen(),
+          onComplete: () => {
+            if (ChapterFour.showRuleScreen) ChapterFour.showRuleScreen();
+            else ChapterFour.showRuleCard();
+          },
+          onFail: () => {
+            if (ChapterFour.showRuleScreen) ChapterFour.showRuleScreen();
+            else ChapterFour.showRuleCard();
+          },
           skippable: true
         });
       },
@@ -18645,6 +18873,12 @@ async function fetchChoicePercentage(choiceId) {
       serviceProgress: 0,
       pendingProgress: 0,
       progressRafId: null,
+      lastSeekAt: 0,
+      isSeeking: false,
+      pendingSeekTime: null,
+      seekRafId: null,
+      seekThreshold: 0.2,
+      minSeekInterval: 150,
 
       init() {
         this.cacheDom();
@@ -18723,82 +18957,170 @@ async function fetchChoicePercentage(choiceId) {
 
       startServiceVideo() {
         this.activeAssets = this.getVideoAssets();
+
+        if (!this.activeAssets.video) {
+          console.warn("第五章影片路徑不存在。", this.activeAssets);
+          this.handleVideoFallback();
+          return;
+        }
+
+        console.log("第五章使用影片：", this.activeAssets.video);
+
         this.videoCompleted = false;
         this.metadataReady = false;
         this.clearTimers();
         this.removeVideoControlListeners();
+
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(this.activeAssets.firstFrame, "ch5-service-first-frame");
         ChapterOne.setDarkOverlay(false);
+
         this.updateHud({ includeChapterFive: false });
+
         this.serviceProgress = 0;
         this.pendingProgress = 0;
+        this.pendingSeekTime = null;
+        this.isSeeking = false;
+        this.lastSeekAt = 0;
+
         if (this.progressRafId) {
           window.cancelAnimationFrame(this.progressRafId);
           this.progressRafId = null;
         }
+
+        if (this.seekRafId) {
+          window.cancelAnimationFrame(this.seekRafId);
+          this.seekRafId = null;
+        }
+
+        this.dom.videoScreen.classList.remove("is-fallback");
+        showScreen(this.dom.videoScreen);
+
         this.prepareVideoElement();
         this.updateVideoHint();
         this.updateProgress(0);
-        this.dom.videoScreen.classList.remove("is-fallback");
-        showScreen(this.dom.videoScreen);
         this.setupScrollControlledVideo();
+
         ChapterOne.setupIntroVideoSkip(this.dom.video, () => this.completeVideo({ skipped: true }));
       },
 
       prepareVideoElement() {
         const video = this.dom.video;
-        if (!video) return;
-
-        video.classList.remove("is-visible");
-        video.innerHTML = "";
-        try { video.pause(); } catch (error) {}
-        video.removeAttribute("src");
-        video.removeAttribute("data-src");
-        video.removeAttribute("data-loaded");
-        video.setAttribute("poster", this.activeAssets.firstFrame);
-        video.preload = "metadata";
-        video.onloadedmetadata = null;
-        video.onloadeddata = null;
-        video.onended = null;
-        video.onerror = null;
-        this.metadataReady = false;
-
-        if (CH5_USE_STATIC_PROGRESS_MODE) {
-          this.metadataReady = false;
-          try { video.load(); } catch (error) {}
-          this.updateProgress(0);
+        if (!video || !this.activeAssets || !this.activeAssets.video) {
+          console.warn("第五章影片 DOM 或影片路徑不存在。", {
+            video,
+            activeAssets: this.activeAssets
+          });
+          this.handleVideoFallback();
           return;
         }
 
-        video.setAttribute("src", this.activeAssets.video);
-        prepareVideoAudio(video);
-        try { video.currentTime = 0; } catch (error) {}
+        video.classList.remove("is-visible");
+        video.innerHTML = "";
 
-        const source = document.createElement("source");
-        source.setAttribute("src", this.activeAssets.video);
-        source.setAttribute("type", "video/mp4");
-        video.appendChild(source);
+        try { video.pause(); } catch (error) {}
+
+        video.removeAttribute("src");
+        video.removeAttribute("data-src");
+        video.removeAttribute("data-loaded");
+
+        video.onloadedmetadata = null;
+        video.onloadeddata = null;
+        video.oncanplay = null;
+        video.onended = null;
+        video.onerror = null;
+        video.onseeking = null;
+        video.onseeked = null;
+
+        this.metadataReady = false;
+        this.pendingSeekTime = null;
+        this.isSeeking = false;
+
+        video.controls = false;
+        video.autoplay = false;
+        video.loop = false;
+        video.muted = false;
+        video.volume = 1;
+        video.playsInline = true;
+        video.setAttribute("playsinline", "");
+        video.setAttribute("webkit-playsinline", "");
+        video.preload = "auto";
+
+        video.poster = this.activeAssets.poster || this.activeAssets.firstFrame || "";
+        video.src = this.activeAssets.video;
+
+        prepareVideoAudio(video);
 
         video.onloadedmetadata = () => {
+          if (this.dom.video !== video || this.videoCompleted) return;
+
           this.metadataReady = true;
           window.clearTimeout(this.fallbackTimer);
+
+          try { video.pause(); } catch (error) {}
           try { video.currentTime = 0; } catch (error) {}
+
           this.updateProgress(0);
         };
 
         video.onloadeddata = () => {
+          if (this.dom.video !== video || this.videoCompleted) return;
+
+          window.clearTimeout(this.fallbackTimer);
+          this.dom.videoScreen.classList.remove("is-fallback");
           video.classList.add("is-visible");
-          video.pause();
+
+          try { video.pause(); } catch (error) {}
         };
 
-        video.onended = () => this.completeVideo();
-        video.onerror = () => this.handleVideoFallback();
-        video.load();
+        video.oncanplay = () => {
+          if (this.dom.video !== video || this.videoCompleted) return;
+
+          window.clearTimeout(this.fallbackTimer);
+          this.dom.videoScreen.classList.remove("is-fallback");
+          video.classList.add("is-visible");
+
+          try { video.pause(); } catch (error) {}
+        };
+
+        video.onseeking = () => {
+          if (this.dom.video !== video || this.videoCompleted) return;
+          this.isSeeking = true;
+        };
+
+        video.onseeked = () => {
+          if (this.dom.video !== video || this.videoCompleted) return;
+
+          this.isSeeking = false;
+
+          if (this.pendingSeekTime != null) {
+            const target = this.pendingSeekTime;
+            this.pendingSeekTime = null;
+            this.requestServiceVideoSeek(target, false);
+          }
+        };
+
+        video.onended = () => this.completeVideo({ completed: true });
+
+        video.onerror = () => {
+          console.warn("第五章影片載入失敗，進入 fallback。", this.activeAssets.video);
+          this.handleVideoFallback();
+        };
+
+        try {
+          video.load();
+        } catch (error) {
+          console.warn("第五章 video.load() 失敗，進入 fallback。", error);
+          this.handleVideoFallback();
+          return;
+        }
 
         this.fallbackTimer = window.setTimeout(() => {
-          if (!this.metadataReady && !this.videoCompleted) this.handleVideoFallback();
-        }, 4500);
+          if (!this.metadataReady && !this.videoCompleted) {
+            console.warn("第五章影片 6 秒內未取得 metadata，進入 fallback。", this.activeAssets.video);
+            this.handleVideoFallback();
+          }
+        }, 6000);
       },
 
       setupScrollControlledVideo() {
@@ -18894,17 +19216,71 @@ async function fetchChoicePercentage(choiceId) {
           this.serviceProgress = this.pendingProgress;
           this.updateProgress(this.serviceProgress);
 
-          if (!CH5_USE_STATIC_PROGRESS_MODE && video && this.metadataReady && Number.isFinite(video.duration) && video.duration > 0) {
-            const targetTime = Math.min(video.duration - 0.05, Math.max(0, video.duration * this.serviceProgress));
-            if (Math.abs((video.currentTime || 0) - targetTime) > 0.35) {
-              try {
-                video.currentTime = targetTime;
-              } catch (error) {}
-            }
+          if (this.serviceProgress >= 0.985) {
+            this.completeVideo({ completed: true });
+            return;
           }
 
-          if (this.serviceProgress >= 0.98) {
-            this.completeVideo();
+          if (!CH5_USE_STATIC_PROGRESS_MODE && video && this.metadataReady && Number.isFinite(video.duration) && video.duration > 0) {
+            const targetTime = Math.min(video.duration - 0.08, Math.max(0, video.duration * this.serviceProgress));
+            this.requestServiceVideoSeek(targetTime, false);
+          }
+        });
+      },
+
+      requestServiceVideoSeek(targetTime, force = false) {
+        const video = this.dom.video;
+        if (!video || this.videoCompleted) return;
+
+        const duration = Number(video.duration);
+        if (!Number.isFinite(duration) || duration <= 0) return;
+
+        const safeTargetTime = Math.max(0, Math.min(duration - 0.08, Number(targetTime) || 0));
+        const current = Number(video.currentTime) || 0;
+        const diff = Math.abs(safeTargetTime - current);
+
+        if (diff < this.seekThreshold) {
+          this.pendingSeekTime = null;
+          return;
+        }
+
+        this.pendingSeekTime = safeTargetTime;
+
+        if (this.isSeeking && !force) return;
+
+        const now = performance.now();
+        if (!force && now - this.lastSeekAt < this.minSeekInterval) {
+          if (!this.seekRafId) {
+            this.seekRafId = window.requestAnimationFrame(() => {
+              this.seekRafId = null;
+              this.requestServiceVideoSeek(this.pendingSeekTime, false);
+            });
+          }
+          return;
+        }
+
+        if (this.seekRafId) return;
+
+        this.seekRafId = window.requestAnimationFrame(() => {
+          this.seekRafId = null;
+          if (this.videoCompleted || this.pendingSeekTime == null) return;
+
+          const target = this.pendingSeekTime;
+          this.pendingSeekTime = null;
+          this.lastSeekAt = performance.now();
+          this.isSeeking = true;
+
+          try {
+            if (!video.paused) video.pause();
+
+            if (typeof video.fastSeek === "function") {
+              video.fastSeek(target);
+            } else {
+              video.currentTime = target;
+            }
+          } catch (error) {
+            console.warn("第五章影片定位失敗，保留目前畫面。", error);
+            this.isSeeking = false;
           }
         });
       },
@@ -18920,42 +19296,49 @@ async function fetchChoicePercentage(choiceId) {
 
       completeVideo(payload = {}) {
         if (this.videoCompleted) return;
-        this.videoCompleted = true;
 
+        this.videoCompleted = true;
         ChapterOne.cleanupIntroVideoSkip?.();
         this.clearTimers();
         this.removeVideoControlListeners();
 
         const video = this.dom.video;
         if (video) {
-          try {
-            video.pause();
-            video.removeAttribute("src");
-            video.innerHTML = "";
-            video.load();
-            video.classList.remove("is-visible");
-          } catch (error) {}
+          try { video.pause(); } catch (error) {}
+          video.classList.remove("is-visible");
         }
 
         this.serviceProgress = 1;
         this.pendingProgress = 1;
+        this.pendingSeekTime = null;
+        this.isSeeking = false;
         this.updateProgress(1);
 
         ChapterOne.setBackground(this.activeAssets?.finalFallback || CH5_ASSETS.serviceFinalFallbackA, "ch5-service-final");
-        window.setTimeout(() => this.showResult(), 220);
+        window.setTimeout(() => this.showResult(payload), 220);
       },
 
       handleVideoFallback() {
         if (this.videoCompleted) return;
-        ChapterOne.cleanupIntroVideoSkip();
-        this.clearTimers();
-        this.removeVideoControlListeners();
-        this.dom.video.pause();
-        this.dom.video.classList.remove("is-visible");
+
+        window.clearTimeout(this.fallbackTimer);
+        this.metadataReady = false;
+
+        const video = this.dom.video;
+        if (video) {
+          try { video.pause(); } catch (error) {}
+          video.classList.remove("is-visible");
+        }
+
         this.dom.videoScreen.classList.add("is-fallback");
-        ChapterOne.setBackground(this.activeAssets?.finalFallback || CH5_ASSETS.serviceFinalFallbackA, "ch5-video-fallback");
-        this.updateProgress(1);
-        this.fallbackTimer = window.setTimeout(() => this.completeVideo(), 1000);
+
+        ChapterOne.setBackground(
+          this.activeAssets?.firstFrame || this.activeAssets?.poster || this.activeAssets?.finalFallback,
+          "ch5-video-fallback"
+        );
+
+        this.updateProgress(this.serviceProgress || 0);
+        this.updateVideoHint("影片載入失敗，請用滑鼠或方向鍵完成進度");
       },
 
       clearTimers() {
@@ -18965,6 +19348,14 @@ async function fetchChoicePercentage(choiceId) {
           window.cancelAnimationFrame(this.progressRafId);
           this.progressRafId = null;
         }
+
+        if (this.seekRafId) {
+          window.cancelAnimationFrame(this.seekRafId);
+          this.seekRafId = null;
+        }
+
+        this.pendingSeekTime = null;
+        this.isSeeking = false;
       },
 
       updateProgress(progress) {
@@ -18976,8 +19367,12 @@ async function fetchChoicePercentage(choiceId) {
         }
       },
 
-      updateVideoHint() {
+      updateVideoHint(customText = "") {
         if (!this.dom.videoHint) return;
+        if (customText) {
+          this.dom.videoHint.textContent = customText;
+          return;
+        }
         const coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
         this.dom.videoHint.textContent = coarsePointer ? "滑動畫面，完成第一單" : "滾動滑鼠滾輪，完成第一單";
       },
@@ -19277,8 +19672,13 @@ async function fetchChoicePercentage(choiceId) {
           poster: CH6_ASSETS.introPoster,
           label: "第六章前導影片",
           screen: document.getElementById("chapterTransitionScreen"),
-          onComplete: () => ChapterSix.showCaseMenu(),
-          onFail: () => ChapterSix.showCaseMenu(),
+          onComplete: () => {
+            if (ChapterSix.completeIntroVideo) ChapterSix.completeIntroVideo({ completed: true });
+            else ChapterSix.showRuleCard();
+          },
+          onFail: () => {
+            if (ChapterSix.showRuleCard) ChapterSix.showRuleCard();
+          },
           skippable: true
         });
       },
@@ -20169,8 +20569,14 @@ async function fetchChoicePercentage(choiceId) {
           poster: CH7_ASSETS.introPoster,
           label: "第七章前導影片",
           screen: document.getElementById("chapterTransitionScreen"),
-          onComplete: () => ChapterSeven.showRuleScreen(),
-          onFail: () => ChapterSeven.showRuleScreen(),
+          onComplete: () => {
+            if (ChapterSeven.showRuleScreen) ChapterSeven.showRuleScreen();
+            else ChapterSeven.showRuleCard();
+          },
+          onFail: () => {
+            if (ChapterSeven.showRuleScreen) ChapterSeven.showRuleScreen();
+            else ChapterSeven.showRuleCard();
+          },
           skippable: true
         });
       },
@@ -20699,6 +21105,12 @@ async function fetchChoicePercentage(choiceId) {
 
       restartGame() {
         cleanupManualVideoControls?.();
+        ChapterFive?.clearTimers?.();
+        ChapterFive?.removeVideoControlListeners?.();
+        if (ChapterFive?.dom?.video) {
+          try { ChapterFive.dom.video.pause(); } catch (error) {}
+          ChapterFive.dom.video.classList.remove("is-visible");
+        }
         cleanupChapter8Scrolly();
         chapter8State.currentIndex = 0;
         document.getElementById("chapter8FinalReportPanel")?.classList.remove("is-visible");
@@ -21310,6 +21722,16 @@ async function fetchChoicePercentage(choiceId) {
       goToChapter(chapterNumber) {
         if (!this.isChapterUnlocked(chapterNumber)) return;
         cleanupManualVideoControls?.();
+
+        const leavingChapterFive = this.state.currentChapter === 5 && Number(chapterNumber) !== 5;
+        if (leavingChapterFive && typeof ChapterFive !== "undefined") {
+          ChapterFive.clearTimers?.();
+          ChapterFive.removeVideoControlListeners?.();
+          if (ChapterFive.dom?.video) {
+            try { ChapterFive.dom.video.pause(); } catch (error) {}
+            ChapterFive.dom.video.classList.remove("is-visible");
+          }
+        }
 
         const leavingChapterSix = this.state.currentChapter === 6 && Number(chapterNumber) !== 6;
         if (leavingChapterSix && typeof ChapterSix !== "undefined" && typeof ChapterSix.cancelActiveRun === "function") {
