@@ -13507,6 +13507,302 @@
       }
     }
 
+
+    /* ==================================================
+       第五章服務影片：移除行動版中間白色直立遮罩
+       只在第五章服務影片正常顯示期間隱藏全域播放 fallback
+    ================================================== */
+    #gameFrame.is-ch5-service-video-active > .video-play-fallback-button,
+    body:has(#ch5VideoScreen.is-active) #gameFrame > .video-play-fallback-button,
+    body:has(#ch5VideoScreen.has-visible-service-video) #gameFrame > .video-play-fallback-button {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #ch5ServiceVideo {
+      pointer-events: none !important;
+      -webkit-user-select: none !important;
+      user-select: none !important;
+    }
+
+    #ch5ServiceVideo::-webkit-media-controls,
+    #ch5ServiceVideo::-webkit-media-controls-panel,
+    #ch5ServiceVideo::-webkit-media-controls-overlay-play-button,
+    #ch5ServiceVideo::-webkit-media-controls-start-playback-button,
+    #ch5ServiceVideo::-webkit-media-controls-play-button,
+    #ch5ServiceVideo::-webkit-media-controls-enclosure {
+      display: none !important;
+      opacity: 0 !important;
+      -webkit-appearance: none !important;
+    }
+
+
+    /* ==================================================
+       第五章服務影片第二輪修正：避開 iOS/Safari 原生影片覆蓋層
+       video 只負責載入與 seek，畫面改由 canvas 顯示，避免白色直立播放遮罩
+    ================================================== */
+    #ch5VideoScreen {
+      isolation: isolate !important;
+    }
+
+    .ch5-service-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0;
+      background: #120d0b;
+      pointer-events: none !important;
+      transition: opacity 0.16s ease;
+    }
+
+    .ch5-service-canvas.is-visible {
+      opacity: 1;
+    }
+
+    #ch5VideoScreen #ch5ServiceVideo,
+    #ch5VideoScreen #ch5ServiceVideo.is-visible {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      z-index: 0 !important;
+      -webkit-user-select: none !important;
+      user-select: none !important;
+    }
+
+    #ch5VideoScreen.is-active::before,
+    #ch5VideoScreen.has-visible-service-video::before {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #ch5VideoScreen.is-active #gameFrame > .video-play-fallback-button,
+    #gameFrame.is-ch5-service-video-active > .video-play-fallback-button,
+    body:has(#ch5VideoScreen.is-active) #gameFrame > .video-play-fallback-button,
+    body:has(#ch5VideoScreen.has-visible-service-video) #gameFrame > .video-play-fallback-button {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #ch5VideoScreen .ch5-progress-bar,
+    #ch5VideoScreen .ch5-video-hint,
+    #ch5VideoScreen .ch5-skip-video-button {
+      z-index: 32 !important;
+    }
+
+
+    /* ==================================================
+       第五章服務影片最終修正：
+       可視層只保留 canvas，video 完全離屏，避免行動版原生影片白色遮罩
+    ================================================== */
+
+    #ch5VideoBuffer {
+      position: fixed !important;
+      left: -99999px !important;
+      top: -99999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+      clip-path: inset(50%) !important;
+      -webkit-clip-path: inset(50%) !important;
+    }
+
+    #ch5VideoBuffer video,
+    #ch5ServiceVideo {
+      position: fixed !important;
+      left: -99999px !important;
+      top: -99999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      min-width: 1px !important;
+      min-height: 1px !important;
+      max-width: 1px !important;
+      max-height: 1px !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      object-fit: contain !important;
+      transform: none !important;
+      background: transparent !important;
+      -webkit-user-select: none !important;
+      user-select: none !important;
+    }
+
+    #ch5VideoScreen > video,
+    #ch5VideoScreen #ch5ServiceVideo {
+      display: none !important;
+    }
+
+    #ch5ServiceCanvas,
+    .ch5-service-canvas {
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 3 !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      opacity: 0 !important;
+      background: #120d0b !important;
+      pointer-events: none !important;
+    }
+
+    #ch5ServiceCanvas.is-visible,
+    .ch5-service-canvas.is-visible,
+    #ch5VideoScreen.has-visible-service-video .ch5-service-canvas {
+      opacity: 1 !important;
+    }
+
+    #gameFrame.is-ch5-service-video-active::before,
+    #ch5VideoScreen.is-active::before,
+    #ch5VideoScreen.is-active::after,
+    #ch5VideoScreen.has-visible-service-video::before,
+    #ch5VideoScreen.has-visible-service-video::after {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #ch5VideoScreen.is-active .ch5-phone-frame,
+    #ch5VideoScreen.is-active .phone-frame,
+    #ch5VideoScreen.is-active .video-placeholder,
+    #ch5VideoScreen.is-active .ch5-video-placeholder,
+    #ch5VideoScreen.is-active .fallback-frame,
+    #ch5VideoScreen.is-active .ch5-video-fallback-card,
+    #ch5VideoScreen.is-active .video-play-fallback-button,
+    #gameFrame.is-ch5-service-video-active > .video-play-fallback-button {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #ch5VideoScreen .ch5-progress-bar,
+    #ch5VideoScreen .ch5-video-hint,
+    #ch5VideoScreen .ch5-skip-video-button,
+    #videoSkipButton {
+      z-index: 40 !important;
+    }
+
+
+    /* ==================================================
+       第五章服務影片結構性修正：
+       可視區只顯示 canvas，真正 video 移到 body 外層 offscreen host 當 decoder
+    ================================================== */
+
+    #ch5OffscreenVideoHost {
+      position: fixed !important;
+      left: -99999px !important;
+      top: -99999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      z-index: -1 !important;
+      contain: strict !important;
+    }
+
+    /* decoder video 不可 display:none，也不要 visibility:hidden，避免行動版無法解碼或 drawImage 失敗 */
+    #ch5OffscreenVideoHost video,
+    #ch5ServiceVideo.ch5-offscreen-decoder {
+      position: fixed !important;
+      left: -99999px !important;
+      top: -99999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      min-width: 1px !important;
+      min-height: 1px !important;
+      max-width: 1px !important;
+      max-height: 1px !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 0 !important;
+      overflow: hidden !important;
+      pointer-events: none !important;
+      z-index: -1 !important;
+      transform: none !important;
+      object-fit: contain !important;
+      background: transparent !important;
+      clip-path: none !important;
+      -webkit-clip-path: none !important;
+      -webkit-user-select: none !important;
+      user-select: none !important;
+    }
+
+    /* 第五章影片畫面：只讓 canvas 承擔可視影像 */
+    #ch5VideoScreen {
+      isolation: isolate !important;
+      background: #120d0b !important;
+    }
+
+    #ch5VideoScreen .ch5-service-canvas,
+    #ch5ServiceCanvas {
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 3 !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      opacity: 1 !important;
+      pointer-events: none !important;
+      background: #120d0b !important;
+    }
+
+    /* fallback 狀態才讓背景圖露出 */
+    #ch5VideoScreen.is-fallback .ch5-service-canvas {
+      opacity: 0 !important;
+    }
+
+    /* 保險：若 video 還沒被 JS 移走，也不能停在第五章可視區中央 */
+    #ch5VideoScreen > video,
+    #ch5VideoScreen #ch5ServiceVideo {
+      position: fixed !important;
+      left: -99999px !important;
+      top: -99999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      min-width: 1px !important;
+      min-height: 1px !important;
+      max-width: 1px !important;
+      max-height: 1px !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      z-index: -1 !important;
+      transform: none !important;
+      background: transparent !important;
+    }
+
+    /* 第五章 UI 保持在 canvas 上方 */
+    #ch5VideoScreen .ch5-progress-bar,
+    #ch5VideoScreen .ch5-video-hint,
+    #ch5VideoScreen .ch5-skip-video-button,
+    #videoSkipButton {
+      z-index: 40 !important;
+    }
+
+    /* 只作輔助，不是主要修正 */
+    #gameFrame.is-ch5-service-video-active > .video-play-fallback-button,
+    #gameFrame:has(#ch5VideoScreen.is-active) > .video-play-fallback-button {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+
   </style>
 </head>
 
@@ -13887,6 +14183,7 @@
 
       <section class="screen ch5-video-screen" id="ch5VideoScreen" aria-label="第五章第一位客人服務影片">
         <video class="ch5-video" id="ch5ServiceVideo" playsinline preload="metadata"></video>
+        <canvas id="ch5ServiceCanvas" class="ch5-service-canvas" aria-hidden="true"></canvas>
 
         <div class="ch5-video-hint" id="ch5VideoHint">滾動或滑動，完成第一單</div>
         <div class="ch5-progress-bar" aria-hidden="true">
@@ -15043,6 +15340,66 @@
       document.querySelectorAll(".video-play-fallback-button").forEach((button) => button.remove());
     }
 
+
+    function ensureCh5OffscreenVideoHost() {
+      let host = document.getElementById("ch5OffscreenVideoHost");
+
+      if (!host) {
+        host = document.createElement("div");
+        host.id = "ch5OffscreenVideoHost";
+        host.setAttribute("aria-hidden", "true");
+        document.body.appendChild(host);
+      }
+
+      return host;
+    }
+
+    function moveCh5VideoOffscreen(video) {
+      if (!video) return null;
+
+      const host = ensureCh5OffscreenVideoHost();
+
+      video.classList.add("ch5-offscreen-decoder");
+      video.classList.remove("is-visible");
+
+      video.removeAttribute("controls");
+      video.controls = false;
+      video.autoplay = false;
+      video.loop = false;
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      video.setAttribute("disablepictureinpicture", "");
+      video.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback");
+      video.setAttribute("x-webkit-airplay", "deny");
+
+      try { video.disablePictureInPicture = true; } catch (error) {}
+      try { video.disableRemotePlayback = true; } catch (error) {}
+
+      video.style.position = "fixed";
+      video.style.left = "-99999px";
+      video.style.top = "-99999px";
+      video.style.width = "1px";
+      video.style.height = "1px";
+      video.style.minWidth = "1px";
+      video.style.minHeight = "1px";
+      video.style.maxWidth = "1px";
+      video.style.maxHeight = "1px";
+      video.style.display = "block";
+      video.style.visibility = "visible";
+      video.style.opacity = "0";
+      video.style.pointerEvents = "none";
+      video.style.zIndex = "-1";
+      video.style.transform = "none";
+      video.style.background = "transparent";
+
+      if (video.parentElement !== host) {
+        host.appendChild(video);
+      }
+
+      return video;
+    }
+
     function shouldOfferManualVideoPlay(error) {
       return !isAudioUnlocked || !error || error.name === "NotAllowedError";
     }
@@ -15050,6 +15407,12 @@
     function showVideoPlayFallback(video, retryPlay) {
       const gameFrame = document.getElementById("gameFrame");
       if (!gameFrame || !video) return;
+
+      const ch5VideoScreen = document.getElementById("ch5VideoScreen");
+      if (video.id === "ch5ServiceVideo" && ch5VideoScreen?.classList.contains("is-active")) {
+        removeVideoPlayFallbackButton();
+        return;
+      }
 
       removeVideoPlayFallbackButton();
 
@@ -20104,6 +20467,30 @@ async function fetchChoicePercentage(choiceId) {
     }
 
 
+    function debugChapterFiveCenterStack() {
+      const screen = document.getElementById("ch5VideoScreen");
+      if (!screen?.classList.contains("is-active")) return;
+
+      const x = Math.round(window.innerWidth / 2);
+      const y = Math.round(window.innerHeight / 2);
+      const stack = document.elementsFromPoint(x, y).slice(0, 12).map((el) => ({
+        tag: el.tagName,
+        id: el.id,
+        className: String(el.className || ""),
+        zIndex: getComputedStyle(el).zIndex,
+        opacity: getComputedStyle(el).opacity,
+        display: getComputedStyle(el).display,
+        visibility: getComputedStyle(el).visibility
+      }));
+
+      console.table(stack);
+
+      const gameFrame = document.getElementById("gameFrame");
+      console.log("gameFrame::before", getComputedStyle(gameFrame, "::before").display, getComputedStyle(gameFrame, "::before").opacity);
+      console.log("ch5VideoScreen::after", getComputedStyle(screen, "::after").display, getComputedStyle(screen, "::after").opacity);
+    }
+
+
     const ChapterFive = {
       dom: {},
       activeAssets: null,
@@ -20125,6 +20512,8 @@ async function fetchChoicePercentage(choiceId) {
 
       init() {
         this.cacheDom();
+        this.ensureServiceVideoBuffer();
+        this.ensureServiceCanvas();
         this.bindEvents();
         this.updateVideoHint();
         this.updateProgress(0);
@@ -20135,6 +20524,7 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.openingButton = document.getElementById("ch5OpeningButton");
         this.dom.videoScreen = document.getElementById("ch5VideoScreen");
         this.dom.video = document.getElementById("ch5ServiceVideo");
+        this.dom.serviceCanvas = document.getElementById("ch5ServiceCanvas");
         this.dom.videoHint = document.getElementById("ch5VideoHint");
         this.dom.progressFill = document.getElementById("ch5ProgressFill");
         this.dom.skipVideoButton = document.getElementById("ch5SkipVideoButton");
@@ -20145,6 +20535,8 @@ async function fetchChoicePercentage(choiceId) {
         this.dom.followersText = document.getElementById("ch5FollowersText");
         this.dom.resultDescription = document.getElementById("ch5ResultDescription");
         this.dom.resultButton = document.getElementById("ch5ResultButton");
+        this.ensureServiceCanvas();
+        this.ensureServiceVideoBuffer();
       },
 
       bindEvents() {
@@ -20153,6 +20545,13 @@ async function fetchChoicePercentage(choiceId) {
         this.boundHandleTouchStart = (event) => this.handleTouchStart(event);
         this.boundHandleTouchMove = (event) => this.handleTouchMove(event);
         this.boundHandleTouchEnd = (event) => this.handleTouchEnd(event);
+        this.boundHandleResize = () => {
+          this.resizeServiceCanvas();
+          this.drawServiceVideoFrame();
+        };
+
+        window.addEventListener("resize", this.boundHandleResize, { passive: true });
+        window.addEventListener("orientationchange", this.boundHandleResize, { passive: true });
 
         this.dom.openingButton.addEventListener("click", () => {
           unlockGameAudio();
@@ -20189,12 +20588,132 @@ async function fetchChoicePercentage(choiceId) {
         return hasDisinfectEquipment();
       },
 
+      ensureServiceVideoBuffer() {
+        const video = this.dom.video || document.getElementById("ch5ServiceVideo");
+        if (!video) return null;
+
+        this.dom.video = moveCh5VideoOffscreen(video);
+        this.dom.videoBuffer = ensureCh5OffscreenVideoHost();
+
+        return this.dom.videoBuffer;
+      },
+
+      ensureServiceCanvas() {
+        if (!this.dom.videoScreen) return null;
+
+        let canvas = this.dom.serviceCanvas || document.getElementById("ch5ServiceCanvas");
+        if (!canvas) {
+          canvas = document.createElement("canvas");
+          canvas.id = "ch5ServiceCanvas";
+          canvas.className = "ch5-service-canvas";
+          canvas.setAttribute("aria-hidden", "true");
+        }
+
+        canvas.classList.add("ch5-service-canvas");
+        canvas.setAttribute("aria-hidden", "true");
+
+        if (canvas.parentElement !== this.dom.videoScreen) {
+          const anchor = this.dom.videoHint || this.dom.videoScreen.querySelector("#ch5VideoHint") || this.dom.videoScreen.firstChild;
+          this.dom.videoScreen.insertBefore(canvas, anchor);
+        }
+
+        this.dom.serviceCanvas = canvas;
+        this.dom.serviceCanvasContext = canvas.getContext("2d", { alpha: false });
+        this.resizeServiceCanvas();
+        return canvas;
+      },
+
+      setServiceCanvasVisible(isVisible) {
+        const canvas = this.ensureServiceCanvas();
+        if (!canvas) return;
+        canvas.classList.toggle("is-visible", Boolean(isVisible));
+      },
+
+      resizeServiceCanvas() {
+        const canvas = this.dom.serviceCanvas;
+        const screen = this.dom.videoScreen;
+        if (!canvas || !screen) return;
+
+        const rect = screen.getBoundingClientRect();
+        const width = Math.max(1, Math.round(rect.width));
+        const height = Math.max(1, Math.round(rect.height));
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const pixelWidth = Math.round(width * dpr);
+        const pixelHeight = Math.round(height * dpr);
+
+        if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+          canvas.width = pixelWidth;
+          canvas.height = pixelHeight;
+        }
+
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+      },
+
+      drawServiceVideoFrame() {
+        const video = this.dom.video;
+        const canvas = this.ensureServiceCanvas();
+        const ctx = this.dom.serviceCanvasContext;
+
+        if (!video || !canvas || !ctx) return;
+        if (!video.videoWidth || !video.videoHeight) return;
+
+        this.resizeServiceCanvas();
+
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
+
+        if (!canvasWidth || !canvasHeight || !videoWidth || !videoHeight) return;
+
+        ctx.save();
+        ctx.fillStyle = "#120d0b";
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        const scale = Math.max(canvasWidth / videoWidth, canvasHeight / videoHeight);
+        const drawWidth = videoWidth * scale;
+        const drawHeight = videoHeight * scale;
+        const drawX = (canvasWidth - drawWidth) / 2;
+        const drawY = (canvasHeight - drawHeight) / 2;
+
+        try {
+          ctx.drawImage(video, drawX, drawY, drawWidth, drawHeight);
+          this.setServiceCanvasVisible(true);
+        } catch (error) {
+          // Safari / Chrome 行動版 seek 過程中偶爾會丟錯，忽略即可
+        } finally {
+          ctx.restore();
+        }
+      },
+
       markServiceVideoVisible() {
+        this.dom.video = moveCh5VideoOffscreen(this.dom.video || document.getElementById("ch5ServiceVideo"));
+
+        this.dom.video?.classList.remove("is-visible");
         this.dom.videoScreen?.classList.add("has-visible-service-video");
+        document.getElementById("gameFrame")?.classList.add("is-ch5-service-video-active");
+
+        this.setServiceCanvasVisible(true);
+        this.drawServiceVideoFrame();
+
+        window.requestAnimationFrame(() => this.drawServiceVideoFrame());
+        removeVideoPlayFallbackButton?.();
       },
 
       markServiceVideoHidden() {
         this.dom.videoScreen?.classList.remove("has-visible-service-video");
+        document.getElementById("gameFrame")?.classList.remove("is-ch5-service-video-active");
+
+        const video = this.dom.video || document.getElementById("ch5ServiceVideo");
+        if (video) {
+          try { video.pause(); } catch (error) {}
+          video.classList.remove("is-visible");
+          this.dom.video = moveCh5VideoOffscreen(video);
+        }
+
+        this.setServiceCanvasVisible(false);
+        removeVideoPlayFallbackButton?.();
       },
 
       showOpeningCard() {
@@ -20244,9 +20763,19 @@ async function fetchChoicePercentage(choiceId) {
           this.seekRafId = null;
         }
 
+        removeVideoPlayFallbackButton?.();
+
+        this.ensureServiceVideoBuffer();
+        this.dom.video = moveCh5VideoOffscreen(this.dom.video || document.getElementById("ch5ServiceVideo"));
+
+        this.ensureServiceCanvas();
         this.dom.videoScreen.classList.remove("is-fallback");
         this.markServiceVideoHidden();
+
+        removeVideoPlayFallbackButton?.();
         showScreen(this.dom.videoScreen);
+        window.setTimeout(debugChapterFiveCenterStack, 300);
+        window.setTimeout(debugChapterFiveCenterStack, 1200);
 
         this.prepareVideoElement();
         this.updateVideoHint();
@@ -20257,7 +20786,10 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       prepareVideoElement() {
-        const video = this.dom.video;
+        let video = this.dom.video || document.getElementById("ch5ServiceVideo");
+        video = moveCh5VideoOffscreen(video);
+        this.dom.video = video;
+
         if (!video || !this.activeAssets || !this.activeAssets.video) {
           console.warn("第五章影片 DOM 或影片路徑不存在。", {
             video,
@@ -20268,12 +20800,16 @@ async function fetchChoicePercentage(choiceId) {
         }
 
         video.classList.remove("is-visible");
+        this.ensureServiceVideoBuffer();
+        this.ensureServiceCanvas();
+        this.setServiceCanvasVisible(false);
         this.markServiceVideoHidden();
         video.innerHTML = "";
 
         try { video.pause(); } catch (error) {}
 
         video.removeAttribute("src");
+        video.removeAttribute("poster");
         video.removeAttribute("data-src");
         video.removeAttribute("data-loaded");
 
@@ -20291,6 +20827,7 @@ async function fetchChoicePercentage(choiceId) {
         this.isSeeking = false;
 
         video.controls = false;
+        video.removeAttribute("controls");
         video.autoplay = false;
         video.loop = false;
         video.muted = false;
@@ -20298,9 +20835,14 @@ async function fetchChoicePercentage(choiceId) {
         video.playsInline = true;
         video.setAttribute("playsinline", "");
         video.setAttribute("webkit-playsinline", "");
+        video.setAttribute("disablepictureinpicture", "");
+        video.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback");
+        video.setAttribute("x-webkit-airplay", "deny");
+        try { video.disablePictureInPicture = true; } catch (error) {}
         video.preload = "auto";
 
-        video.poster = this.activeAssets.poster || this.activeAssets.firstFrame || "";
+        video.removeAttribute("poster");
+        video.poster = "";
         video.src = this.activeAssets.video;
 
         prepareVideoAudio(video);
@@ -20315,6 +20857,8 @@ async function fetchChoicePercentage(choiceId) {
           try { video.currentTime = 0; } catch (error) {}
 
           this.updateProgress(0);
+          this.drawServiceVideoFrame();
+          window.requestAnimationFrame(() => this.drawServiceVideoFrame());
         };
 
         video.onloadeddata = () => {
@@ -20322,8 +20866,9 @@ async function fetchChoicePercentage(choiceId) {
 
           window.clearTimeout(this.fallbackTimer);
           this.dom.videoScreen.classList.remove("is-fallback");
-          video.classList.add("is-visible");
           this.markServiceVideoVisible();
+          this.drawServiceVideoFrame();
+          removeVideoPlayFallbackButton?.();
 
           try { video.pause(); } catch (error) {}
         };
@@ -20333,8 +20878,9 @@ async function fetchChoicePercentage(choiceId) {
 
           window.clearTimeout(this.fallbackTimer);
           this.dom.videoScreen.classList.remove("is-fallback");
-          video.classList.add("is-visible");
           this.markServiceVideoVisible();
+          this.drawServiceVideoFrame();
+          removeVideoPlayFallbackButton?.();
 
           try { video.pause(); } catch (error) {}
         };
@@ -20342,8 +20888,9 @@ async function fetchChoicePercentage(choiceId) {
         video.onplaying = () => {
           if (this.dom.video !== video || this.videoCompleted) return;
           this.dom.videoScreen.classList.remove("is-fallback");
-          video.classList.add("is-visible");
           this.markServiceVideoVisible();
+          this.drawServiceVideoFrame();
+          removeVideoPlayFallbackButton?.();
         };
 
         video.onseeking = () => {
@@ -20355,6 +20902,9 @@ async function fetchChoicePercentage(choiceId) {
           if (this.dom.video !== video || this.videoCompleted) return;
 
           this.isSeeking = false;
+          this.drawServiceVideoFrame();
+          window.setTimeout(() => this.drawServiceVideoFrame(), 100);
+          removeVideoPlayFallbackButton?.();
 
           if (this.pendingSeekTime != null) {
             const target = this.pendingSeekTime;
@@ -20423,6 +20973,12 @@ async function fetchChoicePercentage(choiceId) {
           this.pendingProgress = 0;
           this.serviceProgress = 0;
           this.updateProgress(0);
+
+          if (this.dom.video && this.metadataReady) {
+            this.requestServiceVideoSeek(0, true);
+          }
+
+          this.drawServiceVideoFrame();
         }
         if (event.key === "End") this.scrubVideo(999);
       },
@@ -20504,6 +21060,8 @@ async function fetchChoicePercentage(choiceId) {
 
         if (diff < this.seekThreshold) {
           this.pendingSeekTime = null;
+          this.drawServiceVideoFrame();
+          removeVideoPlayFallbackButton?.();
           return;
         }
 
@@ -20541,6 +21099,12 @@ async function fetchChoicePercentage(choiceId) {
             } else {
               video.currentTime = target;
             }
+
+            this.drawServiceVideoFrame();
+            window.setTimeout(() => {
+              this.drawServiceVideoFrame();
+              removeVideoPlayFallbackButton?.();
+            }, 100);
           } catch (error) {
             console.warn("第五章影片定位失敗，保留目前畫面。", error);
             this.isSeeking = false;
@@ -20594,6 +21158,8 @@ async function fetchChoicePercentage(choiceId) {
           video.classList.remove("is-visible");
         }
         this.markServiceVideoHidden();
+        this.setServiceCanvasVisible(false);
+        removeVideoPlayFallbackButton?.();
 
         this.dom.videoScreen.classList.add("is-fallback");
 
@@ -23395,20 +23961,31 @@ async function fetchChoicePercentage(choiceId) {
 
     function bindChapterFiveVideoSafeVisibility() {
       const screen = document.getElementById("ch5VideoScreen");
-      const video = document.getElementById("ch5ServiceVideo");
-      if (!screen || !video) return;
+      const rawVideo = document.getElementById("ch5ServiceVideo");
+      const canvas = document.getElementById("ch5ServiceCanvas");
+      if (!screen || !rawVideo) return;
+
+      const video = moveCh5VideoOffscreen(rawVideo);
 
       const syncVisibility = () => {
-        const isVisible = video.classList.contains("is-visible") && video.readyState >= 2;
-        screen.classList.toggle("has-visible-service-video", isVisible);
+        const isScreenActive = screen.classList.contains("is-active");
+        const isCanvasVisible = canvas?.classList.contains("is-visible");
+        const shouldKeepCleanVideoLayer = Boolean(isScreenActive || isCanvasVisible);
+        const gameFrame = document.getElementById("gameFrame");
+
+        screen.classList.toggle("has-visible-service-video", shouldKeepCleanVideoLayer && !screen.classList.contains("is-fallback"));
+        gameFrame?.classList.toggle("is-ch5-service-video-active", shouldKeepCleanVideoLayer);
+
+        if (shouldKeepCleanVideoLayer) removeVideoPlayFallbackButton?.();
       };
 
-      ["loadeddata", "canplay", "playing", "pause", "emptied", "error"].forEach((eventName) => {
+      ["loadeddata", "canplay", "playing", "pause", "seeked", "emptied", "error"].forEach((eventName) => {
         video.addEventListener(eventName, syncVisibility);
       });
 
+      const observerTargets = [video, screen, canvas].filter(Boolean);
       const observer = new MutationObserver(syncVisibility);
-      observer.observe(video, { attributes: true, attributeFilter: ["class", "src"] });
+      observerTargets.forEach((target) => observer.observe(target, { attributes: true, attributeFilter: ["class", "src"] }));
       syncVisibility();
     }
 
