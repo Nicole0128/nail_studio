@@ -12405,6 +12405,506 @@
       }
     }
 
+
+    /* ==================================================
+       行動版安全區覆寫：瀏覽器 UI / home indicator / 橫向平板修正
+       以最後覆寫為主，不改章節流程與 HTML 結構
+    ================================================== */
+    :root {
+      --safe-top-extra: env(safe-area-inset-top, 0px);
+      --safe-bottom-extra: env(safe-area-inset-bottom, 0px);
+      --mobile-ui-top: clamp(12px, 3.8vh, 34px);
+      --mobile-ui-bottom: clamp(18px, 4.8vh, 46px);
+      --hud-safe-top: clamp(58px, 12vh, 92px);
+    }
+
+    html,
+    body,
+    .page,
+    .game-frame {
+      width: 100vw;
+      height: var(--app-height, 100svh);
+      min-height: var(--app-height, 100svh);
+      max-height: var(--app-height, 100svh);
+      overflow: hidden;
+    }
+
+    html,
+    body {
+      overscroll-behavior: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    @supports (height: 100svh) {
+      .page,
+      .game-frame {
+        height: 100svh;
+        min-height: 100svh;
+      }
+    }
+
+    html,
+    body,
+    .page,
+    .game-frame {
+      height: var(--app-height, 100svh) !important;
+      min-height: var(--app-height, 100svh) !important;
+      max-height: var(--app-height, 100svh) !important;
+    }
+
+    /* 行動版與瀏覽器安全影片區 */
+    .scene-video,
+    .ch5-video,
+    .ch5-service-video,
+    #ch5ServiceVideo {
+      object-fit: cover;
+    }
+
+    @media (max-width: 1180px), (max-height: 720px), (pointer: coarse) {
+      .scene-video,
+      .ch5-video,
+      .ch5-service-video,
+      #ch5ServiceVideo {
+        object-fit: contain !important;
+        object-position: center center !important;
+        background: #120d0b !important;
+        transform: none !important;
+      }
+
+      .manual-video-ui,
+      .ch5-video-screen .ch5-progress-bar,
+      .ch5-video-screen .ch5-video-hint,
+      .ch5-video-screen .ch5-skip-video-button {
+        z-index: 30;
+      }
+
+      .manual-video-progress {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(14px, 4vh, 36px)) !important;
+        left: clamp(32px, 5vw, 72px) !important;
+        right: clamp(32px, 5vw, 72px) !important;
+      }
+
+      .manual-video-hint {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(34px, 8vh, 68px)) !important;
+      }
+
+      .manual-video-skip-button {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(48px, 9vh, 78px)) !important;
+        right: calc(env(safe-area-inset-right, 0px) + clamp(14px, 3vw, 32px)) !important;
+      }
+
+      .ch5-progress-bar {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(16px, 4vh, 34px)) !important;
+        left: clamp(30px, 5vw, 70px) !important;
+        right: clamp(30px, 5vw, 70px) !important;
+        height: 4px !important;
+        opacity: 0.78;
+      }
+
+      .ch5-video-hint {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(34px, 8vh, 64px)) !important;
+        font-size: clamp(0.62rem, 1.3vw, 0.82rem) !important;
+        padding: 0.42em 0.86em !important;
+      }
+
+      .ch5-skip-video-button {
+        right: calc(env(safe-area-inset-right, 0px) + 14px) !important;
+        top: calc(env(safe-area-inset-top, 0px) + clamp(52px, 10vh, 76px)) !important;
+        bottom: auto !important;
+      }
+
+      .game-hud {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(10px, 2.6vh, 22px)) !important;
+        left: calc(env(safe-area-inset-left, 0px) + clamp(10px, 2.4vw, 22px)) !important;
+        right: calc(env(safe-area-inset-right, 0px) + clamp(10px, 2.4vw, 22px)) !important;
+        max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 20px) !important;
+      }
+    }
+
+    .ch5-video-screen.has-visible-service-video .ch5-phone-frame,
+    .ch5-video-screen.has-visible-service-video .phone-frame,
+    .ch5-video-screen.has-visible-service-video .video-placeholder,
+    .ch5-video-screen.has-visible-service-video .fallback-frame,
+    .ch5-video-screen.has-visible-service-video .ch5-video-fallback-card,
+    #ch5ServiceVideo.is-visible ~ .ch5-phone-frame,
+    #ch5ServiceVideo.is-visible ~ .phone-frame,
+    #ch5ServiceVideo.is-visible ~ .video-placeholder,
+    #ch5ServiceVideo.is-visible ~ .fallback-frame,
+    #ch5ServiceVideo.is-visible ~ .ch5-video-fallback-card {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    @supports selector(.ch5-video-screen:has(#ch5ServiceVideo.is-visible)) {
+      .ch5-video-screen:has(#ch5ServiceVideo.is-visible) .ch5-phone-frame,
+      .ch5-video-screen:has(#ch5ServiceVideo.is-visible) .phone-frame,
+      .ch5-video-screen:has(#ch5ServiceVideo.is-visible) .video-placeholder,
+      .ch5-video-screen:has(#ch5ServiceVideo.is-visible) .fallback-frame,
+      .ch5-video-screen:has(#ch5ServiceVideo.is-visible) .ch5-video-fallback-card {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .result-screen,
+      .ch2-rule-screen,
+      .ch2-summary-screen,
+      .ch3-rule-screen,
+      .ch3-summary-screen,
+      .ch4-rule-screen,
+      .ch4-price-preview-screen,
+      .ch5-opening-screen,
+      .ch5-result-screen,
+      .ch6-rule-screen,
+      .ch6-case-select-screen,
+      .ch6-guide-screen,
+      .ch7-rule-screen,
+      .ch7-rule-form-screen,
+      .ch7-announcement-screen {
+        overflow: hidden !important;
+      }
+
+      .result-card,
+      .ch2-rule-card,
+      .ch2-summary-card,
+      .ch3-rule-card,
+      .ch3-summary-card,
+      .ch3-summary-simple-card,
+      .ch4-rule-card,
+      .ch4-price-preview-card,
+      .ch5-opening-card,
+      .ch5-result-card,
+      .ch6-rule-card,
+      .ch6-case-select-card,
+      .ch6-guide-card,
+      .ch7-rule-card,
+      .ch7-form-card,
+      .ch7-rule-form-card,
+      .ch7-announcement-card,
+      .final-report-card {
+        width: min(92vw, 980px) !important;
+        max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 28px) !important;
+        max-height: calc(var(--app-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 42px) !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: clamp(14px, 2.4vw, 24px) !important;
+        gap: clamp(8px, 1.6vh, 14px) !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .result-copy,
+      .ch2-rule-body,
+      .ch2-summary-description,
+      .ch3-rule-body,
+      .ch3-rule-body-box,
+      .ch3-summary-tool-grid,
+      .ch3-summary-money-box,
+      .ch4-rule-body,
+      .ch4-price-grid,
+      .ch4-price-preview-body,
+      .ch5-opening-body,
+      .ch5-result-description,
+      .ch6-rule-body,
+      .ch6-case-grid,
+      .ch6-guide-body,
+      .ch7-rule-body,
+      .ch7-form-body,
+      .ch7-announcement-body,
+      .final-report-body {
+        min-height: 0 !important;
+        overflow: auto !important;
+        scrollbar-width: thin;
+      }
+
+      .result-title,
+      .ch2-rule-title,
+      .ch2-summary-title,
+      .ch3-rule-title,
+      .ch3-rule-title-box,
+      .ch3-summary-title,
+      .ch4-rule-title,
+      .ch5-opening-title,
+      .ch5-result-title,
+      .ch6-rule-title,
+      .ch6-case-select-head h2,
+      .ch6-guide-title,
+      .ch7-rule-title,
+      .ch7-form-title,
+      .ch7-announcement-title {
+        font-size: clamp(1rem, 3vw, 1.7rem) !important;
+        line-height: 1.22 !important;
+      }
+
+      .result-description,
+      .ch2-rule-body,
+      .ch2-summary-description,
+      .ch3-rule-body,
+      .ch3-rule-body-box,
+      .ch4-rule-body,
+      .ch5-opening-body,
+      .ch5-result-description,
+      .ch6-rule-body,
+      .ch6-case-card p,
+      .ch6-guide-body,
+      .ch7-rule-body,
+      .ch7-announcement-body {
+        font-size: clamp(0.68rem, 1.75vw, 0.92rem) !important;
+        line-height: 1.58 !important;
+        letter-spacing: 0.03em !important;
+      }
+
+      .start-button,
+      .ch2-rule-button,
+      .ch2-summary-button,
+      .ch3-primary-button,
+      .ch3-secondary-button,
+      .ch3-summary-button,
+      .ch4-rule-button,
+      .ch4-confirm-button,
+      .ch4-publish-button,
+      .ch5-opening-button,
+      .ch5-result-button,
+      .ch6-rule-button,
+      .ch6-primary-button,
+      .ch6-secondary-button,
+      .ch7-rule-button,
+      .ch7-rule-confirm,
+      .ch7-announcement-button,
+      .ch7-publish-button {
+        flex: 0 0 auto !important;
+        align-self: center !important;
+        min-height: 34px !important;
+        padding: 0.48em 1.25em !important;
+        font-size: clamp(0.68rem, 1.7vw, 0.9rem) !important;
+        margin-top: clamp(6px, 1.2vh, 12px) !important;
+      }
+
+      .ch2-game-layout {
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(60px, 13vh, 92px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(18px, 5vh, 44px)) !important;
+        padding-left: clamp(10px, 2.4vw, 22px) !important;
+        padding-right: clamp(10px, 2.4vw, 22px) !important;
+        grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.85fr) !important;
+        gap: clamp(8px, 1.6vw, 16px) !important;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .ch2-action-list {
+        min-height: 0 !important;
+        overflow: auto !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-rows: auto !important;
+        padding-bottom: 18px !important;
+      }
+
+      .ch2-action-card {
+        min-height: auto !important;
+        padding: clamp(8px, 1.4vw, 12px) !important;
+      }
+
+      .ch2-planning-panel {
+        min-height: 0 !important;
+      }
+
+      .ch3-package-layout {
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(62px, 13vh, 92px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(16px, 4vh, 34px)) !important;
+        padding-left: clamp(8px, 2vw, 18px) !important;
+        padding-right: clamp(8px, 2vw, 18px) !important;
+        grid-template-columns: minmax(160px, 0.72fr) minmax(280px, 1.28fr) minmax(190px, 0.82fr) !important;
+        gap: clamp(8px, 1.4vw, 14px) !important;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .ch3-package-panel,
+      .ch3-tool-catalog,
+      .ch3-kit-panel {
+        min-width: 0 !important;
+        padding: clamp(8px, 1.5vw, 14px) !important;
+        gap: 7px !important;
+        overflow: hidden !important;
+      }
+
+      .ch3-package-list,
+      .ch3-tool-card-grid,
+      .ch3-kit-chip-list {
+        min-height: 0 !important;
+        overflow: auto !important;
+      }
+
+      .ch3-package-card {
+        padding: 8px 10px !important;
+        gap: 4px !important;
+      }
+
+      .ch3-package-card-title,
+      .ch3-package-card-price {
+        display: block !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        line-height: 1.22 !important;
+      }
+
+      .ch3-package-card-description,
+      .ch3-package-card-tools {
+        font-size: clamp(0.56rem, 1.25vw, 0.72rem) !important;
+        line-height: 1.35 !important;
+      }
+
+      .ch3-kit-item {
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        max-width: 100% !important;
+        line-height: 1.25 !important;
+      }
+
+      .ch3-kit-total,
+      .ch3-confirm-purchase-button {
+        flex: 0 0 auto !important;
+      }
+
+      .ch3-summary-simple-card {
+        width: min(92vw, 960px) !important;
+        max-height: calc(var(--app-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 42px) !important;
+      }
+
+      .ch3-summary-simple-section {
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+
+      .ch3-summary-tool-grid,
+      .ch3-summary-money-box {
+        min-height: 0 !important;
+        overflow: auto !important;
+      }
+
+      .ch4-rule-layout,
+      .ch4-pricing-layout,
+      .ch4-preview-layout,
+      .ch5-opening-layout,
+      .ch5-result-layout,
+      .ch6-rule-layout,
+      .ch6-case-select-wrap,
+      .ch6-case-complete-wrap,
+      .ch6-guide-wrap,
+      .ch7-rule-layout,
+      .ch7-form-layout,
+      .ch7-rule-form-layout,
+      .ch7-announcement-layout {
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(62px, 13vh, 92px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(18px, 5vh, 44px)) !important;
+        padding-left: clamp(12px, 2.4vw, 24px) !important;
+        padding-right: clamp(12px, 2.4vw, 24px) !important;
+      }
+
+      .ch4-pricing-card {
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+
+      .ch4-price-form {
+        min-height: 0 !important;
+        overflow: auto !important;
+        gap: clamp(8px, 1.6vw, 18px) !important;
+      }
+
+      .ch5-result-card {
+        max-height: calc(var(--app-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 58px) !important;
+        overflow: hidden !important;
+      }
+
+      .ch5-result-content {
+        min-height: 0 !important;
+        overflow: auto !important;
+      }
+
+      .ch5-result-image-wrap {
+        min-height: 0 !important;
+        max-height: 34vh !important;
+      }
+
+      .ch6-case-select-card {
+        max-height: calc(var(--app-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 48px) !important;
+      }
+
+      .ch6-case-grid {
+        min-height: 0 !important;
+        overflow: auto !important;
+        padding-bottom: 8px !important;
+      }
+
+      .ch6-case-card {
+        min-height: clamp(118px, 26vh, 170px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .ch6-case-card p {
+        display: block !important;
+        overflow: visible !important;
+        max-height: none !important;
+      }
+
+      .ch6-case-select-head span {
+        display: block !important;
+        overflow: visible !important;
+      }
+    }
+
+    @media (max-height: 480px) and (orientation: landscape), (max-width: 760px) and (orientation: landscape) {
+      .ch2-game-layout,
+      .ch3-package-layout {
+        gap: 7px !important;
+      }
+
+      .ch3-panel-head p,
+      .ch3-tool-card-description,
+      .ch3-package-card-description,
+      .ch3-package-card-tools {
+        font-size: 0.56rem !important;
+        line-height: 1.3 !important;
+      }
+
+      .ch3-tool-card-grid {
+        grid-auto-rows: auto !important;
+      }
+
+      .ch4-price-field,
+      .ch4-rule-field {
+        grid-template-columns: minmax(90px, 1fr) minmax(120px, 170px) !important;
+        gap: 8px !important;
+      }
+
+      .ch5-result-card {
+        display: grid !important;
+        grid-template-columns: minmax(160px, 0.8fr) minmax(0, 1.2fr) !important;
+        align-items: stretch !important;
+      }
+
+      .ch5-result-image-wrap {
+        max-height: none !important;
+        height: 100% !important;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .ch7-rule-input,
+      input,
+      select,
+      textarea {
+        font-size: 16px !important;
+      }
+    }
+
+
   </style>
 </head>
 
@@ -20645,15 +21145,35 @@ async function fetchChoicePercentage(choiceId) {
       },
 
       bindEvents() {
-        this.dom.skipVideoButton?.addEventListener("click", () => this.completeIntroVideo({ useFallback: true }));
-        this.dom.ruleCardButton?.addEventListener("click", () => {
+        this.dom.skipVideoButton?.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.completeIntroVideo({ useFallback: true });
+        });
+        this.dom.ruleCardButton?.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
           unlockGameAudio();
           this.showFormScreen();
         });
-        this.dom.confirmButton?.addEventListener("click", () => this.confirmRules());
-        this.dom.publishButton?.addEventListener("click", () => this.publishRules());
+        this.dom.confirmButton?.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.confirmRules();
+        });
+        this.dom.publishButton?.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.publishRules();
+        });
         this.getInputs().forEach((input) => {
           input?.addEventListener("input", () => this.handleInputChange());
+          input?.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              input.blur();
+            }
+          });
         });
       },
 
@@ -22178,7 +22698,47 @@ async function fetchChoicePercentage(choiceId) {
       ChapterOne.showChapterTwoPlaceholder();
     }
 
+
+
+    function updateAppViewportHeight() {
+      const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty("--app-height", `${height}px`);
+    }
+
+    updateAppViewportHeight();
+    window.addEventListener("load", updateAppViewportHeight, { passive: true });
+    window.addEventListener("resize", updateAppViewportHeight, { passive: true });
+    window.addEventListener("orientationchange", () => {
+      window.setTimeout(updateAppViewportHeight, 250);
+    });
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", updateAppViewportHeight, { passive: true });
+      window.visualViewport.addEventListener("scroll", updateAppViewportHeight, { passive: true });
+    }
+
+    function bindChapterFiveVideoSafeVisibility() {
+      const screen = document.getElementById("ch5VideoScreen");
+      const video = document.getElementById("ch5ServiceVideo");
+      if (!screen || !video) return;
+
+      const syncVisibility = () => {
+        const isVisible = video.classList.contains("is-visible") && video.readyState >= 2;
+        screen.classList.toggle("has-visible-service-video", isVisible);
+      };
+
+      ["loadeddata", "canplay", "playing", "pause", "emptied", "error"].forEach((eventName) => {
+        video.addEventListener(eventName, syncVisibility);
+      });
+
+      const observer = new MutationObserver(syncVisibility);
+      observer.observe(video, { attributes: true, attributeFilter: ["class", "src"] });
+      syncVisibility();
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
+      updateAppViewportHeight();
+      bindChapterFiveVideoSafeVisibility();
       ChapterOne.init();
       ChapterTwo.init();
       ChapterThree.init();
