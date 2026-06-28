@@ -12905,6 +12905,608 @@
     }
 
 
+
+
+    /* ==================================================
+       Mobile Landscape Fix v2
+       只處理手機／平板／觸控裝置，不影響桌機版
+    ================================================== */
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .screen {
+        min-height: 0 !important;
+      }
+
+      .game-hud {
+        flex: 0 0 auto !important;
+      }
+
+      .ch2-decision-screen,
+      .ch3-tool-screen,
+      .ch3-summary-screen,
+      .ch5-video-screen,
+      .ch6-case-select-screen,
+      .ch6-guide-screen,
+      .ch8-scrolly-screen {
+        overflow: hidden !important;
+      }
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch2-game-layout {
+        height: 100% !important;
+        min-height: 0 !important;
+        grid-template-columns: minmax(0, 1.28fr) minmax(230px, 0.9fr) !important;
+        gap: clamp(8px, 1.5vw, 14px) !important;
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(72px, 14vh, 104px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, 4vh, 34px)) !important;
+        padding-left: clamp(10px, 2vw, 20px) !important;
+        padding-right: clamp(10px, 2vw, 20px) !important;
+      }
+
+      .ch2-action-list,
+      .ch2-option-list {
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: auto !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-rows: auto !important;
+        align-content: start !important;
+        gap: clamp(8px, 1.4vw, 12px) !important;
+        padding: 4px 8px 20px 4px !important;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .ch2-action-card,
+      .ch2-option-card {
+        min-height: auto !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        align-content: start !important;
+        padding: clamp(9px, 1.3vw, 13px) !important;
+        gap: 7px !important;
+      }
+
+      .ch2-action-main,
+      .ch2-option-main {
+        min-width: 0 !important;
+        overflow: visible !important;
+      }
+
+      .ch2-action-title,
+      .ch2-option-title {
+        font-size: clamp(0.78rem, 1.65vw, 1rem) !important;
+        line-height: 1.25 !important;
+        margin-bottom: 3px !important;
+      }
+
+      .ch2-action-tags,
+      .ch2-option-tags {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 3px !important;
+        margin: 4px 0 5px !important;
+        overflow: visible !important;
+      }
+
+      .ch2-tag,
+      .ch2-option-tag,
+      .ch2-action-tag {
+        font-size: clamp(0.54rem, 1.15vw, 0.66rem) !important;
+        line-height: 1.2 !important;
+        padding: 2px 6px !important;
+        white-space: normal !important;
+      }
+
+      .ch2-action-description,
+      .ch2-option-description {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        -webkit-line-clamp: unset !important;
+        line-clamp: unset !important;
+        -webkit-box-orient: initial !important;
+        font-size: clamp(0.58rem, 1.25vw, 0.72rem) !important;
+        line-height: 1.42 !important;
+      }
+
+      .ch2-planning-panel {
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        padding: clamp(10px, 1.6vw, 16px) !important;
+        gap: clamp(6px, 1.2vh, 10px) !important;
+      }
+
+      .ch2-planning-panel h2 {
+        flex: 0 0 auto !important;
+        font-size: clamp(1rem, 2.2vw, 1.35rem) !important;
+        line-height: 1.15 !important;
+      }
+
+      .ch2-panel-stats {
+        flex: 0 0 auto !important;
+        gap: 5px !important;
+        font-size: clamp(0.62rem, 1.25vw, 0.78rem) !important;
+      }
+
+      .ch2-selected-section {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .ch2-selected-list {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 4px !important;
+      }
+
+      .ch2-selected-list li {
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        font-size: clamp(0.58rem, 1.2vw, 0.72rem) !important;
+        line-height: 1.35 !important;
+      }
+
+      .ch2-confirm-button {
+        flex: 0 0 auto !important;
+        margin-top: 6px !important;
+      }
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch3-package-layout {
+        height: 100% !important;
+        min-height: 0 !important;
+        grid-template-columns: minmax(170px, 0.7fr) minmax(280px, 1.32fr) minmax(210px, 0.86fr) !important;
+        gap: clamp(8px, 1.4vw, 12px) !important;
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(72px, 14vh, 102px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(12px, 3.6vh, 28px)) !important;
+        padding-left: clamp(8px, 1.8vw, 16px) !important;
+        padding-right: clamp(8px, 1.8vw, 16px) !important;
+      }
+
+      .ch3-package-panel,
+      .ch3-tool-catalog,
+      .ch3-kit-panel {
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: clamp(9px, 1.5vw, 13px) !important;
+        gap: 7px !important;
+      }
+
+      .ch3-panel-head {
+        flex: 0 0 auto !important;
+      }
+
+      .ch3-panel-head h2 {
+        font-size: clamp(0.92rem, 2vw, 1.22rem) !important;
+        line-height: 1.2 !important;
+      }
+
+      .ch3-panel-head p {
+        font-size: clamp(0.56rem, 1.15vw, 0.7rem) !important;
+        line-height: 1.35 !important;
+      }
+
+      .ch3-package-list {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        display: grid !important;
+        align-content: start !important;
+        gap: 7px !important;
+        padding-right: 4px !important;
+      }
+
+      .ch3-package-card {
+        min-height: auto !important;
+        height: auto !important;
+        display: grid !important;
+        gap: 4px !important;
+        padding: 8px 9px !important;
+        overflow: visible !important;
+      }
+
+      .ch3-package-card-title,
+      .ch3-package-card-price {
+        display: block !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        overflow-wrap: anywhere !important;
+        text-overflow: clip !important;
+        line-height: 1.2 !important;
+      }
+
+      .ch3-package-card-title {
+        font-size: clamp(0.7rem, 1.45vw, 0.86rem) !important;
+      }
+
+      .ch3-package-card-description,
+      .ch3-package-card-tools {
+        display: block !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        overflow-wrap: anywhere !important;
+        font-size: clamp(0.52rem, 1.08vw, 0.66rem) !important;
+        line-height: 1.32 !important;
+      }
+
+      .ch3-package-card-price {
+        font-size: clamp(0.62rem, 1.25vw, 0.78rem) !important;
+        margin-top: 0 !important;
+      }
+
+      .ch3-tool-card-grid {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        grid-auto-rows: auto !important;
+        padding-bottom: 14px !important;
+      }
+
+      .ch3-kit-panel {
+        overflow: hidden !important;
+      }
+
+      .ch3-kit-section {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .ch3-kit-chip-list,
+      .ch3-kit-list {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        align-content: flex-start !important;
+        padding-right: 4px !important;
+      }
+
+      .ch3-kit-item {
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        max-width: 100% !important;
+        line-height: 1.25 !important;
+        font-size: clamp(0.56rem, 1.1vw, 0.68rem) !important;
+      }
+
+      .ch3-kit-item span {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+      }
+
+      .ch3-kit-total,
+      .ch3-cart-warning,
+      .ch3-confirm-purchase-button {
+        flex: 0 0 auto !important;
+      }
+
+      .ch3-kit-total {
+        margin-top: 4px !important;
+      }
+
+      .ch3-confirm-purchase-button {
+        min-height: 34px !important;
+        padding: 0.5em 1em !important;
+        font-size: clamp(0.66rem, 1.35vw, 0.82rem) !important;
+      }
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch3-summary-wrap {
+        height: 100% !important;
+        min-height: 0 !important;
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(76px, 14vh, 104px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, 4vh, 34px)) !important;
+        padding-left: clamp(12px, 2.2vw, 22px) !important;
+        padding-right: clamp(12px, 2.2vw, 22px) !important;
+        overflow: hidden !important;
+        place-items: center !important;
+      }
+
+      .ch3-summary-simple-card,
+      .ch3-summary-card {
+        width: min(86vw, 980px) !important;
+        max-width: calc(100vw - 28px) !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: clamp(14px, 2.2vw, 22px) !important;
+        gap: clamp(8px, 1.4vh, 12px) !important;
+      }
+
+      .ch3-summary-simple-card .ch3-summary-title,
+      .ch3-summary-title {
+        flex: 0 0 auto !important;
+        font-size: clamp(1.1rem, 3vw, 1.8rem) !important;
+        line-height: 1.18 !important;
+        margin: 0 !important;
+      }
+
+      .ch3-summary-simple-section {
+        min-height: 0 !important;
+        overflow: hidden !important;
+        padding: clamp(9px, 1.5vw, 14px) !important;
+      }
+
+      .ch3-summary-simple-section h3 {
+        font-size: clamp(0.72rem, 1.5vw, 0.95rem) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 6px !important;
+      }
+
+      .ch3-summary-tool-grid,
+      .ch3-summary-money-box {
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .ch3-summary-tool-grid {
+        max-height: clamp(52px, 18vh, 128px) !important;
+      }
+
+      .ch3-summary-money-box {
+        max-height: clamp(58px, 18vh, 128px) !important;
+      }
+
+      .ch3-summary-money-box p {
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        font-size: clamp(0.62rem, 1.25vw, 0.78rem) !important;
+        line-height: 1.32 !important;
+        padding: 0.48em 0.62em !important;
+      }
+
+      .ch3-summary-button {
+        flex: 0 0 auto !important;
+        align-self: center !important;
+        margin-top: 6px !important;
+        min-height: 34px !important;
+        padding: 0.5em 1.2em !important;
+      }
+    }
+
+    .ch5-video-screen.has-visible-service-video .ch5-phone-frame,
+    .ch5-video-screen.has-visible-service-video .phone-frame,
+    .ch5-video-screen.has-visible-service-video .video-placeholder,
+    .ch5-video-screen.has-visible-service-video .ch5-video-placeholder,
+    .ch5-video-screen.has-visible-service-video .fallback-frame,
+    .ch5-video-screen.has-visible-service-video .ch5-video-fallback-card,
+    .ch5-video-screen.has-visible-service-video .video-play-fallback-button {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+    }
+
+    .ch5-video-screen .video-play-fallback-button:empty {
+      display: none !important;
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch5-video-screen .video-play-fallback-button {
+        width: auto !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 34px !important;
+        padding: 0.45em 1em !important;
+        border-radius: 999px !important;
+      }
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch6-case-select-wrap {
+        height: 100% !important;
+        min-height: 0 !important;
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(76px, 14vh, 104px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, 4vh, 34px)) !important;
+        padding-left: clamp(12px, 2vw, 22px) !important;
+        padding-right: clamp(12px, 2vw, 22px) !important;
+        overflow: hidden !important;
+      }
+
+      .ch6-case-select-card {
+        width: min(86vw, 980px) !important;
+        max-width: calc(100vw - 28px) !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: clamp(14px, 2.2vw, 22px) !important;
+        gap: clamp(8px, 1.4vh, 12px) !important;
+      }
+
+      .ch6-case-select-head {
+        flex: 0 0 auto !important;
+      }
+
+      .ch6-case-select-head h2 {
+        font-size: clamp(1.05rem, 2.8vw, 1.65rem) !important;
+        line-height: 1.2 !important;
+      }
+
+      .ch6-case-select-head p {
+        font-size: clamp(0.62rem, 1.35vw, 0.82rem) !important;
+        line-height: 1.4 !important;
+      }
+
+      .ch6-case-grid {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(7px, 1.4vw, 12px) !important;
+        padding-right: 4px !important;
+        padding-bottom: 10px !important;
+      }
+
+      .ch6-case-card {
+        min-height: auto !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding: clamp(9px, 1.6vw, 14px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 5px !important;
+      }
+
+      .ch6-case-card h3,
+      .ch6-case-card-title {
+        font-size: clamp(0.78rem, 1.8vw, 1.05rem) !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+      }
+
+      .ch6-case-card p,
+      .ch6-case-description {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        font-size: clamp(0.58rem, 1.25vw, 0.76rem) !important;
+        line-height: 1.42 !important;
+        margin: 0 !important;
+      }
+
+      .ch6-case-select-card .ch6-primary-button,
+      .ch6-case-select-card .ch6-secondary-button {
+        flex: 0 0 auto !important;
+        align-self: center !important;
+        min-height: 34px !important;
+      }
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch6-guide-wrap {
+        height: 100% !important;
+        min-height: 0 !important;
+        padding-top: calc(env(safe-area-inset-top, 0px) + clamp(76px, 14vh, 104px)) !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, 4vh, 34px)) !important;
+        overflow: hidden !important;
+      }
+
+      .ch6-guide-card {
+        width: min(86vw, 980px) !important;
+        max-width: calc(100vw - 28px) !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: clamp(14px, 2.2vw, 22px) !important;
+        gap: clamp(8px, 1.4vh, 12px) !important;
+      }
+
+      .ch6-guide-tabs,
+      .ch6-guide-title,
+      .ch6-guide-step-label {
+        flex: 0 0 auto !important;
+      }
+
+      .ch6-guide-title {
+        font-size: clamp(0.95rem, 2.35vw, 1.45rem) !important;
+        line-height: 1.18 !important;
+        margin: 0 !important;
+      }
+
+      .ch6-guide-step-label {
+        font-size: clamp(0.58rem, 1.25vw, 0.72rem) !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+      }
+
+      .ch6-guide-step-title,
+      .ch6-guide-card h3,
+      .ch6-guide-card h2 {
+        font-size: clamp(1.02rem, 3vw, 1.7rem) !important;
+        line-height: 1.18 !important;
+        margin: 0 0 6px !important;
+      }
+
+      .ch6-guide-body,
+      .ch6-guide-step-body,
+      .ch6-guide-content {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .ch6-guide-body p,
+      .ch6-guide-step-body p,
+      .ch6-guide-content p {
+        font-size: clamp(0.68rem, 1.55vw, 0.9rem) !important;
+        line-height: 1.55 !important;
+        margin: 0 !important;
+      }
+
+      .ch6-guide-actions,
+      .ch6-guide-card .ch6-primary-button,
+      .ch6-guide-card .ch6-secondary-button {
+        flex: 0 0 auto !important;
+      }
+
+      .ch6-guide-card .ch6-primary-button,
+      .ch6-guide-card .ch6-secondary-button {
+        min-height: 34px !important;
+        padding: 0.5em 1.2em !important;
+        font-size: clamp(0.68rem, 1.4vw, 0.84rem) !important;
+      }
+    }
+
+    .ch8-scrolly-screen,
+    .ch8-scrolly-stage {
+      touch-action: none !important;
+      overscroll-behavior: none !important;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    @media (max-width: 1180px), (pointer: coarse) {
+      .ch8-control-hint {
+        font-size: clamp(0.62rem, 1.5vw, 0.82rem) !important;
+        color: transparent !important;
+      }
+
+      .ch8-control-hint::before {
+        content: "上下滑動切換畫面";
+        color: rgba(255, 248, 238, 0.82) !important;
+      }
+
+      .ch8-progress {
+        top: calc(env(safe-area-inset-top, 0px) + clamp(14px, 4vh, 34px)) !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -13976,6 +14578,8 @@
       wheelAccumulator: 0,
       touchStartY: 0,
       touchLastY: 0,
+      touchStartX: 0,
+      touchLocked: false,
       cleanupFns: [],
       transitionTimer: null,
       activeDirection: 1,
@@ -19585,6 +20189,14 @@ async function fetchChoicePercentage(choiceId) {
         return hasDisinfectEquipment();
       },
 
+      markServiceVideoVisible() {
+        this.dom.videoScreen?.classList.add("has-visible-service-video");
+      },
+
+      markServiceVideoHidden() {
+        this.dom.videoScreen?.classList.remove("has-visible-service-video");
+      },
+
       showOpeningCard() {
         this.activeAssets = this.getVideoAssets();
         ChapterOne.clearVideoLayer();
@@ -19633,6 +20245,7 @@ async function fetchChoicePercentage(choiceId) {
         }
 
         this.dom.videoScreen.classList.remove("is-fallback");
+        this.markServiceVideoHidden();
         showScreen(this.dom.videoScreen);
 
         this.prepareVideoElement();
@@ -19655,6 +20268,7 @@ async function fetchChoicePercentage(choiceId) {
         }
 
         video.classList.remove("is-visible");
+        this.markServiceVideoHidden();
         video.innerHTML = "";
 
         try { video.pause(); } catch (error) {}
@@ -19670,6 +20284,7 @@ async function fetchChoicePercentage(choiceId) {
         video.onerror = null;
         video.onseeking = null;
         video.onseeked = null;
+        video.onplaying = null;
 
         this.metadataReady = false;
         this.pendingSeekTime = null;
@@ -19708,6 +20323,7 @@ async function fetchChoicePercentage(choiceId) {
           window.clearTimeout(this.fallbackTimer);
           this.dom.videoScreen.classList.remove("is-fallback");
           video.classList.add("is-visible");
+          this.markServiceVideoVisible();
 
           try { video.pause(); } catch (error) {}
         };
@@ -19718,8 +20334,16 @@ async function fetchChoicePercentage(choiceId) {
           window.clearTimeout(this.fallbackTimer);
           this.dom.videoScreen.classList.remove("is-fallback");
           video.classList.add("is-visible");
+          this.markServiceVideoVisible();
 
           try { video.pause(); } catch (error) {}
+        };
+
+        video.onplaying = () => {
+          if (this.dom.video !== video || this.videoCompleted) return;
+          this.dom.videoScreen.classList.remove("is-fallback");
+          video.classList.add("is-visible");
+          this.markServiceVideoVisible();
         };
 
         video.onseeking = () => {
@@ -19946,6 +20570,7 @@ async function fetchChoicePercentage(choiceId) {
           try { video.pause(); } catch (error) {}
           video.classList.remove("is-visible");
         }
+        this.markServiceVideoHidden();
 
         this.serviceProgress = 1;
         this.pendingProgress = 1;
@@ -19968,6 +20593,7 @@ async function fetchChoicePercentage(choiceId) {
           try { video.pause(); } catch (error) {}
           video.classList.remove("is-visible");
         }
+        this.markServiceVideoHidden();
 
         this.dom.videoScreen.classList.add("is-fallback");
 
@@ -20037,6 +20663,7 @@ async function fetchChoicePercentage(choiceId) {
         const result = this.calculateResult();
         const hasDisinfect = result.selectedVideoType === "A";
 
+        this.markServiceVideoHidden();
         ChapterOne.clearVideoLayer();
         ChapterOne.setBackground(this.activeAssets?.finalFallback || CH5_ASSETS.serviceFinalFallbackA, "ch5-result-bg");
         ChapterOne.setDarkOverlay(false);
@@ -21927,46 +22554,93 @@ async function fetchChoicePercentage(choiceId) {
         if (event.key === "End") setChapter8Step(21, { direction: 1 });
       };
 
+      chapter8State.touchStartY = 0;
+      chapter8State.touchLastY = 0;
+      chapter8State.touchStartX = 0;
+      chapter8State.touchLocked = false;
+
+      const touchTarget = stage;
+      const screenTarget = document.getElementById("chapter8ScrollyScreen");
+
       const onTouchStart = (event) => {
         if (!isChapter8Active()) return;
         const touch = event.touches?.[0];
         if (!touch) return;
+
         chapter8State.touchStartY = touch.clientY;
         chapter8State.touchLastY = touch.clientY;
+        chapter8State.touchStartX = touch.clientX;
+        chapter8State.touchLocked = false;
       };
 
       const onTouchMove = (event) => {
         if (!isChapter8Active()) return;
         event.preventDefault();
-        if (chapter8State.isTransitioning) return;
+
         const touch = event.touches?.[0];
         if (!touch) return;
-        const diff = chapter8State.touchLastY - touch.clientY;
-        if (Math.abs(diff) < 46) {
-          chapter8State.touchLastY = touch.clientY;
-          return;
-        }
-        goChapter8Step(diff > 0 ? 1 : -1);
-        chapter8State.touchStartY = 0;
-        chapter8State.touchLastY = 0;
+
+        chapter8State.touchLastY = touch.clientY;
+
+        const diffY = chapter8State.touchStartY - touch.clientY;
+        const diffX = chapter8State.touchStartX - touch.clientX;
+
+        if (Math.abs(diffX) > Math.abs(diffY) * 1.4) return;
+        if (chapter8State.touchLocked) return;
+        if (chapter8State.isTransitioning) return;
+        if (Math.abs(diffY) < 42) return;
+
+        chapter8State.touchLocked = true;
+        goChapter8Step(diffY > 0 ? 1 : -1);
       };
 
-      const onTouchEnd = () => {
-        chapter8State.touchStartY = 0;
-        chapter8State.touchLastY = 0;
+      const onTouchEnd = (event) => {
+        if (!isChapter8Active()) return;
+        event.preventDefault();
+
+        window.setTimeout(() => {
+          chapter8State.touchLocked = false;
+        }, 260);
+      };
+
+      const onPointerUp = (event) => {
+        if (!isChapter8Active()) return;
+        if (chapter8State.isTransitioning) return;
+        if (event.pointerType === "mouse") return;
+
+        const width = window.innerWidth || 1;
+        if (event.clientX < width * 0.25) {
+          goChapter8Step(-1);
+        } else {
+          goChapter8Step(1);
+        }
       };
 
       stage.addEventListener("wheel", onWheel, { passive: false });
       document.addEventListener("keydown", onKeyDown);
-      stage.addEventListener("touchstart", onTouchStart, { passive: true });
-      stage.addEventListener("touchmove", onTouchMove, { passive: false });
-      stage.addEventListener("touchend", onTouchEnd, { passive: true });
+
+      [touchTarget, screenTarget].forEach((target) => {
+        if (!target) return;
+        target.addEventListener("touchstart", onTouchStart, { passive: false });
+        target.addEventListener("touchmove", onTouchMove, { passive: false });
+        target.addEventListener("touchend", onTouchEnd, { passive: false });
+        target.addEventListener("touchcancel", onTouchEnd, { passive: false });
+      });
+
+      stage.addEventListener("pointerup", onPointerUp);
 
       chapter8State.cleanupFns.push(() => stage.removeEventListener("wheel", onWheel));
       chapter8State.cleanupFns.push(() => document.removeEventListener("keydown", onKeyDown));
-      chapter8State.cleanupFns.push(() => stage.removeEventListener("touchstart", onTouchStart));
-      chapter8State.cleanupFns.push(() => stage.removeEventListener("touchmove", onTouchMove));
-      chapter8State.cleanupFns.push(() => stage.removeEventListener("touchend", onTouchEnd));
+      chapter8State.cleanupFns.push(() => {
+        [touchTarget, screenTarget].forEach((target) => {
+          if (!target) return;
+          target.removeEventListener("touchstart", onTouchStart);
+          target.removeEventListener("touchmove", onTouchMove);
+          target.removeEventListener("touchend", onTouchEnd);
+          target.removeEventListener("touchcancel", onTouchEnd);
+        });
+      });
+      chapter8State.cleanupFns.push(() => stage.removeEventListener("pointerup", onPointerUp));
 
       preloadChapter8NearbyImages(chapter8State.currentIndex);
     }
@@ -22181,6 +22855,8 @@ async function fetchChoicePercentage(choiceId) {
       chapter8State.wheelAccumulator = 0;
       chapter8State.touchStartY = 0;
       chapter8State.touchLastY = 0;
+      chapter8State.touchStartX = 0;
+      chapter8State.touchLocked = false;
       const reportPanel = document.getElementById("chapter8FinalReportPanel");
       reportPanel?.classList.remove("is-visible");
     }
